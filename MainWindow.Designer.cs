@@ -34,6 +34,7 @@
             this.aToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -63,33 +64,46 @@
             // aToolStripMenuItem
             // 
             this.aToolStripMenuItem.Name = "aToolStripMenuItem";
-            this.aToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.aToolStripMenuItem.Text = "Add";
             this.aToolStripMenuItem.Click += new System.EventHandler(this.aToolStripMenuItem_Click);
             // 
             // aToolStripMenuItem1
             // 
             this.aToolStripMenuItem1.Name = "aToolStripMenuItem1";
-            this.aToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.aToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
             this.aToolStripMenuItem1.Text = "Delete";
             // 
             // createGroupToolStripMenuItem
             // 
             this.createGroupToolStripMenuItem.Name = "createGroupToolStripMenuItem";
-            this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.createGroupToolStripMenuItem.Text = "Create Group";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(731, 86);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "label1";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.MainPicBox);
             this.Name = "MainWindow";
             this.Text = "Form1";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).EndInit();
             this.mainPicBox_ContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -100,6 +114,7 @@
         private System.Windows.Forms.ToolStripMenuItem aToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem createGroupToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
     }
 }
 

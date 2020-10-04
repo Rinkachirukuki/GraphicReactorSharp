@@ -9,13 +9,18 @@ namespace GraphicReactor
 {
     class GR_Point : ICloneable
     {
-        private float x;
-        private float y;
-        private float z;
+        public float x;
+        public float y;
+        public float z;
+        public float ok;
+
         private float lineWight;
         private float radius;
+
         private Color outColor;
         private Color fillColor;
+
+        public bool Selected = false;
         public GR_Point()
         {
             x = 0;
@@ -24,7 +29,9 @@ namespace GraphicReactor
             this.radius = 10;
             this.outColor = Color.Black;
             this.fillColor = Color.White;
+            this.Selected = false;
         }
+
         public GR_Point(float x, float y, float radius, Color out_color, Color fill_color)
         {
             this.x = x;
@@ -33,6 +40,7 @@ namespace GraphicReactor
             this.radius = radius;
             this.outColor = out_color;
             this.fillColor = fill_color;
+            this.Selected = false;
         }
         public GR_Point(float x, float y, float radius, int r, int g, int b)
         {
@@ -42,6 +50,7 @@ namespace GraphicReactor
             this.radius = radius;
             this.outColor = Color.FromArgb(r, g, b);
             this.fillColor = Color.FromArgb(r, g, b);
+            this.Selected = false;
         }
         public GR_Point(float x, float y, float z, float radius, Color color)
         {
@@ -50,6 +59,7 @@ namespace GraphicReactor
             this.z = z;
             this.radius = radius;
             this.outColor = color;
+            this.Selected = false;
         }
         public GR_Point(float x, float y, float z, float radius, float lineWight, int out_r, int out_g, int out_b, int fill_r, int fill_g, int fill_b)
         {
@@ -60,6 +70,15 @@ namespace GraphicReactor
             this.lineWight = lineWight;
             this.outColor = Color.FromArgb(out_r, out_g, out_b);
             this.fillColor = Color.FromArgb(fill_r, fill_g, fill_b);
+            this.Selected = false;
+        }
+        public void Select()
+        {
+            Selected = true;
+        }
+        public void UnSelect()
+        {
+            Selected = false;
         }
 
         public float GetX()
