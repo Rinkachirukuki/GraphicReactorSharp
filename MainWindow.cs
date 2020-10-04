@@ -166,7 +166,7 @@ namespace GraphicReactor
 
         private void aToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GR_Point p = new GR_Point(endPos.X, endPos.Y, 0, rnd.Next(40, 100), rnd.Next(1, 10), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
+            GR_Point p = new GR_Point(endPos.X, endPos.Y, 0, rnd.Next(20, 40), rnd.Next(1, 2), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
             mainScene.AddPoint(p);
 
             UpdatePicBox();
