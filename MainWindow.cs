@@ -52,10 +52,19 @@ namespace GraphicReactor
         private void MainPicBox_MouseDown(object sender, MouseEventArgs e)
         {
             startPos = e.Location;
-            if (shiftButton) 
-                tool = Tool.select;
+            
             if (e.Button == MouseButtons.Left) mouseLbutton = true;
-
+            if (shiftButton)
+            {
+                tool = Tool.select;
+                return;
+            }
+            if (ctrlButton)
+            {
+                tool = Tool.connect;
+                return;
+            }
+                
         }
         private void MainPicBox_MouseMove(object sender, MouseEventArgs e)
         {
@@ -81,6 +90,13 @@ namespace GraphicReactor
             {
                 UpdatePicBox(false);
                 DrawSelectRect(Color.FromArgb(25, Color.Teal), Color.FromArgb(75, Color.Teal), startPos.X, startPos.Y, e.X, e.Y);
+                MainPicBox.Refresh();
+                return;
+            }
+            if (tool == Tool.connect && mouseLbutton)
+            {
+                UpdatePicBox(false);
+                main_graphics.DrawLine(new Pen(Color.Black, 2.0F), startPos, endPos);
                 MainPicBox.Refresh();
                 return;
             }
@@ -131,6 +147,11 @@ namespace GraphicReactor
             {
                 mainPicBox_ContextMenu.Show(Cursor.Position.X, Cursor.Position.Y);
             }
+            if (tool == Tool.connect && e.Button == MouseButtons.Left)
+            {
+                mouseLbutton = false;
+                mainScene.ConnectPoints(startPos, endPos);
+            }
 
             UpdatePicBox();
             if (e.Button == MouseButtons.Left) mouseLbutton = false;
@@ -154,13 +175,13 @@ namespace GraphicReactor
         private void GR_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ShiftKey) { shiftButton = true; label1.Text = "1"; }
-            if (e.KeyCode == Keys.Control) ctrlButton = true;
+            if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
         }
 
         private void GR_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ShiftKey) { shiftButton = false; label1.Text = "0"; }
-            if (e.KeyCode == Keys.Control) ctrlButton = false;
+            if (e.KeyCode == Keys.ControlKey) ctrlButton = false;
         }
     }
 }

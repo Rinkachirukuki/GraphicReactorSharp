@@ -9,16 +9,26 @@ namespace GraphicReactor
 {
     class GR_Scene
     {
+        private uint point_identificator = 1;
         private List<GR_Point> points;
+        private List<GR_Line> lines;
         public Pen selectPen = new Pen(Color.Red, 2);
 
         public GR_Scene()
         {
             points = new List<GR_Point>();
+            lines = new List<GR_Line>();
         }
         public void Draw(Graphics gr)
         {
             Pen pen = new Pen(Color.Black);
+            foreach (GR_Line p in lines)
+            {
+                pen.Color = p.color;
+                pen.Width = p.width;
+                gr.DrawLine(pen, GetPointByUid(p.point1).ToPoint(), GetPointByUid(p.point2).ToPoint());
+
+            }
             foreach (GR_Point p in points)
             {
                 pen.Color = p.GetOutColor();
@@ -31,8 +41,18 @@ namespace GraphicReactor
             pen.Dispose();
 
         }
+        private GR_Point GetPointByUid(uint id)
+        {
+            foreach (GR_Point p in points)
+            {
+                if (p.id == id) return p;
+            }
+            return null;
+        }
         public void AddPoint(GR_Point point)
         {
+            point.id = point_identificator;
+            point_identificator++;
             points.Add(point);
         }
         public void SelectPoints(int x1, int y1, int x2, int y2, bool reselect = true)
@@ -57,7 +77,27 @@ namespace GraphicReactor
                 s.UnSelect();
             }
         }
-                
+        public uint GetPointUid(Point a)
+        {
+            foreach (GR_Point p in points)
+            {
+                if (Math.Pow((a.X - p.GetX()), 2) + Math.Pow((a.Y - p.GetY()), 2) <= Math.Pow(p.GetRadius(), 2))
+                {
+                    return p.id;
+                }
+            }
+            return 0;
+        }
+
+        public void ConnectPoints(Point a, Point b)
+        {
+            uint point1_id = GetPointUid(a);
+            uint point2_id = GetPointUid(b);
+            if (point1_id == point2_id || point1_id == 0 || point2_id == 0) return;
+            else lines.Add(new GR_Line(point1_id, point2_id));
+
+        }
+             
         public List<GR_Point> SelectedPoints
         {
             get

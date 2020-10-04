@@ -9,6 +9,8 @@ namespace GraphicReactor
 {
     class GR_Point : ICloneable
     {
+        public uint id;
+
         public float x;
         public float y;
         public float z;
@@ -23,6 +25,7 @@ namespace GraphicReactor
         public bool Selected = false;
         public GR_Point()
         {
+
             x = 0;
             y = 0;
             z = 0;
@@ -32,8 +35,9 @@ namespace GraphicReactor
             this.Selected = false;
         }
 
-        public GR_Point(float x, float y, float radius, Color out_color, Color fill_color)
+        public GR_Point( float x, float y, float radius, Color out_color, Color fill_color)
         {
+
             this.x = x;
             this.y = y;
             this.z = 0;
@@ -44,6 +48,7 @@ namespace GraphicReactor
         }
         public GR_Point(float x, float y, float radius, int r, int g, int b)
         {
+
             this.x = x;
             this.y = y;
             this.z = 0;
@@ -52,7 +57,7 @@ namespace GraphicReactor
             this.fillColor = Color.FromArgb(r, g, b);
             this.Selected = false;
         }
-        public GR_Point(float x, float y, float z, float radius, Color color)
+        public GR_Point( float x, float y, float z, float radius, Color color)
         {
             this.x = x;
             this.y = y;
@@ -61,7 +66,7 @@ namespace GraphicReactor
             this.outColor = color;
             this.Selected = false;
         }
-        public GR_Point(float x, float y, float z, float radius, float lineWight, int out_r, int out_g, int out_b, int fill_r, int fill_g, int fill_b)
+        public GR_Point( float x, float y, float z, float radius, float lineWight, int out_r, int out_g, int out_b, int fill_r, int fill_g, int fill_b)
         {
             this.x = x;
             this.y = y;
@@ -108,6 +113,10 @@ namespace GraphicReactor
         public float GetWidth()
         {
             return lineWight;
+        }
+        public Point ToPoint()
+        {
+            return new Point((int)x, (int)y);
         }
         public void SetXY(float x, float y)
         {
