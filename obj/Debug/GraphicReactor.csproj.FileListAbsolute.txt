@@ -1,10 +1,10 @@
 C:\GitOther\GraphicReactor\bin\Debug\GraphicReactor.exe.config
 C:\GitOther\GraphicReactor\bin\Debug\GraphicReactor.exe
 C:\GitOther\GraphicReactor\bin\Debug\GraphicReactor.pdb
-C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.csprojAssemblyReference.cache
 C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.MainWindow.resources
 C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.Properties.Resources.resources
 C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.csproj.GenerateResource.cache
 C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.csproj.CoreCompileInputs.cache
 C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.exe
 C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.pdb
+C:\GitOther\GraphicReactor\obj\Debug\GraphicReactor.csprojAssemblyReference.cache

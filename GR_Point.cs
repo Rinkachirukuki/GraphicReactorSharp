@@ -14,7 +14,7 @@ namespace GraphicReactor
         public float x;
         public float y;
         public float z;
-        public float ok;
+        public float ok = 1;
 
         private float lineWight;
         private float radius;

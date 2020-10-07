@@ -176,6 +176,17 @@ namespace GraphicReactor
         {
             if (e.KeyCode == Keys.ShiftKey) { shiftButton = true; label1.Text = "1"; }
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
+            if (tool == Tool.move)
+            {
+                if (e.KeyCode == Keys.Up) mainScene.MovePoints(0, -1, 0, true);
+                if (e.KeyCode == Keys.Down) mainScene.MovePoints(0, 1, 0, true);
+                if (e.KeyCode == Keys.Right) mainScene.MovePoints(1, 0, 0, true);
+                if (e.KeyCode == Keys.Left) mainScene.MovePoints(-1, 0, 0, true);
+                UpdatePicBox();
+            }
+            
+
+
         }
 
         private void GR_KeyUp(object sender, KeyEventArgs e)
@@ -183,5 +194,30 @@ namespace GraphicReactor
             if (e.KeyCode == Keys.ShiftKey) { shiftButton = false; label1.Text = "0"; }
             if (e.KeyCode == Keys.ControlKey) ctrlButton = false;
         }
+        private void setButtonsDefaultColors()
+        {
+            foreach(Button b in panel1.Controls)
+            {
+                b.BackColor = Color.WhiteSmoke;
+            }
+        }
+        private void buttonToolView_Click(object sender, EventArgs e)
+        {
+            setButtonsDefaultColors();
+            buttonToolView.BackColor = Color.FromArgb(100, Color.Teal);
+        }
+
+        private void buttonToolMove_Click(object sender, EventArgs e)
+        {
+            setButtonsDefaultColors();
+            buttonToolMove.BackColor = Color.FromArgb(100, Color.Teal);
+        }
+
+        private void buttonToolSelect_Click(object sender, EventArgs e)
+        {
+            setButtonsDefaultColors();
+            buttonToolSelect.BackColor = Color.FromArgb(100, Color.Teal);
+        }
+        //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
     }
 }
