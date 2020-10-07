@@ -29,33 +29,20 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.MainPicBox = new System.Windows.Forms.PictureBox();
             this.mainPicBox_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonToolSelect = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.MainPicBox = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.buttonToolStyle = new GraphicReactor.CustomForms.ToolCustomButton();
             this.buttonToolMove = new GraphicReactor.CustomForms.ToolCustomButton();
             this.buttonToolView = new GraphicReactor.CustomForms.ToolCustomButton();
-            ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // MainPicBox
-            // 
-            this.MainPicBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.MainPicBox.Location = new System.Drawing.Point(59, 1);
-            this.MainPicBox.Name = "MainPicBox";
-            this.MainPicBox.Size = new System.Drawing.Size(656, 439);
-            this.MainPicBox.TabIndex = 1;
-            this.MainPicBox.TabStop = false;
-            this.MainPicBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseDown);
-            this.MainPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseMove);
-            this.MainPicBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseUp);
             // 
             // mainPicBox_ContextMenu
             // 
@@ -78,6 +65,7 @@
             this.aToolStripMenuItem1.Name = "aToolStripMenuItem1";
             this.aToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
             this.aToolStripMenuItem1.Text = "Delete";
+            this.aToolStripMenuItem1.Click += new System.EventHandler(this.aToolStripMenuItem1_Click);
             // 
             // createGroupToolStripMenuItem
             // 
@@ -85,18 +73,9 @@
             this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.createGroupToolStripMenuItem.Text = "Create Group";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(731, 86);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
-            // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.buttonToolSelect);
+            this.panel1.Controls.Add(this.buttonToolStyle);
             this.panel1.Controls.Add(this.buttonToolMove);
             this.panel1.Controls.Add(this.buttonToolView);
             this.panel1.Location = new System.Drawing.Point(1, 1);
@@ -104,17 +83,39 @@
             this.panel1.Size = new System.Drawing.Size(55, 439);
             this.panel1.TabIndex = 4;
             // 
-            // buttonToolSelect
+            // MainPicBox
             // 
-            this.buttonToolSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonToolSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonToolSelect.Location = new System.Drawing.Point(4, 63);
-            this.buttonToolSelect.Name = "buttonToolSelect";
-            this.buttonToolSelect.Size = new System.Drawing.Size(49, 23);
-            this.buttonToolSelect.TabIndex = 8;
-            this.buttonToolSelect.Text = "Select";
-            this.buttonToolSelect.UseVisualStyleBackColor = true;
-            this.buttonToolSelect.Click += new System.EventHandler(this.buttonToolSelect_Click);
+            this.MainPicBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.MainPicBox.Location = new System.Drawing.Point(59, 1);
+            this.MainPicBox.Name = "MainPicBox";
+            this.MainPicBox.Size = new System.Drawing.Size(656, 439);
+            this.MainPicBox.TabIndex = 1;
+            this.MainPicBox.TabStop = false;
+            this.MainPicBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseDown);
+            this.MainPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseMove);
+            this.MainPicBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseUp);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(721, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "label1";
+            // 
+            // buttonToolStyle
+            // 
+            this.buttonToolStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonToolStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonToolStyle.Location = new System.Drawing.Point(4, 63);
+            this.buttonToolStyle.Name = "buttonToolStyle";
+            this.buttonToolStyle.Size = new System.Drawing.Size(49, 23);
+            this.buttonToolStyle.TabIndex = 8;
+            this.buttonToolStyle.Text = "Style";
+            this.buttonToolStyle.UseVisualStyleBackColor = true;
+            this.buttonToolStyle.Click += new System.EventHandler(this.buttonToolSelect_Click);
             // 
             // buttonToolMove
             // 
@@ -144,7 +145,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(865, 441);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.MainPicBox);
@@ -152,26 +153,25 @@
             this.Text = "Form1";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
-            ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).EndInit();
             this.mainPicBox_ContextMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox MainPicBox;
         private System.Windows.Forms.ContextMenuStrip mainPicBox_ContextMenu;
         private System.Windows.Forms.ToolStripMenuItem aToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem createGroupToolStripMenuItem;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private CustomForms.ToolCustomButton buttonToolView;
-        private CustomForms.ToolCustomButton buttonToolSelect;
+        private CustomForms.ToolCustomButton buttonToolStyle;
         private CustomForms.ToolCustomButton buttonToolMove;
+        private System.Windows.Forms.PictureBox MainPicBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 

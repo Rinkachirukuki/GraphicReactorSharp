@@ -20,8 +20,10 @@ namespace GraphicReactor
         Point startPos;
         Point endPos;
         private Tool tool;
+        private Action action;
+        float xAngle = 0;
 
-        bool mouseRbutton = false;
+        bool mouseMidbutton = false;
         bool mouseLbutton = false;
         bool shiftButton = false;
         bool ctrlButton = false;
@@ -29,11 +31,16 @@ namespace GraphicReactor
 
         enum Tool
         {
+            view,
             move,
-            select,
-            connect,
-            scale,
-            rotate
+            select
+        }
+        enum Action
+        {
+            moving,
+            selecting,
+            connecting,
+            viewchanging
         }
 
 
@@ -54,6 +61,7 @@ namespace GraphicReactor
             startPos = e.Location;
             
             if (e.Button == MouseButtons.Left) mouseLbutton = true;
+            if (e.Button == MouseButtons.Middle) mouseMidbutton = true;
             if (shiftButton)
             {
                 tool = Tool.select;
@@ -61,7 +69,7 @@ namespace GraphicReactor
             }
             if (ctrlButton)
             {
-                tool = Tool.connect;
+                action = Action.connecting;
                 return;
             }
                 
@@ -69,18 +77,18 @@ namespace GraphicReactor
         private void MainPicBox_MouseMove(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
+            if (mouseMidbutton)
+            {
+                xAngle += (e.Y - startPos.Y);
+                startPos.X = e.X;
+                startPos.Y = e.Y;
+                label1.Text = xAngle.ToString();
+                UpdatePicBox(true);
+                return;
+            }
             if(tool == Tool.move && mouseLbutton && mainScene.SelectedPoints.Count > 0)
             {
-                int off_x;
-                int off_y;
-                for (int i = 0; i < mainScene.SelectedPoints.Count; i++)
-                {
-                    off_x = e.X - startPos.X;
-                    off_y = e.Y - startPos.Y;
-
-                    mainScene.SelectedPoints[i].x = mainScene.SelectedPoints[i].x + off_x;
-                    mainScene.SelectedPoints[i].y = mainScene.SelectedPoints[i].y + off_y;
-                }
+                mainScene.MovePoints(e.X - startPos.X, e.Y - startPos.Y, 0, true);
                 startPos.X = e.X;
                 startPos.Y = e.Y;
                 UpdatePicBox(true);
@@ -93,7 +101,7 @@ namespace GraphicReactor
                 MainPicBox.Refresh();
                 return;
             }
-            if (tool == Tool.connect && mouseLbutton)
+            if (action == Action.connecting && mouseLbutton)
             {
                 UpdatePicBox(false);
                 main_graphics.DrawLine(new Pen(Color.Black, 2.0F), startPos, endPos);
@@ -136,7 +144,9 @@ namespace GraphicReactor
         private void MainPicBox_MouseUp(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
-           
+
+            if (e.Button == MouseButtons.Middle) mouseMidbutton = false;
+
             if (tool == Tool.select && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
@@ -147,7 +157,7 @@ namespace GraphicReactor
             {
                 mainPicBox_ContextMenu.Show(Cursor.Position.X, Cursor.Position.Y);
             }
-            if (tool == Tool.connect && e.Button == MouseButtons.Left)
+            if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
                 mainScene.ConnectPoints(startPos, endPos);
@@ -160,7 +170,8 @@ namespace GraphicReactor
         private void UpdatePicBox(bool refresh = true)
         {
             main_graphics.Clear(Color.White);
-            mainScene.Draw(main_graphics);
+            mainScene.Draw(main_graphics, xAngle);
+
             if (refresh) MainPicBox.Refresh();
         }
 
@@ -205,18 +216,27 @@ namespace GraphicReactor
         {
             setButtonsDefaultColors();
             buttonToolView.BackColor = Color.FromArgb(100, Color.Teal);
+            tool = Tool.view;
         }
 
         private void buttonToolMove_Click(object sender, EventArgs e)
         {
             setButtonsDefaultColors();
             buttonToolMove.BackColor = Color.FromArgb(100, Color.Teal);
+            tool = Tool.move;
         }
 
         private void buttonToolSelect_Click(object sender, EventArgs e)
         {
             setButtonsDefaultColors();
-            buttonToolSelect.BackColor = Color.FromArgb(100, Color.Teal);
+            buttonToolStyle.BackColor = Color.FromArgb(100, Color.Teal);
+            tool = Tool.select;
+        }
+
+        private void aToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            mainScene.DeletePoints();
+            UpdatePicBox();
         }
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
     }

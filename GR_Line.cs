@@ -22,7 +22,7 @@ namespace GraphicReactor
             this.point1 = point1;
             this.point2 = point2;
             color = Color.Black;
-            width = 1;
+            width = 2;
         }
         public GR_Line(uint point1, uint point2, int width, Color color)
         {
