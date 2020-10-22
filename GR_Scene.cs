@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -15,12 +16,13 @@ namespace GraphicReactor
         private List<GR_Point> points;
         private List<GR_Line> lines;
         private List<GR_Point> temp = new List<GR_Point>();
-        public Pen selectPen = new Pen(Color.Red, 2);
+        public Pen selectPen = new Pen(Color.Red, 1.5f);
 
         public GR_Scene()
         {
             points = new List<GR_Point>();
             lines = new List<GR_Line>();
+            selectPen.DashStyle = DashStyle.Dash;
         }
         public void Draw(Graphics gr, double ang = 0)
         {
@@ -69,7 +71,7 @@ namespace GraphicReactor
                 pen.Width = p.LineWidth;
                 gr.FillEllipse(new SolidBrush(p.FillColor), p.X - p.Radius / 2, p.Y - p.Radius / 2, p.Radius, p.Radius);
                 gr.DrawEllipse(pen, p.X - p.Radius / 2, p.Y - p.Radius / 2, p.Radius, p.Radius);
-                if (p.Selected) gr.DrawEllipse(selectPen, p.X - (p.Radius + p.LineWidth) / 2, p.Y - (p.Radius + p.LineWidth) / 2, p.Radius + p.LineWidth, p.Radius + p.LineWidth);
+                if (p.Selected) gr.DrawEllipse(selectPen, p.X - (p.Radius + p.LineWidth + 4) / 2, p.Y - (p.Radius + p.LineWidth + 4) / 2, p.Radius + p.LineWidth + 4, p.Radius + p.LineWidth + 4);
 
             }
 
