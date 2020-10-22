@@ -50,10 +50,10 @@ namespace GraphicReactor
 
             foreach (GR_Point p in temp)
             {
-                p.x = (float)(p.x * matrix[0, 0] + p.y * matrix[1, 0] + p.z * matrix[2, 0] + p.ok * matrix[3, 0]);
-                p.y = (float)(p.x * matrix[0, 1] + p.y * matrix[1, 1] + p.z * matrix[2, 1] + p.ok * matrix[3, 1]);
-                p.z = (float)(p.x * matrix[0, 2] + p.y * matrix[1, 2] + p.z * matrix[2, 2] + p.ok * matrix[3, 2]);
-                p.z = (float)(p.x * matrix[0, 3] + p.y * matrix[1, 3] + p.z * matrix[2, 3] + p.ok * matrix[3, 3]);
+                p.X = (float)(p.X * matrix[0, 0] + p.Y * matrix[1, 0] + p.Z * matrix[2, 0] + p.Ok * matrix[3, 0]);
+                p.Y = (float)(p.X * matrix[0, 1] + p.Y * matrix[1, 1] + p.Z * matrix[2, 1] + p.Ok * matrix[3, 1]);
+                p.Z = (float)(p.X * matrix[0, 2] + p.Y * matrix[1, 2] + p.Z * matrix[2, 2] + p.Ok * matrix[3, 2]);
+                p.Ok = (float)(p.X * matrix[0, 3] + p.Y * matrix[1, 3] + p.Z * matrix[2, 3] + p.Ok * matrix[3, 3]);
             }
             foreach (GR_Line p in lines)
             {
@@ -65,11 +65,11 @@ namespace GraphicReactor
             }
             foreach (GR_Point p in temp)
             {
-                pen.Color = p.GetOutColor();
-                pen.Width = p.GetWidth();
-                gr.FillEllipse(new SolidBrush(p.GetFillColor()), p.GetX() - p.GetRadius() / 2, p.GetY() - p.GetRadius() / 2, p.GetRadius(), p.GetRadius());
-                gr.DrawEllipse(pen, p.GetX() - p.GetRadius() / 2, p.GetY() - p.GetRadius() / 2, p.GetRadius(), p.GetRadius());
-                if (p.Selected) gr.DrawEllipse(selectPen, p.GetX() - (p.GetRadius() + p.GetWidth()) / 2, p.GetY() - (p.GetRadius() + p.GetWidth()) / 2, p.GetRadius() + p.GetWidth(), p.GetRadius() + p.GetWidth());
+                pen.Color = p.OutColor;
+                pen.Width = p.LineWidth;
+                gr.FillEllipse(new SolidBrush(p.FillColor), p.X - p.Radius / 2, p.Y - p.Radius / 2, p.Radius, p.Radius);
+                gr.DrawEllipse(pen, p.X - p.Radius / 2, p.Y - p.Radius / 2, p.Radius, p.Radius);
+                if (p.Selected) gr.DrawEllipse(selectPen, p.X - (p.Radius + p.LineWidth) / 2, p.Y - (p.Radius + p.LineWidth) / 2, p.Radius + p.LineWidth, p.Radius + p.LineWidth);
 
             }
 
@@ -88,7 +88,7 @@ namespace GraphicReactor
             if (temp.Count == 2)
             {
                 FontFamily fontFamily = new FontFamily("Arial");
-                gr.DrawString((temp[0].x - temp[1].x).ToString() + "X + " + (temp[0].y - temp[1].y).ToString() + "Y + " + (temp[0].x * temp[1].y + temp[1].x * temp[0].y).ToString(), new Font(fontFamily, 7), new SolidBrush(Color.Black), (temp[0].x + temp[1].x)/2, (temp[0].y + temp[1].y)/2);
+                gr.DrawString((temp[0].X - temp[1].X).ToString() + "X + " + (temp[0].Y - temp[1].Y).ToString() + "Y + " + (temp[0].X * temp[1].Y + temp[1].X * temp[0].Y).ToString(), new Font(fontFamily, 7), new SolidBrush(Color.Black), (temp[0].X + temp[1].X)/2, (temp[0].Y + temp[1].Y)/2);
             }
             pen.Dispose();
 
@@ -98,7 +98,7 @@ namespace GraphicReactor
         {
             foreach (GR_Point p in points)
             {
-                if (p.id == id) return p;
+                if (p.Id == id) return p;
             }
             return null;
         }
@@ -106,13 +106,13 @@ namespace GraphicReactor
         {
             foreach (GR_Point p in list)
             {
-                if (p.id == id) return p;
+                if (p.Id == id) return p;
             }
             return null;
         }
         public void AddPoint(GR_Point point)
         {
-            point.id = point_identificator;
+            point.Id = point_identificator;
             point_identificator++;
             points.Add(point);
         }
@@ -121,10 +121,10 @@ namespace GraphicReactor
             if (reselect) UnselectPoints();
             foreach (var s in points)
             {
-                if (s.GetY() <= Math.Max(y1, y2) &&
-                    s.GetY() >= Math.Min(y1, y2) &&
-                    s.GetX() <= Math.Max(x1, x2) &&
-                    s.GetX() >= Math.Min(x1, x2))
+                if (s.Y <= Math.Max(y1, y2) &&
+                    s.Y >= Math.Min(y1, y2) &&
+                    s.X <= Math.Max(x1, x2) &&
+                    s.X >= Math.Min(x1, x2))
                 {
                     s.Select();
                 }
@@ -142,9 +142,9 @@ namespace GraphicReactor
         {
             foreach (GR_Point p in points)
             {
-                if (Math.Pow((a.X - p.GetX()), 2) + Math.Pow((a.Y - p.GetY()), 2) <= Math.Pow(p.GetRadius(), 2))
+                if (Math.Pow((a.X - p.X), 2) + Math.Pow((a.Y - p.Y), 2) <= Math.Pow(p.Radius, 2))
                 {
-                    return p.id;
+                    return p.Id;
                 }
             }
             return 0;
@@ -180,12 +180,19 @@ namespace GraphicReactor
         }
         public void DeletePoints (bool selectedOnly = false)
         {
-            foreach (GR_Point l in SelectedPoints)
-            {
-                DeleteLineByPoint(l.id);
-                points.Remove(l);
-            }
-            
+            if (selectedOnly)
+                foreach (GR_Point l in SelectedPoints)
+                {
+                    DeleteLineByPoint(l.Id);
+                    points.Remove(l);
+                }
+            else
+                foreach (GR_Point l in points)
+                {
+                    DeleteLineByPoint(l.Id);
+                    points.Remove(l);
+                }
+
         }
 
         public List<GR_Point> SelectedPoints
@@ -201,24 +208,42 @@ namespace GraphicReactor
         public void MatrixOperation(double[,] matrix, bool selectedOnly = false)
         {
             if (matrix.Length != 16) return;
-            foreach (GR_Point p in selectedOnly ? SelectedPoints : points)
-            {
-                p.x = (float)(p.x * matrix[0, 0] + p.y * matrix[1, 0] + p.z * matrix[2, 0] + p.ok * matrix[3, 0]);
-                p.y = (float)(p.x * matrix[0, 1] + p.y * matrix[1, 1] + p.z * matrix[2, 1] + p.ok * matrix[3, 1]);
-                p.z = (float)(p.x * matrix[0, 2] + p.y * matrix[1, 2] + p.z * matrix[2, 2] + p.ok * matrix[3, 2]);
-                p.z = (float)(p.x * matrix[0, 3] + p.y * matrix[1, 3] + p.z * matrix[2, 3] + p.ok * matrix[3, 3]);
-            }
+            if (selectedOnly)
+                foreach (GR_Point p in SelectedPoints)
+                {
+                    p.X = (float)(p.X * matrix[0, 0] + p.Y * matrix[1, 0] + p.Z * matrix[2, 0] + p.Ok * matrix[3, 0]);
+                    p.Y = (float)(p.X * matrix[0, 1] + p.Y * matrix[1, 1] + p.Z * matrix[2, 1] + p.Ok * matrix[3, 1]);
+                    p.Z = (float)(p.X * matrix[0, 2] + p.Y * matrix[1, 2] + p.Z * matrix[2, 2] + p.Ok * matrix[3, 2]);
+                    p.Ok = (float)(p.X * matrix[0, 3] + p.Y * matrix[1, 3] + p.Z * matrix[2, 3] + p.Ok * matrix[3, 3]);
+                }
+            else
+                foreach (GR_Point p in points)
+                {
+                    p.X = (float)(p.X * matrix[0, 0] + p.Y * matrix[1, 0] + p.Z * matrix[2, 0] + p.Ok * matrix[3, 0]);
+                    p.Y = (float)(p.X * matrix[0, 1] + p.Y * matrix[1, 1] + p.Z * matrix[2, 1] + p.Ok * matrix[3, 1]);
+                    p.Z = (float)(p.X * matrix[0, 2] + p.Y * matrix[1, 2] + p.Z * matrix[2, 2] + p.Ok * matrix[3, 2]);
+                    p.Ok = (float)(p.X * matrix[0, 3] + p.Y * matrix[1, 3] + p.Z * matrix[2, 3] + p.Ok * matrix[3, 3]);
+                }
+
 
         }
         public void MovePoints(int x, int y, int z, bool selectedOnly = false)
         {
-            foreach (GR_Point p in selectedOnly ? SelectedPoints : points)
-            {
-                p.x += x;
-                p.y += y;
-                p.z += z;
-            }
-
+            if(selectedOnly)
+                foreach (GR_Point p in SelectedPoints)
+                {
+                    p.X += x;
+                    p.Y += y;
+                    p.Z += z;
+                }
+            else
+                foreach (GR_Point p in points)
+                {
+                    p.X += x;
+                    p.Y += y;
+                    p.Z += z;
+                }
+            
         }
     }
 }

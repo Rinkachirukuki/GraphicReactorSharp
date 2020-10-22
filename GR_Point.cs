@@ -9,74 +9,76 @@ namespace GraphicReactor
 {
     class GR_Point : ICloneable
     {
-        public uint id;
+        public uint Id { get; set; }
 
-        public float x;
-        public float y;
-        public float z;
-        public float ok = 1;
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
 
-        private float lineWidth;
-        private float radius;
+        public float Ok { get; set; }
 
-        private Color outColor;
-        private Color fillColor;
+        public float LineWidth { get; set; }
+        public float Radius { get; set; }
 
-        public bool Selected = false;
+        public Color OutColor { get; set; }
+        public Color FillColor { get; set; }
+
+        public bool Selected { get; set; }
         public GR_Point()
         {
 
-            x = 0;
-            y = 0;
-            z = 0;
-            this.radius = 10;
-            this.outColor = Color.Black;
-            this.fillColor = Color.White;
-            this.Selected = false;
+            X = 0;
+            Y = 0;
+            Z = 0;
+            Ok = 1;
+            Radius = 10;
+            OutColor = Color.Black;
+            FillColor = Color.White;
+            Selected = false;
         }
 
         private GR_Point(uint id, float x, float y, float z, float ok, float radius, float lineWidth, Color out_color, Color fill_color, bool selected)
         {
-            this.id = id;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.ok = ok;
-            this.lineWidth = lineWidth;
-            this.radius = radius;
-            this.outColor = out_color;
-            this.fillColor = fill_color;
+            this.Id = id;
+            this.X= x;
+            this.Y = y;
+            this.Z = z;
+            this.Ok = ok;
+            this.LineWidth = lineWidth;
+            this.Radius = radius;
+            this.OutColor = out_color;
+            this.FillColor = fill_color;
             this.Selected = selected;
         }
         public GR_Point(float x, float y, float radius, int r, int g, int b)
         {
 
-            this.x = x;
-            this.y = y;
-            this.z = 0;
-            this.radius = radius;
-            this.outColor = Color.FromArgb(r, g, b);
-            this.fillColor = Color.FromArgb(r, g, b);
+            this.X = x;
+            this.Y = y;
+            this.Z = 0;
+            this.Radius = radius;
+            this.OutColor = Color.FromArgb(r, g, b);
+            this.FillColor = Color.FromArgb(r, g, b);
             this.Selected = false;
         }
         public GR_Point( float x, float y, float z, float radius, Color outColor)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.radius = radius;
-            this.outColor = outColor;
+            this.X = x;
+            this.Y = y;
+            this.Z= z;
+            this.Radius = radius;
+            this.OutColor = outColor;
             this.Selected = false;
         }
         public GR_Point( float x, float y, float z, float radius, float lineWight, int out_r, int out_g, int out_b, int fill_r, int fill_g, int fill_b)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.radius = radius;
-            this.lineWidth = lineWight;
-            this.outColor = Color.FromArgb(out_r, out_g, out_b);
-            this.fillColor = Color.FromArgb(fill_r, fill_g, fill_b);
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+            this.Radius = radius;
+            this.LineWidth = lineWight;
+            this.OutColor = Color.FromArgb(out_r, out_g, out_b);
+            this.FillColor = Color.FromArgb(fill_r, fill_g, fill_b);
             this.Selected = false;
         }
         public void Select()
@@ -88,56 +90,18 @@ namespace GraphicReactor
             Selected = false;
         }
 
-        public float GetX()
-        {
-            return x;
-        }
-        public float GetY()
-        {
-            return y;
-        }
-        public float GetZ()
-        {
-            return z;
-        }
-        public float GetRadius()
-        {
-            return radius;
-        }
-        public Color GetOutColor()
-        {
-            return outColor;
-        }
-        public Color GetFillColor()
-        {
-            return fillColor;
-        }
-        public float GetWidth()
-        {
-            return lineWidth;
-        }
         public Point ToPoint()
         {
-            return new Point((int)x, (int)y);
+            return new Point((int)X, (int)Y);
         }
-        public void SetXY(float x, float y)
+        public PointF ToPointF()
         {
-            this.x = x;
-            this.y = y;
+            return new PointF(X, Y);
         }
-        public void SetXYZ(float x, float y, float z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-
-
 
         public object Clone()
         {
-            return new GR_Point(id, x, y, z, ok, radius, lineWidth, outColor, fillColor, Selected);
+            return new GR_Point(Id, X, Y, Z, Ok, Radius, LineWidth, OutColor, FillColor, Selected);
         }
     }
 }

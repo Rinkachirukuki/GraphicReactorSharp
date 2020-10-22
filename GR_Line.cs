@@ -10,11 +10,11 @@ namespace GraphicReactor
 {
     class GR_Line
     {
-        public uint point1;
-        public uint point2;
+        public uint point1 { get; set; }
+        public uint point2 { get; set; }
 
-        public Color color;
-        public int width;
+        public Color color { get; set; }
+        public int width { get; set; }
 
 
         public GR_Line(uint point1, uint point2)
