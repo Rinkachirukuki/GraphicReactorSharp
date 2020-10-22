@@ -17,8 +17,22 @@ namespace GraphicReactor
 
         public float Ok { get; set; }
 
-        public float LineWidth { get; set; }
-        public float Radius { get; set; }
+
+
+        private float lineWidth;
+        public float LineWidth 
+        {
+            get { return lineWidth; }
+            set { lineWidth = value > 0 ? value : 1; }
+        }
+
+
+        private float radius;
+        public float Radius
+        {
+            get { return radius; }
+            set { radius = value > 0 ? value : 1; }
+        }
 
         public Color OutColor { get; set; }
         public Color FillColor { get; set; }
@@ -36,7 +50,19 @@ namespace GraphicReactor
             FillColor = Color.White;
             Selected = false;
         }
-
+        public GR_Point(float x, float y, float z)
+        {
+            this.Id = 0;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+            this.Ok = 1;
+            this.LineWidth = lineWidth;
+            this.Radius = 1;
+            this.OutColor = Color.Black;
+            this.FillColor = Color.Black;
+            this.Selected = false;
+        }
         private GR_Point(uint id, float x, float y, float z, float ok, float radius, float lineWidth, Color out_color, Color fill_color, bool selected)
         {
             this.Id = id;
@@ -81,6 +107,7 @@ namespace GraphicReactor
             this.FillColor = Color.FromArgb(fill_r, fill_g, fill_b);
             this.Selected = false;
         }
+
         public void Select()
         {
             Selected = true;

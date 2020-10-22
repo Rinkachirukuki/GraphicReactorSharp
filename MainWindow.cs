@@ -21,7 +21,6 @@ namespace GraphicReactor
         Point endPos;
         private Tool tool;
         private Action action;
-        float xAngle = 0;
 
         bool mouseMidbutton = false;
         bool mouseLbutton = false;
@@ -47,13 +46,14 @@ namespace GraphicReactor
         public MainWindow()
         {
             InitializeComponent();
+
             MainPicBox.Image = new Bitmap(MainPicBox.Width, MainPicBox.Height);
             MainPicBox.BackColor = Color.Gray;
             main_graphics = Graphics.FromImage(MainPicBox.Image);
             mainScene = new GR_Scene();
+
             this.DoubleBuffered = true;
             main_graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
         }
 
         private void MainPicBox_MouseDown(object sender, MouseEventArgs e)
@@ -79,10 +79,10 @@ namespace GraphicReactor
             endPos = e.Location;
             if (mouseMidbutton)
             {
-                xAngle += (e.Y - startPos.Y);
+                mainScene.Camera_HorizontalAngle += (e.X - startPos.X);
+                mainScene.Camera_VerticalAngle += (e.Y - startPos.Y);
                 startPos.X = e.X;
                 startPos.Y = e.Y;
-                label1.Text = xAngle.ToString();
                 UpdatePicBox(true);
                 return;
             }
@@ -167,17 +167,18 @@ namespace GraphicReactor
             if (e.Button == MouseButtons.Left) mouseLbutton = false;
             tool = Tool.move;
         }
+
         private void UpdatePicBox(bool refresh = true)
         {
             main_graphics.Clear(Color.White);
-            mainScene.Draw(main_graphics, xAngle);
+            mainScene.Draw(main_graphics);
 
             if (refresh) MainPicBox.Refresh();
         }
 
         private void aToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GR_Point p = new GR_Point(endPos.X, endPos.Y, 0, rnd.Next(20, 40), rnd.Next(1, 2), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
+            GR_Point p = new GR_Point(endPos.X, endPos.Y, 0, rnd.Next(10, 30), rnd.Next(1, 2), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
             mainScene.AddPoint(p);
 
             UpdatePicBox();
@@ -235,7 +236,7 @@ namespace GraphicReactor
 
         private void aToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            mainScene.DeletePoints();
+            mainScene.DeletePoints(true);
             UpdatePicBox();
         }
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);

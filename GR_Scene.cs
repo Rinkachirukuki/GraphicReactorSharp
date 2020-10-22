@@ -4,6 +4,8 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,21 +14,35 @@ namespace GraphicReactor
 {
     class GR_Scene
     {
-        private uint point_identificator = 1;
+        private uint point_identificator;
+
         private List<GR_Point> points;
         private List<GR_Line> lines;
-        private List<GR_Point> temp = new List<GR_Point>();
-        public Pen selectPen = new Pen(Color.Red, 1.5f);
+        private List<GR_Point> temp;
+
+        public Pen selectPen { get; set; }
+
+        public float Camera_VerticalAngle { get; set; }
+        public float Camera_HorizontalAngle { get; set; }
+
 
         public GR_Scene()
         {
             points = new List<GR_Point>();
             lines = new List<GR_Line>();
+            temp = new List<GR_Point>();
+
+            selectPen = new Pen(Color.Red, 1.5f);
             selectPen.DashStyle = DashStyle.Dash;
+
+            point_identificator = 1;
         }
-        public void Draw(Graphics gr, double ang = 0)
+
+        public void Draw(Graphics gr)
         {
             Pen pen = new Pen(Color.Black);
+            temp.Clear();
+
             //foreach (GR_Line p in lines)
             //{
             //    pen.Color = p.color;
@@ -34,19 +50,24 @@ namespace GraphicReactor
             //    gr.DrawLine(pen, GetPointByUid(p.point1).ToPoint(), GetPointByUid(p.point2).ToPoint());
 
             //}
-
-
-            temp.Clear();
+            GR_Point centerPoint = GetPointsCenter();
 
             foreach (GR_Point p in points)
             {
                 temp.Add((GR_Point)p.Clone());
             }
-                double[,] matrix = new double[,] {
-                { 1, 0, 0, 0 },
-                { 0, Math.Cos(Math.PI * ang / 180), -Math.Sin(Math.PI * ang / 180), 0 },
-                { 0, Math.Sin(Math.PI * ang / 180), Math.Cos(Math.PI * ang / 180), 0 },
-                { 0, 0, 0, 1 } };
+            double angleA = Camera_HorizontalAngle / 180 * Math.PI;
+            double angleB = Camera_VerticalAngle / 180 * Math.PI;
+
+
+            double[,] matrix = new double[,] {
+                { Math.Cos(angleA), 0, Math.Sin(angleA), 0 },
+                { Math.Sin(angleB)*Math.Sin(angleA),Math.Cos(angleB),-Math.Sin(angleA)*Math.Cos(angleB), 0},
+                { -Math.Cos(angleB)*Math.Sin(angleA),Math.Sin(angleB),Math.Cos(angleA)*Math.Cos(angleB),0},
+                { centerPoint.X * Math.Cos(angleA) + centerPoint.Y * Math.Sin(angleA)*Math.Sin(angleB)+ centerPoint.Z*Math.Cos(angleB) - centerPoint.X, centerPoint.Y*Math.Cos(angleB)*Math.Sin(angleB) - centerPoint.Y,centerPoint.X * Math.Sin(angleA) - centerPoint.Y * Math.Cos(angleA)*Math.Sin(angleB)+ centerPoint.Z*Math.Cos(angleB) - centerPoint.Z,1} 
+            };
+
+                
 
             
 
@@ -189,13 +210,51 @@ namespace GraphicReactor
                     points.Remove(l);
                 }
             else
-                foreach (GR_Point l in points)
+            {
+                points.Clear();
+                lines.Clear();
+            }
+        }
+        public GR_Point GetPointsCenter(bool selectedOnly = false)
+        {
+            if (selectedOnly && SelectedPoints.Count == 0) return new GR_Point(0, 0, 0);
+            if (!selectedOnly && points.Count == 0) return new GR_Point(0, 0, 0);
+            float x = 0;
+            float y = 0;
+            float z = 0;
+
+            if (selectedOnly) 
+            {
+                
+                foreach (GR_Point p in SelectedPoints)
                 {
-                    DeleteLineByPoint(l.Id);
-                    points.Remove(l);
+                    x += p.X;
+                    y += p.Y;
+                    z += p.Z;
                 }
 
+                x /= SelectedPoints.Count;
+                y /= SelectedPoints.Count;
+                z /= SelectedPoints.Count;
+            }
+            else
+            {
+                foreach (GR_Point p in points)
+                {
+                    x += p.X;
+                    y += p.Y;
+                    z += p.Z;
+                }
+
+                x /= points.Count;
+                y /= points.Count;
+                z /= SelectedPoints.Count;
+            }
+
+            return new GR_Point(x,y,z);
+            
         }
+
 
         public List<GR_Point> SelectedPoints
         {
