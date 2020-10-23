@@ -61,12 +61,35 @@ namespace GraphicReactor
 
 
             double[,] matrix = new double[,] {
-                { Math.Cos(angleA), 0, Math.Sin(angleA), 0 },
-                { Math.Sin(angleB)*Math.Sin(angleA),Math.Cos(angleB),-Math.Sin(angleA)*Math.Cos(angleB), 0},
-                { -Math.Cos(angleB)*Math.Sin(angleA),Math.Sin(angleB),Math.Cos(angleA)*Math.Cos(angleB),0},
-                { centerPoint.X * Math.Cos(angleA) + centerPoint.Y * Math.Sin(angleA)*Math.Sin(angleB)+ centerPoint.Z*Math.Cos(angleB) - centerPoint.X, centerPoint.Y*Math.Cos(angleB)*Math.Sin(angleB) - centerPoint.Y,centerPoint.X * Math.Sin(angleA) - centerPoint.Y * Math.Cos(angleA)*Math.Sin(angleB)+ centerPoint.Z*Math.Cos(angleB) - centerPoint.Z,1} 
-            };
+                { 
+                    Math.Cos(angleA),
+                    0,
+                    Math.Sin(angleA),
+                    0
+                },
 
+                { 
+                    Math.Sin(angleB)*Math.Sin(angleA),
+                    Math.Cos(angleB),
+                    -Math.Sin(angleB)*Math.Cos(angleA),
+                    0
+                },
+
+                { 
+                    -Math.Cos(angleB)*Math.Sin(angleA),
+                    Math.Sin(angleB),
+                    Math.Cos(angleA)*Math.Cos(angleB),
+                    0
+                },
+
+                { 
+                    -centerPoint.X * Math.Cos(angleA) - centerPoint.Y * Math.Sin(angleA)*Math.Sin(angleB) - centerPoint.Z*Math.Cos(angleB) + centerPoint.X, 
+                    -centerPoint.Y * Math.Cos(angleB) - centerPoint.Z * Math.Sin(angleB) + centerPoint.Y,
+                    -centerPoint.X * Math.Sin(angleA) + centerPoint.Y * Math.Cos(angleA)*Math.Sin(angleB) - centerPoint.Z*Math.Cos(angleB) + centerPoint.Z,
+                    1
+                } 
+            };
+            
                 
 
             
@@ -86,6 +109,7 @@ namespace GraphicReactor
                 gr.DrawLine(pen, GetPointByUid(p.point1, temp).ToPoint(), GetPointByUid(p.point2, temp).ToPoint());
 
             }
+
             foreach (GR_Point p in temp)
             {
                 pen.Color = p.OutColor;
@@ -108,11 +132,11 @@ namespace GraphicReactor
             //    if (p.Selected) gr.DrawEllipse(selectPen, p.GetX() - (p.GetRadius() + p.GetWidth()) / 2, p.GetY() - (p.GetRadius() + p.GetWidth()) / 2, p.GetRadius() + p.GetWidth(), p.GetRadius() + p.GetWidth());
 
             //}
-            if (temp.Count == 2)
-            {
-                FontFamily fontFamily = new FontFamily("Arial");
-                gr.DrawString((temp[0].X - temp[1].X).ToString() + "X + " + (temp[0].Y - temp[1].Y).ToString() + "Y + " + (temp[0].X * temp[1].Y + temp[1].X * temp[0].Y).ToString(), new Font(fontFamily, 7), new SolidBrush(Color.Black), (temp[0].X + temp[1].X)/2, (temp[0].Y + temp[1].Y)/2);
-            }
+            //if (temp.Count == 2)
+            //{
+            //    FontFamily fontFamily = new FontFamily("Arial");
+            //    gr.DrawString((temp[0].X - temp[1].X).ToString() + "X + " + (temp[0].Y - temp[1].Y).ToString() + "Y + " + (temp[0].X * temp[1].Y + temp[1].X * temp[0].Y).ToString(), new Font(fontFamily, 7), new SolidBrush(Color.Black), (temp[0].X + temp[1].X)/2, (temp[0].Y + temp[1].Y)/2);
+            //}
             pen.Dispose();
 
         }
@@ -248,7 +272,7 @@ namespace GraphicReactor
 
                 x /= points.Count;
                 y /= points.Count;
-                z /= SelectedPoints.Count;
+                z /= points.Count;
             }
 
             return new GR_Point(x,y,z);

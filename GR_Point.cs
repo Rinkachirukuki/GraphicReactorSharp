@@ -82,6 +82,7 @@ namespace GraphicReactor
             this.X = x;
             this.Y = y;
             this.Z = 0;
+            this.Ok = 1;
             this.Radius = radius;
             this.OutColor = Color.FromArgb(r, g, b);
             this.FillColor = Color.FromArgb(r, g, b);
@@ -92,6 +93,7 @@ namespace GraphicReactor
             this.X = x;
             this.Y = y;
             this.Z= z;
+            this.Ok = 1;
             this.Radius = radius;
             this.OutColor = outColor;
             this.Selected = false;
@@ -101,6 +103,7 @@ namespace GraphicReactor
             this.X = x;
             this.Y = y;
             this.Z = z;
+            this.Ok = 1;
             this.Radius = radius;
             this.LineWidth = lineWight;
             this.OutColor = Color.FromArgb(out_r, out_g, out_b);
