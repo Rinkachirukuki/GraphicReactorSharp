@@ -29,16 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.mainPicBox_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.MainPicBox = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.buttonToolStyle = new GraphicReactor.CustomForms.ToolCustomButton();
             this.buttonToolMove = new GraphicReactor.CustomForms.ToolCustomButton();
             this.buttonToolView = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.MainPicBox = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
@@ -75,35 +76,15 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.Controls.Add(this.buttonToolStyle);
             this.panel1.Controls.Add(this.buttonToolMove);
             this.panel1.Controls.Add(this.buttonToolView);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(55, 439);
+            this.panel1.Size = new System.Drawing.Size(55, 455);
             this.panel1.TabIndex = 4;
-            // 
-            // MainPicBox
-            // 
-            this.MainPicBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.MainPicBox.Location = new System.Drawing.Point(59, 1);
-            this.MainPicBox.Name = "MainPicBox";
-            this.MainPicBox.Size = new System.Drawing.Size(656, 439);
-            this.MainPicBox.TabIndex = 1;
-            this.MainPicBox.TabStop = false;
-            this.MainPicBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseDown);
-            this.MainPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseMove);
-            this.MainPicBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseUp);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(721, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
             // 
             // buttonToolStyle
             // 
@@ -141,16 +122,46 @@
             this.buttonToolView.UseVisualStyleBackColor = true;
             this.buttonToolView.Click += new System.EventHandler(this.buttonToolView_Click);
             // 
+            // MainPicBox
+            // 
+            this.MainPicBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MainPicBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.MainPicBox.Location = new System.Drawing.Point(59, 2);
+            this.MainPicBox.Name = "MainPicBox";
+            this.MainPicBox.Size = new System.Drawing.Size(493, 454);
+            this.MainPicBox.TabIndex = 1;
+            this.MainPicBox.TabStop = false;
+            this.MainPicBox.SizeChanged += new System.EventHandler(this.MainPicBox_SizeChanged);
+            this.MainPicBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseDown);
+            this.MainPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseMove);
+            this.MainPicBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseUp);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(558, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "label1";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(865, 441);
+            this.ClientSize = new System.Drawing.Size(702, 458);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.MainPicBox);
+            this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(524, 313);
             this.Name = "MainWindow";
-            this.Text = "Form1";
+            this.Text = "Reactor";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
             this.mainPicBox_ContextMenu.ResumeLayout(false);

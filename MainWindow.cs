@@ -22,6 +22,9 @@ namespace GraphicReactor
         private Tool tool;
         private Action action;
 
+        private int Xoffset;
+        private int Yoffset;
+
         bool mouseMidbutton = false;
         bool mouseLbutton = false;
         bool shiftButton = false;
@@ -42,18 +45,25 @@ namespace GraphicReactor
             viewchanging
         }
 
-
         public MainWindow()
         {
+
             InitializeComponent();
 
-            MainPicBox.Image = new Bitmap(MainPicBox.Width, MainPicBox.Height);
-            MainPicBox.BackColor = Color.Gray;
-            main_graphics = Graphics.FromImage(MainPicBox.Image);
             mainScene = new GR_Scene();
 
-            this.DoubleBuffered = true;
+            UpdatePicBoxParams();
+
+        }
+
+        private void UpdatePicBoxParams()
+        {
+            Xoffset = MainPicBox.Width / 2;
+            Yoffset = MainPicBox.Height / 2;
+            MainPicBox.Image = new Bitmap(MainPicBox.Width, MainPicBox.Height);
+            main_graphics = Graphics.FromImage(MainPicBox.Image); 
             main_graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            UpdatePicBox();
         }
 
         private void MainPicBox_MouseDown(object sender, MouseEventArgs e)
@@ -150,7 +160,7 @@ namespace GraphicReactor
             if (tool == Tool.select && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.SelectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y);
+                mainScene.SelectPoints(startPos.X - Xoffset, startPos.Y - Yoffset, endPos.X - Xoffset, endPos.Y - Yoffset);
 
             }
             if (e.Button == MouseButtons.Right)
@@ -160,7 +170,7 @@ namespace GraphicReactor
             if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.ConnectPoints(startPos, endPos);
+                mainScene.ConnectPoints(startPos.X - Xoffset,startPos.Y-Yoffset, endPos.X-Xoffset,endPos.Y-Yoffset);
             }
 
             UpdatePicBox();
@@ -171,14 +181,14 @@ namespace GraphicReactor
         private void UpdatePicBox(bool refresh = true)
         {
             main_graphics.Clear(Color.White);
-            mainScene.Draw(main_graphics);
+            mainScene.Draw(main_graphics,Xoffset,Yoffset);
 
             if (refresh) MainPicBox.Refresh();
         }
 
         private void aToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GR_Point p = new GR_Point(endPos.X, endPos.Y, 0f, rnd.Next(10, 30), rnd.Next(1, 2), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
+            GR_Point p = new GR_Point(endPos.X - Xoffset, endPos.Y - Yoffset, 0f, rnd.Next(10, 30), rnd.Next(1, 2), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
             mainScene.AddPoint(p);
 
             UpdatePicBox();
@@ -196,8 +206,6 @@ namespace GraphicReactor
                 if (e.KeyCode == Keys.Left) mainScene.MovePoints(-1, 0, 0, true);
                 UpdatePicBox();
             }
-            
-
 
         }
 
@@ -238,6 +246,11 @@ namespace GraphicReactor
         {
             mainScene.DeletePoints(true);
             UpdatePicBox();
+        }
+
+        private void MainPicBox_SizeChanged(object sender, EventArgs e)
+        {
+            UpdatePicBoxParams();
         }
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
     }

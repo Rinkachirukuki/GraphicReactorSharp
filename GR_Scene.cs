@@ -38,18 +38,11 @@ namespace GraphicReactor
             point_identificator = 1;
         }
 
-        public void Draw(Graphics gr)
+        public void Draw(Graphics gr, float Xoffset = 0, float Yoffset = 0)
         {
             Pen pen = new Pen(Color.Black);
             temp.Clear();
 
-            //foreach (GR_Line p in lines)
-            //{
-            //    pen.Color = p.color;
-            //    pen.Width = p.width;
-            //    gr.DrawLine(pen, GetPointByUid(p.point1).ToPoint(), GetPointByUid(p.point2).ToPoint());
-
-            //}
             GR_Point centerPoint = GetPointsCenter();
 
             foreach (GR_Point p in points)
@@ -83,9 +76,9 @@ namespace GraphicReactor
                 },
 
                 { 
-                    -centerPoint.X * Math.Cos(angleA) - centerPoint.Y * Math.Sin(angleA)*Math.Sin(angleB) - centerPoint.Z*Math.Cos(angleB) + centerPoint.X, 
-                    -centerPoint.Y * Math.Cos(angleB) - centerPoint.Z * Math.Sin(angleB) + centerPoint.Y,
-                    -centerPoint.X * Math.Sin(angleA) + centerPoint.Y * Math.Cos(angleA)*Math.Sin(angleB) - centerPoint.Z*Math.Cos(angleB) + centerPoint.Z,
+                    Math.Cos(angleA) -  Math.Sin(angleA)*Math.Sin(angleB) - Math.Cos(angleB), 
+                    Math.Cos(angleB) -  Math.Sin(angleB),
+                    Math.Sin(angleA) +  Math.Cos(angleA)*Math.Sin(angleB) - Math.Cos(angleB),
                     1
                 } 
             };
@@ -105,18 +98,19 @@ namespace GraphicReactor
             {
                 pen.Color = p.color;
                 pen.Width = p.width;
+                Point P1 = GetPointByUid(p.point1, temp).ToPoint();
+                Point P2 = GetPointByUid(p.point2, temp).ToPoint();
 
-                gr.DrawLine(pen, GetPointByUid(p.point1, temp).ToPoint(), GetPointByUid(p.point2, temp).ToPoint());
-
+                gr.DrawLine(pen, P1.X + Xoffset,P1.Y + Yoffset, P2.X + Xoffset, P2.Y + Yoffset);
             }
 
             foreach (GR_Point p in temp)
             {
                 pen.Color = p.OutColor;
                 pen.Width = p.LineWidth;
-                gr.FillEllipse(new SolidBrush(p.FillColor), p.X - p.Radius / 2, p.Y - p.Radius / 2, p.Radius, p.Radius);
-                gr.DrawEllipse(pen, p.X - p.Radius / 2, p.Y - p.Radius / 2, p.Radius, p.Radius);
-                if (p.Selected) gr.DrawEllipse(selectPen, p.X - (p.Radius + p.LineWidth + 4) / 2, p.Y - (p.Radius + p.LineWidth + 4) / 2, p.Radius + p.LineWidth + 4, p.Radius + p.LineWidth + 4);
+                gr.FillEllipse(new SolidBrush(p.FillColor), p.X - p.Radius / 2 + Xoffset, p.Y - p.Radius / 2 + Yoffset, p.Radius, p.Radius);
+                gr.DrawEllipse(pen, p.X - p.Radius / 2 + Xoffset, p.Y - p.Radius / 2 + Yoffset, p.Radius, p.Radius);
+                if (p.Selected) gr.DrawEllipse(selectPen, p.X - (p.Radius + p.LineWidth + 4) / 2 + Xoffset, p.Y - (p.Radius + p.LineWidth + 4) / 2 + Yoffset, p.Radius + p.LineWidth + 4, p.Radius + p.LineWidth + 4);
 
             }
 
@@ -196,6 +190,17 @@ namespace GraphicReactor
             }
             return 0;
         }
+        public uint GetPointUid(float x, float y)
+        {
+            foreach (GR_Point p in points)
+            {
+                if (Math.Pow((x - p.X), 2) + Math.Pow((y - p.Y), 2) <= Math.Pow(p.Radius, 2))
+                {
+                    return p.Id;
+                }
+            }
+            return 0;
+        }
 
         public void ConnectPoints(Point a, Point b)
         {
@@ -204,6 +209,16 @@ namespace GraphicReactor
             if (LineCorrectAndDoesntExists(point1_id, point2_id))
                 lines.Add(new GR_Line(point1_id, point2_id));
         }
+        public void ConnectPoints(float x1,float y1, float x2, float y2)
+        {
+            uint point1_id = GetPointUid(x1,y1);
+            uint point2_id = GetPointUid(x2,y2);
+            if (LineCorrectAndDoesntExists(point1_id, point2_id))
+                lines.Add(new GR_Line(point1_id, point2_id));
+        }
+
+
+
         private bool LineCorrectAndDoesntExists(uint p1,uint p2)
         {
             if (p1 == p2 || p1 == 0 || p2 == 0) return false;
