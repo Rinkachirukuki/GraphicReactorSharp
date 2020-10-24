@@ -84,7 +84,7 @@ namespace GraphicReactor
 
             }
 
-            DrawXYZarrows(gr, matrix,Xoffset,Yoffset);
+            DrawXYZarrows(gr, CalculateXYZarrows(matrix, Xoffset, Yoffset));
             if (temp.Count == 2)
             {
                 FontFamily fontFamily = new FontFamily("Arial");
@@ -93,9 +93,9 @@ namespace GraphicReactor
             pen.Dispose();
 
         }
-        private void DrawXYZarrows(Graphics gr, double[,] matrix, float Xoffset, float Yoffset)
+        private float[,] CalculateXYZarrows(double[,] matrix, float Xoffset, float Yoffset)
         {
-            if (SelectedPoints.Count == 0) return;
+            if (SelectedPoints.Count == 0) return new float[0,0];
             GR_Point centerPoint = GetPointsCenter(true);
 
             float cX = centerPoint.X;
@@ -117,9 +117,60 @@ namespace GraphicReactor
                 arw1[i, 2] = (float)(arw[i, 0] * matrix[0, 2] + arw[i, 1] * matrix[1, 2] + arw[i, 2] * matrix[2, 2] + arw[i, 3] * matrix[3, 2]);
                 arw1[i, 3] = (float)(arw[i, 0] * matrix[0, 3] + arw[i, 1] * matrix[1, 3] + arw[i, 2] * matrix[2, 3] + arw[i, 3] * matrix[3, 3]);
             }
-            gr.DrawLine(new Pen(Color.Red, 3), arw1[0, 0], arw1[0, 1], arw1[1, 0], arw1[1, 1]);
-            gr.DrawLine(new Pen(Color.Green, 3), arw1[0, 0], arw1[0, 1], arw1[2, 0], arw1[2, 1]);
-            gr.DrawLine(new Pen(Color.Blue, 3), arw1[0, 0], arw1[0, 1], arw1[3, 0], arw1[3, 1]);
+            return arw1;
+            
+        }
+        private void DrawXYZarrows(Graphics gr,float[,] arw)
+        {
+            if (arw.GetLength(0) == 0) return;
+            gr.DrawLine(new Pen(Color.Red, 3), arw[0, 0], arw[0, 1], arw[1, 0], arw[1, 1]);
+            gr.DrawLine(new Pen(Color.Green, 3), arw[0, 0], arw[0, 1], arw[2, 0], arw[2, 1]);
+            gr.DrawLine(new Pen(Color.Blue, 3), arw[0, 0], arw[0, 1], arw[3, 0], arw[3, 1]);
+        }
+
+        public bool HitXarrow(float x, float y,float Xoffset = 0, float Yoffset = 0)
+        {
+            double[,] matrix = CalculateRotationMatrix();
+            float[,] arr = CalculateXYZarrows(matrix, Xoffset,Yoffset);
+            if (arr.GetLength(0) == 0) return false;
+            return isIntersect(arr[0,0], arr[0, 1], arr[1, 0], arr[1, 1], x,  y,  2);
+        }
+        public bool HitYarrow(float x, float y, float Xoffset = 0, float Yoffset = 0)
+        {
+            double[,] matrix = CalculateRotationMatrix();
+            float[,] arr = CalculateXYZarrows(matrix, Xoffset, Yoffset);
+            if (arr.GetLength(0) == 0) return false;
+            return isIntersect(arr[0, 0], arr[0, 1], arr[2, 0], arr[2, 1], x, y, 2);
+        }
+        public bool HitZarrow(float x, float y, float Xoffset = 0, float Yoffset = 0)
+        {
+            double[,] matrix = CalculateRotationMatrix();
+            float[,] arr = CalculateXYZarrows(matrix, Xoffset, Yoffset);
+            if (arr.GetLength(0) == 0) return false;
+            return isIntersect(arr[0, 0], arr[0, 1], arr[3, 0], arr[3, 1], x, y, 2);
+        }
+
+        public bool isIntersect(float x1line, float y1line, float x2line, float y2line, float x, float y, float R)
+        {
+            x1line = x1line - x;
+            x2line = x2line - x;
+            y1line = y1line - y;
+            y2line = y2line - y;
+            float l1 = (float)Math.Sqrt(x1line * x1line + y1line * y1line);
+            float l2 = (float)Math.Sqrt(x2line * x2line + y2line * y2line);
+            if ((l1 <= R && l2 >= R) || (l1 >= R && l2 <= R))
+            {
+                return true;
+            }
+            else if (l1 < R && l2 < R) { return false; }
+            else
+            {
+                float p1 = x1line * (x2line - x1line) + y1line * (y2line - y1line);
+                float p2 = x2line * (x2line - x1line) + y2line * (y2line - y1line);
+                if (((p1 >= 0 && p2 <= 0) || (p1 <= 0) && (p2 >= 0)) && Math.Abs(x2line * y1line - x1line * y2line) / Math.Sqrt(Math.Pow(y2line - y1line, 2) + Math.Pow(x2line - x1line, 2)) <= R)
+                { return true; }
+                else { return false; }
+            }
         }
         private void DrawXYZ(Graphics gr, double[,] matrix, float Xoffset, float Yoffset)
         {
@@ -225,14 +276,15 @@ namespace GraphicReactor
         public void SelectPoints(int x1, int y1, int x2, int y2, bool reselect = true)
         {
             if (reselect) UnselectPoints();
-            foreach (var s in points)
+            foreach (var s in temp)
             {
-                if (s.Y - Camera_VerticalOffset <= Math.Max(y1, y2) &&
-                    s.Y - Camera_VerticalOffset >= Math.Min(y1, y2) &&
-                    s.X + Camera_HorizontalOffset <= Math.Max(x1, x2) &&
-                    s.X + Camera_HorizontalOffset >= Math.Min(x1, x2))
+                if (s.Y  <= Math.Max(y1, y2) &&
+                    s.Y  >= Math.Min(y1, y2) &&
+                    s.X  <= Math.Max(x1, x2) &&
+                    s.X  >= Math.Min(x1, x2))
                 {
-                    s.Select();
+
+                    GetPointByUid(s.Id, points).Select();
                 }
 
             }
@@ -257,7 +309,7 @@ namespace GraphicReactor
         }
         public uint GetPointUid(float x, float y)
         {
-            foreach (GR_Point p in points)
+            foreach (GR_Point p in temp)
             {
                 if (Math.Pow((x - p.X), 2) + Math.Pow((y - p.Y), 2) <= Math.Pow(p.Radius, 2))
                 {
@@ -399,6 +451,13 @@ namespace GraphicReactor
                 
 
 
+        }
+        public void ResetCamera()
+        {
+            Camera_HorizontalAngle = 0;
+            Camera_VerticalAngle = 0;
+            Camera_VerticalOffset = 0;
+            Camera_HorizontalOffset = 0;
         }
         public void MovePoints(int x, int y, int z, bool selectedOnly = false)
         {

@@ -39,7 +39,10 @@ namespace GraphicReactor
         }
         enum Action
         {
-            moving,
+            noAction,
+            movingX,
+            movingY,
+            movingZ,
             selecting,
             connecting,
             viewchanging
@@ -69,15 +72,34 @@ namespace GraphicReactor
         private void MainPicBox_MouseDown(object sender, MouseEventArgs e)
         {
             startPos = e.Location;
-            
+
             if (e.Button == MouseButtons.Left) mouseLbutton = true;
             if (e.Button == MouseButtons.Middle) mouseMidbutton = true;
+
+            
+            if (mainScene.HitXarrow(startPos.X, startPos.Y, Xoffset, Yoffset))
+            {
+                action = Action.movingX;
+                return;
+            }
+            if (mainScene.HitYarrow(startPos.X, startPos.Y, Xoffset, Yoffset))
+            {
+                action = Action.movingY;
+                return;
+            }
+            if (mainScene.HitZarrow(startPos.X, startPos.Y, Xoffset, Yoffset))
+            {
+                action = Action.movingZ;
+                return;
+            }
+
+
             if (shiftButton)
             {
                 tool = Tool.select;
                 return;
             }
-            if (ctrlButton)
+            if (ctrlButton && mouseLbutton)
             {
                 action = Action.connecting;
                 return;
@@ -87,6 +109,23 @@ namespace GraphicReactor
         private void MainPicBox_MouseMove(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
+            if (action != Action.noAction)
+            {
+                if (mouseLbutton && action == Action.connecting)
+                {
+                    UpdatePicBox(false);
+                    main_graphics.DrawLine(new Pen(Color.Black, 2.0F), startPos, endPos);
+                    MainPicBox.Refresh();
+                    return;
+                } 
+                else if (action == Action.movingX) mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
+                else if (action == Action.movingY) mainScene.MovePoints(0, e.X - startPos.X, 0, true);
+                else if (action == Action.movingZ) mainScene.MovePoints(0, 0, e.X - startPos.X, true);
+                UpdatePicBox(true);
+                startPos.X = e.X;
+                startPos.Y = e.Y; 
+                return;
+            }
 
             if (mouseMidbutton && shiftButton)
             {
@@ -106,14 +145,14 @@ namespace GraphicReactor
                 UpdatePicBox(true);
                 return;
             }
-            if(tool == Tool.move && mouseLbutton && mainScene.SelectedPoints.Count > 0)
-            {
-                mainScene.MovePoints(e.X - startPos.X, -e.Y + startPos.Y, 0, true);
-                startPos.X = e.X;
-                startPos.Y = e.Y;
-                UpdatePicBox(true);
-                return;
-            }
+            //if(tool == Tool.move && mouseLbutton && mainScene.SelectedPoints.Count > 0)
+            //{
+            //    mainScene.MovePoints(e.X - startPos.X, -e.Y + startPos.Y, 0, true);
+            //    startPos.X = e.X;
+            //    startPos.Y = e.Y;
+            //    UpdatePicBox(true);
+            //    return;
+            //}
             if (tool == Tool.select && mouseLbutton)
             {
                 UpdatePicBox(false);
@@ -121,13 +160,7 @@ namespace GraphicReactor
                 MainPicBox.Refresh();
                 return;
             }
-            if (action == Action.connecting && mouseLbutton)
-            {
-                UpdatePicBox(false);
-                main_graphics.DrawLine(new Pen(Color.Black, 2.0F), startPos, endPos);
-                MainPicBox.Refresh();
-                return;
-            }
+            
         }
         private void DrawSelectRect(Color fillColor, Color outColor, int x1, int y1, int x2, int y2)
         {
@@ -164,6 +197,7 @@ namespace GraphicReactor
         private void MainPicBox_MouseUp(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
+            
 
             if (e.Button == MouseButtons.Middle) mouseMidbutton = false;
 
@@ -186,6 +220,7 @@ namespace GraphicReactor
             UpdatePicBox();
             if (e.Button == MouseButtons.Left) mouseLbutton = false;
             tool = Tool.move;
+            action = Action.noAction;
         }
 
         private void UpdatePicBox(bool refresh = true)
@@ -215,7 +250,7 @@ namespace GraphicReactor
 
         private void GR_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ShiftKey) { shiftButton = true; label1.Text = "1"; }
+            if (e.KeyCode == Keys.ShiftKey)  shiftButton = true;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
           
 
@@ -233,7 +268,7 @@ namespace GraphicReactor
 
         private void GR_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ShiftKey) { shiftButton = false; label1.Text = "0"; }
+            if (e.KeyCode == Keys.ShiftKey) shiftButton = false;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = false;
         }
         private void setButtonsDefaultColors()
@@ -319,6 +354,12 @@ namespace GraphicReactor
                              );
             UpdatePicBox();
 
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            mainScene.ResetCamera();
+            UpdatePicBox();
         }
 
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
