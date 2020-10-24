@@ -60,7 +60,7 @@ namespace GraphicReactor
         {
             Xoffset = MainPicBox.Width / 2;
             Yoffset = MainPicBox.Height / 2;
-            MainPicBox.Image = new Bitmap(MainPicBox.Width, MainPicBox.Height);
+            MainPicBox.Image = new Bitmap(MainPicBox.Width > 0 ? MainPicBox.Width : 1, MainPicBox.Height > 0 ? MainPicBox.Height : 1);
             main_graphics = Graphics.FromImage(MainPicBox.Image); 
             main_graphics.SmoothingMode = SmoothingMode.AntiAlias;
             UpdatePicBox();
@@ -87,6 +87,16 @@ namespace GraphicReactor
         private void MainPicBox_MouseMove(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
+
+            if (mouseMidbutton && shiftButton)
+            {
+                mainScene.Camera_HorizontalOffset += (e.X - startPos.X);
+                mainScene.Camera_VerticalOffset += (e.Y - startPos.Y);
+                startPos.X = e.X;
+                startPos.Y = e.Y;
+                UpdatePicBox(true);
+                return;
+            }
             if (mouseMidbutton)
             {
                 mainScene.Camera_HorizontalAngle += (e.X - startPos.X);
@@ -98,7 +108,7 @@ namespace GraphicReactor
             }
             if(tool == Tool.move && mouseLbutton && mainScene.SelectedPoints.Count > 0)
             {
-                mainScene.MovePoints(e.X - startPos.X, e.Y - startPos.Y, 0, true);
+                mainScene.MovePoints(e.X - startPos.X, -e.Y + startPos.Y, 0, true);
                 startPos.X = e.X;
                 startPos.Y = e.Y;
                 UpdatePicBox(true);
@@ -160,7 +170,7 @@ namespace GraphicReactor
             if (tool == Tool.select && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.SelectPoints(startPos.X - Xoffset, startPos.Y - Yoffset, endPos.X - Xoffset, endPos.Y - Yoffset);
+                mainScene.SelectPoints(startPos.X - Xoffset, - startPos.Y + Yoffset, endPos.X - Xoffset, - endPos.Y + Yoffset);
 
             }
             if (e.Button == MouseButtons.Right)
@@ -170,7 +180,7 @@ namespace GraphicReactor
             if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.ConnectPoints(startPos.X - Xoffset,startPos.Y-Yoffset, endPos.X-Xoffset,endPos.Y-Yoffset);
+                mainScene.ConnectPoints(startPos.X - Xoffset, -startPos.Y+Yoffset, endPos.X-Xoffset,-endPos.Y+Yoffset);
             }
 
             UpdatePicBox();
@@ -182,13 +192,22 @@ namespace GraphicReactor
         {
             main_graphics.Clear(Color.White);
             mainScene.Draw(main_graphics,Xoffset,Yoffset);
-
+            
+            if (mainScene.points.Count > 0)
+            {
+                label2.Text = mainScene.points[0].X.ToString();
+                label3.Text = mainScene.points[0].Y.ToString();
+            }
+            
             if (refresh) MainPicBox.Refresh();
         }
 
         private void aToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GR_Point p = new GR_Point(endPos.X - Xoffset, endPos.Y - Yoffset, 0f, rnd.Next(10, 30), rnd.Next(1, 2), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
+            GR_Point p = new GR_Point(endPos.X - Xoffset, -endPos.Y + Yoffset, 0f,
+                rnd.Next(8, 8), rnd.Next(2, 2),
+                rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255),
+                rnd.Next(0, 255), rnd.Next(0,255), rnd.Next(0,255));
             mainScene.AddPoint(p);
 
             UpdatePicBox();
@@ -198,6 +217,9 @@ namespace GraphicReactor
         {
             if (e.KeyCode == Keys.ShiftKey) { shiftButton = true; label1.Text = "1"; }
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
+          
+
+
             if (tool == Tool.move)
             {
                 if (e.KeyCode == Keys.Up) mainScene.MovePoints(0, -1, 0, true);
@@ -252,6 +274,53 @@ namespace GraphicReactor
         {
             UpdatePicBoxParams();
         }
+
+        private void xToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            mainScene.MatrixOperation(
+                             new double[,]
+                             {
+                                {-1,0,0,0},
+                                {0,1,0,0},
+                                {0,0,1,0},
+                                {0,0,0,1}
+                             }, 
+                                true
+                             );
+            UpdatePicBox();
+        }
+
+        private void yToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mainScene.MatrixOperation(
+                             new double[,]
+                             {
+                                {1,0,0,0},
+                                {0,-1,0,0},
+                                {0,0,1,0},
+                                {0,0,0,1}
+                             },
+                                true
+                             );
+            UpdatePicBox();
+        }
+
+        private void zToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mainScene.MatrixOperation(
+                             new double[,]
+                             {
+                                {1,0,0,0},
+                                {0,1,0,0},
+                                {0,0,-1,0},
+                                {0,0,0,1}
+                             },
+                                true
+                             );
+            UpdatePicBox();
+
+        }
+
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
     }
 }

@@ -34,12 +34,19 @@
             this.aToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.createGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.MainPicBox = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.yToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.buttonToolStyle = new GraphicReactor.CustomForms.ToolCustomButton();
             this.buttonToolMove = new GraphicReactor.CustomForms.ToolCustomButton();
             this.buttonToolView = new GraphicReactor.CustomForms.ToolCustomButton();
-            this.MainPicBox = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
@@ -50,29 +57,38 @@
             this.mainPicBox_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aToolStripMenuItem,
             this.aToolStripMenuItem1,
-            this.createGroupToolStripMenuItem});
+            this.createGroupToolStripMenuItem,
+            this.toolStripMenuItem2});
             this.mainPicBox_ContextMenu.Name = "contextMenuStrip1";
-            this.mainPicBox_ContextMenu.Size = new System.Drawing.Size(145, 70);
+            this.mainPicBox_ContextMenu.Size = new System.Drawing.Size(175, 92);
             // 
             // aToolStripMenuItem
             // 
             this.aToolStripMenuItem.Name = "aToolStripMenuItem";
-            this.aToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.aToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.aToolStripMenuItem.Text = "Add";
             this.aToolStripMenuItem.Click += new System.EventHandler(this.aToolStripMenuItem_Click);
             // 
             // aToolStripMenuItem1
             // 
             this.aToolStripMenuItem1.Name = "aToolStripMenuItem1";
-            this.aToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
+            this.aToolStripMenuItem1.Size = new System.Drawing.Size(174, 22);
             this.aToolStripMenuItem1.Text = "Delete";
             this.aToolStripMenuItem1.Click += new System.EventHandler(this.aToolStripMenuItem1_Click);
             // 
             // createGroupToolStripMenuItem
             // 
             this.createGroupToolStripMenuItem.Name = "createGroupToolStripMenuItem";
-            this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.createGroupToolStripMenuItem.Text = "Create Group";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xToolStripMenuItem});
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(174, 22);
+            this.toolStripMenuItem2.Text = "Transform selected";
             // 
             // panel1
             // 
@@ -85,6 +101,84 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(55, 455);
             this.panel1.TabIndex = 4;
+            // 
+            // MainPicBox
+            // 
+            this.MainPicBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MainPicBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.MainPicBox.Location = new System.Drawing.Point(59, 2);
+            this.MainPicBox.Name = "MainPicBox";
+            this.MainPicBox.Size = new System.Drawing.Size(493, 454);
+            this.MainPicBox.TabIndex = 1;
+            this.MainPicBox.TabStop = false;
+            this.MainPicBox.SizeChanged += new System.EventHandler(this.MainPicBox_SizeChanged);
+            this.MainPicBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseDown);
+            this.MainPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseMove);
+            this.MainPicBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseUp);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(558, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "label1";
+            // 
+            // xToolStripMenuItem
+            // 
+            this.xToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xToolStripMenuItem1,
+            this.yToolStripMenuItem,
+            this.zToolStripMenuItem});
+            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.xToolStripMenuItem.Text = "Reflect";
+            // 
+            // xToolStripMenuItem1
+            // 
+            this.xToolStripMenuItem1.Name = "xToolStripMenuItem1";
+            this.xToolStripMenuItem1.Size = new System.Drawing.Size(81, 22);
+            this.xToolStripMenuItem1.Text = "X";
+            this.xToolStripMenuItem1.Click += new System.EventHandler(this.xToolStripMenuItem1_Click);
+            // 
+            // yToolStripMenuItem
+            // 
+            this.yToolStripMenuItem.Name = "yToolStripMenuItem";
+            this.yToolStripMenuItem.Size = new System.Drawing.Size(81, 22);
+            this.yToolStripMenuItem.Text = "Y";
+            this.yToolStripMenuItem.Click += new System.EventHandler(this.yToolStripMenuItem_Click);
+            // 
+            // zToolStripMenuItem
+            // 
+            this.zToolStripMenuItem.Name = "zToolStripMenuItem";
+            this.zToolStripMenuItem.Size = new System.Drawing.Size(81, 22);
+            this.zToolStripMenuItem.Text = "Z";
+            this.zToolStripMenuItem.Click += new System.EventHandler(this.zToolStripMenuItem_Click);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(561, 73);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "label2";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(603, 73);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "label3";
             // 
             // buttonToolStyle
             // 
@@ -122,38 +216,13 @@
             this.buttonToolView.UseVisualStyleBackColor = true;
             this.buttonToolView.Click += new System.EventHandler(this.buttonToolView_Click);
             // 
-            // MainPicBox
-            // 
-            this.MainPicBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.MainPicBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.MainPicBox.Location = new System.Drawing.Point(59, 2);
-            this.MainPicBox.Name = "MainPicBox";
-            this.MainPicBox.Size = new System.Drawing.Size(493, 454);
-            this.MainPicBox.TabIndex = 1;
-            this.MainPicBox.TabStop = false;
-            this.MainPicBox.SizeChanged += new System.EventHandler(this.MainPicBox_SizeChanged);
-            this.MainPicBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseDown);
-            this.MainPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseMove);
-            this.MainPicBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseUp);
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(558, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(702, 458);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.MainPicBox);
@@ -183,6 +252,13 @@
         private CustomForms.ToolCustomButton buttonToolMove;
         private System.Windows.Forms.PictureBox MainPicBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem yToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem zToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 

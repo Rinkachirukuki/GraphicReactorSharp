@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
-    class GR_Point : ICloneable
+    class GR_Point : ICloneable, IComparable<GR_Point>
     {
         public uint Id { get; set; }
 
@@ -132,6 +132,11 @@ namespace GraphicReactor
         public object Clone()
         {
             return new GR_Point(Id, X, Y, Z, Ok, Radius, LineWidth, OutColor, FillColor, Selected);
+        }
+
+        public int CompareTo(GR_Point obj)
+        {
+            return -Z.CompareTo(obj.Z);
         }
     }
 }
