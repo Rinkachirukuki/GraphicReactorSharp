@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
-    class GR_Point : GR_Point_Base, ICloneable, IComparable<GR_Point>
+    class GR_Point : GR_Point_Base
     {
-        public uint Id { get; set; }
 
         private float lineWidth;
         public float LineWidth 
@@ -120,18 +119,17 @@ namespace GraphicReactor
             return new PointF(X, Y);
         }
 
-        public object Clone()
+        override public object Clone()
         {
             return new GR_Point(Id, X, Y, Z, Ok, Radius, LineWidth, OutColor, FillColor, Selected);
         }
         override public void Draw(Graphics gr, Pen selectPen) 
         {
-            gr.FillEllipse(new SolidBrush(FillColor), X - Radius / 2, -Y - Radius / 2, Radius, Radius);
-            gr.DrawEllipse(new Pen(OutColor), X - Radius / 2, -Y - Radius / 2, Radius, Radius);
-            if (Selected) gr.DrawEllipse(selectPen, X - (Radius + LineWidth + 4) / 2, -Y - (Radius + LineWidth + 4) / 2, Radius + LineWidth + 4, Radius + LineWidth + 4);
+            gr.FillEllipse(new SolidBrush(FillColor), X - Radius / 2, Y - Radius / 2, Radius, Radius);
+            gr.DrawEllipse(new Pen(OutColor), X - Radius / 2, Y - Radius / 2, Radius, Radius);
+            if (Selected) gr.DrawEllipse(selectPen, X - (Radius + LineWidth + 4) / 2, Y - (Radius + LineWidth + 4) / 2, Radius + LineWidth + 4, Radius + LineWidth + 4);
         }
-
-        public int CompareTo(GR_Point obj)
+        override public int CompareTo(GR_Point_Base obj)
         {
             return -Z.CompareTo(obj.Z);
         }

@@ -55,6 +55,7 @@
     <Compile Include="GR_Line.cs" />
     <Compile Include="GR_Point.cs" />
     <Compile Include="GR_Point_Base.cs" />
+    <Compile Include="GR_Point_Simple.cs" />
     <Compile Include="GR_Scene.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>

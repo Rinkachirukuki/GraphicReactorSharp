@@ -16,9 +16,9 @@ namespace GraphicReactor
     {
         private uint point_identificator;
 
-        public List<GR_Point> points;
+        public List<GR_Point_Base> points;
         private List<GR_Line> lines;
-        private List<GR_Point> temp;
+        private List<GR_Point_Base> temp;
 
         public Pen selectPen { get; set; }
 
@@ -33,9 +33,9 @@ namespace GraphicReactor
 
         public GR_Scene()
         {
-            points = new List<GR_Point>();
+            points = new List<GR_Point_Base>();
             lines = new List<GR_Line>();
-            temp = new List<GR_Point>();
+            temp = new List<GR_Point_Base>();
 
             
 
@@ -71,21 +71,25 @@ namespace GraphicReactor
                 temp[i].Z = (float)(points[i].X * matrix[0, 2] + points[i].Y * matrix[1, 2] + points[i].Z * matrix[2, 2] + points[i].Ok * matrix[3, 2]);
                 temp[i].Ok = (float)(points[i].X * matrix[0, 3] + points[i].Y * matrix[1, 3] + points[i].Z * matrix[2, 3] + points[i].Ok * matrix[3, 3]);
             }
-
-
-            foreach (GR_Line p in lines)
+            if (true)
             {
-                pen.Color = p.color;
-                pen.Width = p.width;
-                Point P1 = GetPointByUid(p.point1, temp).ToPoint();
-                Point P2 = GetPointByUid(p.point2, temp).ToPoint();
-
-                gr.DrawLine(pen, P1.X, -P1.Y, P2.X, -P2.Y);
+                foreach (GR_Line p in lines)
+                {
+                    temp.AddRange(ToSimplePointList(p, 50));
+                }
             }
+            else
+            {
+                foreach (GR_Line line in lines)
+                {
+                    gr.DrawLine(new Pen(line.color,line.width), GetPointByUid(line.point1).ToPoint(), GetPointByUid(line.point2).ToPoint());
+                }
+            }
+            
 
             temp.Sort();
 
-            foreach (GR_Point p in temp)
+            foreach (GR_Point_Base p in temp)
             {
                 p.Draw(gr,selectPen);
             }
@@ -93,6 +97,21 @@ namespace GraphicReactor
             DrawXYZarrows(gr, CalculateXYZarrows(matrix));
            
             pen.Dispose();
+
+        }
+        public List<GR_Point_Base> ToSimplePointList(GR_Line line,int n)
+        {
+            List <GR_Point_Base> lst  = new List<GR_Point_Base>();
+            GR_Point_Base p1 = GetPointByUid(line.point1, temp);
+            GR_Point_Base p2 = GetPointByUid(line.point2, temp);
+            float adX = (p2.X - p1.X) / n;
+            float adY = (p2.Y - p1.Y) / n;
+            float adZ = (p2.Z - p1.Z) / n;
+            for (int i =0; i < n;i++)
+            {
+                lst.Add(new GR_Point_Simple(p1.X + adX * i, p1.Y + adY * i, p1.Z + adZ * i, 1 ,line.width,line.color));
+            }
+            return lst;
 
         }
         private float[,] CalculateXYZarrows(double[,] matrix)
@@ -115,7 +134,7 @@ namespace GraphicReactor
             for (int i = 0; i < arw.GetLength(0); i++)
             {
                 arw1[i, 0] = (float)(arw[i, 0] * matrix[0, 0] + arw[i, 1] * matrix[1, 0] + arw[i, 2] * matrix[2, 0] + arw[i, 3] * matrix[3, 0]);
-                arw1[i, 1] = -(float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
+                arw1[i, 1] = (float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
                 arw1[i, 2] = (float)(arw[i, 0] * matrix[0, 2] + arw[i, 1] * matrix[1, 2] + arw[i, 2] * matrix[2, 2] + arw[i, 3] * matrix[3, 2]);
                 arw1[i, 3] = (float)(arw[i, 0] * matrix[0, 3] + arw[i, 1] * matrix[1, 3] + arw[i, 2] * matrix[2, 3] + arw[i, 3] * matrix[3, 3]);
             }
@@ -196,7 +215,7 @@ namespace GraphicReactor
             for (int i = 0; i < arw.GetLength(0); i++)
             {
                 arw1[i, 0] = (float)(arw[i, 0] * matrix[0, 0] + arw[i, 1] * matrix[1, 0] + arw[i, 2] * matrix[2, 0] + arw[i, 3] * matrix[3, 0]);
-                arw1[i, 1] = -(float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
+                arw1[i, 1] = (float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
                 arw1[i, 2] = (float)(arw[i, 0] * matrix[0, 2] + arw[i, 1] * matrix[1, 2] + arw[i, 2] * matrix[2, 2] + arw[i, 3] * matrix[3, 2]);
                 arw1[i, 3] = (float)(arw[i, 0] * matrix[0, 3] + arw[i, 1] * matrix[1, 3] + arw[i, 2] * matrix[2, 3] + arw[i, 3] * matrix[3, 3]);
             }
@@ -218,21 +237,21 @@ namespace GraphicReactor
 
                 {
                     Math.Sin(angleB)*Math.Sin(angleA),
-                    Math.Cos(angleB),
+                    -Math.Cos(angleB),
                     -Math.Sin(angleB)*Math.Cos(angleA),
                     0
                 },
 
                 {
                     -Math.Cos(angleB)*Math.Sin(angleA),
-                    Math.Sin(angleB),
+                    -Math.Sin(angleB),
                     Math.Cos(angleA)*Math.Cos(angleB),
                     0
                 },
 
                 {
                     Math.Cos(angleA) -  Math.Sin(angleA)*Math.Sin(angleB) - Math.Cos(angleB) + Camera_HorizontalOffset + HorizontalOffset,
-                    Math.Cos(angleB) -  Math.Sin(angleB) - Camera_VerticalOffset - VerticalOffset,
+                    - Math.Cos(angleB) +  Math.Sin(angleB) + Camera_VerticalOffset + VerticalOffset,
                     Math.Sin(angleA) +  Math.Cos(angleA)*Math.Sin(angleB) - Math.Cos(angleB),
                     1
                 }
@@ -255,17 +274,17 @@ namespace GraphicReactor
        
         private GR_Point GetPointByUid(uint id)
         {
-            foreach (GR_Point p in points)
+            foreach (GR_Point_Base p in temp)
             {
-                if (p.Id == id) return p;
+                if (p is GR_Point && p.Id == id) return (GR_Point)p;
             }
             return null;
         }
-        private GR_Point GetPointByUid(uint id, List<GR_Point> list)
+        private GR_Point GetPointByUid(uint id, List<GR_Point_Base> list)
         {
-            foreach (GR_Point p in list)
+            foreach (GR_Point_Base p in list)
             {
-                if (p.Id == id) return p;
+                if (p is GR_Point && p.Id == id) return (GR_Point)p;
             }
             return null;
         }
@@ -282,7 +301,8 @@ namespace GraphicReactor
             if (reselect) UnselectPoints();
             foreach (var s in temp)
             {
-                if (s.Y  <= Math.Max(y1, y2) &&
+                if (s.Id != 0 &&
+                    s.Y  <= Math.Max(y1, y2) &&
                     s.Y  >= Math.Min(y1, y2) &&
                     s.X  <= Math.Max(x1, x2) &&
                     s.X  >= Math.Min(x1, x2))
@@ -295,16 +315,17 @@ namespace GraphicReactor
         }
         public void UnselectPoints()
         {
-            foreach (var s in points)
+            foreach (GR_Point_Base s in points)
             {
-                s.UnSelect();
+                if (s is GR_Point)
+                    ((GR_Point)s).UnSelect();
             }
         }
         public uint GetPointUid(Point a)
         {
-            foreach (GR_Point p in points)
+            foreach (GR_Point_Base p in points)
             {
-                if (Math.Pow((a.X - p.X), 2) + Math.Pow((a.Y - p.Y), 2) <= Math.Pow(p.Radius, 2))
+                if (p is GR_Point && Math.Pow((a.X - p.X), 2) + Math.Pow((a.Y - p.Y), 2) <= Math.Pow(p.Radius, 2))
                 {
                     return p.Id;
                 }
@@ -313,9 +334,9 @@ namespace GraphicReactor
         }
         public uint GetPointUid(float x, float y)
         {
-            foreach (GR_Point p in temp)
+            foreach (GR_Point_Base p in temp)
             {
-                if (Math.Pow((x - p.X), 2) + Math.Pow((y - p.Y), 2) <= Math.Pow(p.Radius, 2))
+                if (p is GR_Point && Math.Pow((x - p.X), 2) + Math.Pow((y - p.Y), 2) <= Math.Pow(p.Radius, 2))
                 {
                     return p.Id;
                 }
@@ -330,12 +351,12 @@ namespace GraphicReactor
             if (LineCorrectAndDoesntExists(point1_id, point2_id))
                 lines.Add(new GR_Line(point1_id, point2_id));
         }
-        public void ConnectPoints(float x1,float y1, float x2, float y2)
+        public void ConnectPoints(float x1,float y1, float x2, float y2, int width, Color color)
         {
             uint point1_id = GetPointUid(x1,y1);
             uint point2_id = GetPointUid(x2,y2);
             if (LineCorrectAndDoesntExists(point1_id, point2_id))
-                lines.Add(new GR_Line(point1_id, point2_id));
+                lines.Add(new GR_Line(point1_id,point2_id,width,color));
         }
 
 
@@ -416,12 +437,13 @@ namespace GraphicReactor
         }
 
 
-        public List<GR_Point> SelectedPoints
+        public List<GR_Point_Base> SelectedPoints
         {
             get
             {
                 var s_points = from s in points
-                               where s.Selected
+                               where s is GR_Point
+                               where ((GR_Point)s).Selected
                                select s;
                 return s_points.ToList();
             }

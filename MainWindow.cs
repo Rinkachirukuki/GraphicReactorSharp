@@ -200,7 +200,7 @@ namespace GraphicReactor
             if (tool == Tool.select && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.SelectPoints(startPos.X, - startPos.Y, endPos.X, - endPos.Y);
+                mainScene.SelectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y);
 
             }
             if (e.Button == MouseButtons.Right)
@@ -210,7 +210,7 @@ namespace GraphicReactor
             if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.ConnectPoints(startPos.X, -startPos.Y, endPos.X,-endPos.Y);
+                mainScene.ConnectPoints(startPos.X, startPos.Y, endPos.X,endPos.Y, 4, Color.FromArgb(255,rnd.Next(0,255), rnd.Next(0, 255), rnd.Next(0, 255)));
             }
 
             UpdatePicBox();

@@ -24,6 +24,14 @@ namespace GraphicReactor
             color = Color.Black;
             width = 2;
         }
+
+        public GR_Line(uint point1, uint point2, int width)
+        {
+            this.point1 = point1;
+            this.point2 = point2;
+            color = Color.Black;
+            this.width = width;
+        }
         public GR_Line(uint point1, uint point2, int width, Color color)
         {
             this.point1 = point1;
@@ -31,5 +39,6 @@ namespace GraphicReactor
             this.width = width;
             this.color = color;
         }
+
     }
 }
