@@ -7,17 +7,9 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
-    class GR_Point : ICloneable, IComparable<GR_Point>
+    class GR_Point : GR_Point_Base, ICloneable, IComparable<GR_Point>
     {
         public uint Id { get; set; }
-
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Z { get; set; }
-
-        public float Ok { get; set; }
-
-
 
         private float lineWidth;
         public float LineWidth 
@@ -28,14 +20,13 @@ namespace GraphicReactor
 
 
         private float radius;
-        public float Radius
+        override public float Radius
         {
             get { return radius; }
             set { radius = value > 0 ? value : 1; }
         }
 
         public Color OutColor { get; set; }
-        public Color FillColor { get; set; }
 
         public bool Selected { get; set; }
         public GR_Point()
@@ -132,6 +123,12 @@ namespace GraphicReactor
         public object Clone()
         {
             return new GR_Point(Id, X, Y, Z, Ok, Radius, LineWidth, OutColor, FillColor, Selected);
+        }
+        override public void Draw(Graphics gr, Pen selectPen) 
+        {
+            gr.FillEllipse(new SolidBrush(FillColor), X - Radius / 2, -Y - Radius / 2, Radius, Radius);
+            gr.DrawEllipse(new Pen(OutColor), X - Radius / 2, -Y - Radius / 2, Radius, Radius);
+            if (Selected) gr.DrawEllipse(selectPen, X - (Radius + LineWidth + 4) / 2, -Y - (Radius + LineWidth + 4) / 2, Radius + LineWidth + 4, Radius + LineWidth + 4);
         }
 
         public int CompareTo(GR_Point obj)

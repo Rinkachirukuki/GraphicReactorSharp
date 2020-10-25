@@ -27,6 +27,9 @@ namespace GraphicReactor
         public float Camera_VerticalOffset { get; set; }
         public float Camera_HorizontalOffset { get; set; }
 
+        public float VerticalOffset { get; set; }
+        public float HorizontalOffset { get; set; }
+
 
         public GR_Scene()
         {
@@ -40,16 +43,24 @@ namespace GraphicReactor
             selectPen.DashStyle = DashStyle.Dot;
 
             point_identificator = 1;
+
+            HorizontalOffset = 0;
+            VerticalOffset = 0;
+
+            Camera_HorizontalAngle = 0;
+            Camera_VerticalAngle = 0;
+            Camera_HorizontalOffset = 0;
+            Camera_VerticalOffset = 0;
         }
 
-        public void Draw(Graphics gr, float Xoffset = 0, float Yoffset = 0)
+        public void Draw(Graphics gr)
         {
 
             Pen pen = new Pen(Color.Black);
 
             double[,] matrix = CalculateRotationMatrix();
 
-            DrawXYZ(gr,matrix,Xoffset,Yoffset);
+            DrawXYZ(gr,matrix);
 
             UpdateTemp();
 
@@ -69,31 +80,22 @@ namespace GraphicReactor
                 Point P1 = GetPointByUid(p.point1, temp).ToPoint();
                 Point P2 = GetPointByUid(p.point2, temp).ToPoint();
 
-                gr.DrawLine(pen, P1.X + Xoffset,-P1.Y + Yoffset, P2.X + Xoffset, -P2.Y + Yoffset);
+                gr.DrawLine(pen, P1.X, -P1.Y, P2.X, -P2.Y);
             }
 
             temp.Sort();
 
             foreach (GR_Point p in temp)
             {
-                pen.Color = p.OutColor;
-                pen.Width = p.LineWidth;
-                gr.FillEllipse(new SolidBrush(p.FillColor), p.X - p.Radius / 2 + Xoffset, - p.Y - p.Radius / 2 + Yoffset, p.Radius, p.Radius);
-                gr.DrawEllipse(pen, p.X - p.Radius / 2 + Xoffset, - p.Y - p.Radius / 2 + Yoffset, p.Radius, p.Radius);
-                if (p.Selected) gr.DrawEllipse(selectPen, p.X - (p.Radius + p.LineWidth + 4) / 2 + Xoffset, - p.Y - (p.Radius + p.LineWidth + 4) / 2 + Yoffset, p.Radius + p.LineWidth + 4, p.Radius + p.LineWidth + 4);
-
+                p.Draw(gr,selectPen);
             }
 
-            DrawXYZarrows(gr, CalculateXYZarrows(matrix, Xoffset, Yoffset));
-            if (temp.Count == 2)
-            {
-                FontFamily fontFamily = new FontFamily("Arial");
-                gr.DrawString((temp[0].Y * temp[1].Ok - temp[1].Y*temp[0].Ok).ToString() + "X - " + (temp[0].X * temp[1].Ok - temp[1].X * temp[0].Ok).ToString() + "Y + " + (temp[0].X * temp[1].Y - temp[1].X * temp[0].Y).ToString(), new Font(fontFamily, 7), new SolidBrush(Color.Black), (temp[0].X + temp[1].X) / 2 + Xoffset, -(temp[0].Y + temp[1].Y) / 2 + Yoffset);
-            }
+            DrawXYZarrows(gr, CalculateXYZarrows(matrix));
+           
             pen.Dispose();
 
         }
-        private float[,] CalculateXYZarrows(double[,] matrix, float Xoffset, float Yoffset)
+        private float[,] CalculateXYZarrows(double[,] matrix)
         {
             if (SelectedPoints.Count == 0) return new float[0,0];
             GR_Point centerPoint = GetPointsCenter(true);
@@ -112,8 +114,8 @@ namespace GraphicReactor
 
             for (int i = 0; i < arw.GetLength(0); i++)
             {
-                arw1[i, 0] = (float)(arw[i, 0] * matrix[0, 0] + arw[i, 1] * matrix[1, 0] + arw[i, 2] * matrix[2, 0] + arw[i, 3] * matrix[3, 0]) + Xoffset;
-                arw1[i, 1] = -(float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]) + Yoffset;
+                arw1[i, 0] = (float)(arw[i, 0] * matrix[0, 0] + arw[i, 1] * matrix[1, 0] + arw[i, 2] * matrix[2, 0] + arw[i, 3] * matrix[3, 0]);
+                arw1[i, 1] = -(float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
                 arw1[i, 2] = (float)(arw[i, 0] * matrix[0, 2] + arw[i, 1] * matrix[1, 2] + arw[i, 2] * matrix[2, 2] + arw[i, 3] * matrix[3, 2]);
                 arw1[i, 3] = (float)(arw[i, 0] * matrix[0, 3] + arw[i, 1] * matrix[1, 3] + arw[i, 2] * matrix[2, 3] + arw[i, 3] * matrix[3, 3]);
             }
@@ -128,24 +130,24 @@ namespace GraphicReactor
             gr.DrawLine(new Pen(Color.Blue, 3), arw[0, 0], arw[0, 1], arw[3, 0], arw[3, 1]);
         }
 
-        public bool HitXarrow(float x, float y,float Xoffset = 0, float Yoffset = 0)
+        public bool HitXarrow(float x, float y)
         {
             double[,] matrix = CalculateRotationMatrix();
-            float[,] arr = CalculateXYZarrows(matrix, Xoffset,Yoffset);
+            float[,] arr = CalculateXYZarrows(matrix);
             if (arr.GetLength(0) == 0) return false;
             return isIntersect(arr[0,0], arr[0, 1], arr[1, 0], arr[1, 1], x,  y,  2);
         }
-        public bool HitYarrow(float x, float y, float Xoffset = 0, float Yoffset = 0)
+        public bool HitYarrow(float x, float y)
         {
             double[,] matrix = CalculateRotationMatrix();
-            float[,] arr = CalculateXYZarrows(matrix, Xoffset, Yoffset);
+            float[,] arr = CalculateXYZarrows(matrix);
             if (arr.GetLength(0) == 0) return false;
             return isIntersect(arr[0, 0], arr[0, 1], arr[2, 0], arr[2, 1], x, y, 2);
         }
-        public bool HitZarrow(float x, float y, float Xoffset = 0, float Yoffset = 0)
+        public bool HitZarrow(float x, float y)
         {
             double[,] matrix = CalculateRotationMatrix();
-            float[,] arr = CalculateXYZarrows(matrix, Xoffset, Yoffset);
+            float[,] arr = CalculateXYZarrows(matrix);
             if (arr.GetLength(0) == 0) return false;
             return isIntersect(arr[0, 0], arr[0, 1], arr[3, 0], arr[3, 1], x, y, 2);
         }
@@ -172,18 +174,18 @@ namespace GraphicReactor
                 else { return false; }
             }
         }
-        private void DrawXYZ(Graphics gr, double[,] matrix, float Xoffset, float Yoffset)
+        private void DrawXYZ(Graphics gr, double[,] matrix)
         {
 
             float[,] arw = new float[,] {
-            {Xoffset*2, 0, 0, 1},
-            {-Xoffset*2, 0, 0, 1},
+            {HorizontalOffset*2, 0, 0, 1},
+            {-HorizontalOffset*2, 0, 0, 1},
 
-            {0, Yoffset*2, 0, 1},
-            {0, -Yoffset*2, 0, 1},
+            {0, VerticalOffset*2, 0, 1},
+            {0, -VerticalOffset*2, 0, 1},
 
-            {0, 0,  Yoffset*2, 1},
-            {0, 0, - Yoffset*2, 1}
+            {0, 0,  VerticalOffset*2, 1},
+            {0, 0, - VerticalOffset*2, 1}
             };
 
 
@@ -193,8 +195,8 @@ namespace GraphicReactor
 
             for (int i = 0; i < arw.GetLength(0); i++)
             {
-                arw1[i, 0] = (float)(arw[i, 0] * matrix[0, 0] + arw[i, 1] * matrix[1, 0] + arw[i, 2] * matrix[2, 0] + arw[i, 3] * matrix[3, 0]) + Xoffset;
-                arw1[i, 1] = -(float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]) + Yoffset;
+                arw1[i, 0] = (float)(arw[i, 0] * matrix[0, 0] + arw[i, 1] * matrix[1, 0] + arw[i, 2] * matrix[2, 0] + arw[i, 3] * matrix[3, 0]);
+                arw1[i, 1] = -(float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
                 arw1[i, 2] = (float)(arw[i, 0] * matrix[0, 2] + arw[i, 1] * matrix[1, 2] + arw[i, 2] * matrix[2, 2] + arw[i, 3] * matrix[3, 2]);
                 arw1[i, 3] = (float)(arw[i, 0] * matrix[0, 3] + arw[i, 1] * matrix[1, 3] + arw[i, 2] * matrix[2, 3] + arw[i, 3] * matrix[3, 3]);
             }
@@ -229,8 +231,8 @@ namespace GraphicReactor
                 },
 
                 {
-                    Math.Cos(angleA) -  Math.Sin(angleA)*Math.Sin(angleB) - Math.Cos(angleB) + Camera_HorizontalOffset,
-                    Math.Cos(angleB) -  Math.Sin(angleB) - Camera_VerticalOffset,
+                    Math.Cos(angleA) -  Math.Sin(angleA)*Math.Sin(angleB) - Math.Cos(angleB) + Camera_HorizontalOffset + HorizontalOffset,
+                    Math.Cos(angleB) -  Math.Sin(angleB) - Camera_VerticalOffset - VerticalOffset,
                     Math.Sin(angleA) +  Math.Cos(angleA)*Math.Sin(angleB) - Math.Cos(angleB),
                     1
                 }
@@ -270,6 +272,8 @@ namespace GraphicReactor
         public void AddPoint(GR_Point point)
         {
             point.Id = point_identificator;
+            point.X -= HorizontalOffset + Camera_HorizontalOffset;
+            point.Y += VerticalOffset + Camera_VerticalOffset;
             point_identificator++;
             points.Add(point);
         }

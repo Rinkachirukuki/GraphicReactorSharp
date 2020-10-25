@@ -22,14 +22,10 @@ namespace GraphicReactor
         private Tool tool;
         private Action action;
 
-        private int Xoffset;
-        private int Yoffset;
-
         bool mouseMidbutton = false;
         bool mouseLbutton = false;
         bool shiftButton = false;
         bool ctrlButton = false;
-        bool altButton = false;
 
         enum Tool
         {
@@ -61,8 +57,8 @@ namespace GraphicReactor
 
         private void UpdatePicBoxParams()
         {
-            Xoffset = MainPicBox.Width / 2;
-            Yoffset = MainPicBox.Height / 2;
+            mainScene.HorizontalOffset = MainPicBox.Width / 2;
+            mainScene.VerticalOffset = MainPicBox.Height / 2;
             MainPicBox.Image = new Bitmap(MainPicBox.Width > 0 ? MainPicBox.Width : 1, MainPicBox.Height > 0 ? MainPicBox.Height : 1);
             main_graphics = Graphics.FromImage(MainPicBox.Image); 
             main_graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -77,17 +73,17 @@ namespace GraphicReactor
             if (e.Button == MouseButtons.Middle) mouseMidbutton = true;
 
             
-            if (mainScene.HitXarrow(startPos.X, startPos.Y, Xoffset, Yoffset))
+            if (mainScene.HitXarrow(startPos.X, startPos.Y))
             {
                 action = Action.movingX;
                 return;
             }
-            if (mainScene.HitYarrow(startPos.X, startPos.Y, Xoffset, Yoffset))
+            if (mainScene.HitYarrow(startPos.X, startPos.Y))
             {
                 action = Action.movingY;
                 return;
             }
-            if (mainScene.HitZarrow(startPos.X, startPos.Y, Xoffset, Yoffset))
+            if (mainScene.HitZarrow(startPos.X, startPos.Y))
             {
                 action = Action.movingZ;
                 return;
@@ -204,7 +200,7 @@ namespace GraphicReactor
             if (tool == Tool.select && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.SelectPoints(startPos.X - Xoffset, - startPos.Y + Yoffset, endPos.X - Xoffset, - endPos.Y + Yoffset);
+                mainScene.SelectPoints(startPos.X, - startPos.Y, endPos.X, - endPos.Y);
 
             }
             if (e.Button == MouseButtons.Right)
@@ -214,7 +210,7 @@ namespace GraphicReactor
             if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.ConnectPoints(startPos.X - Xoffset, -startPos.Y+Yoffset, endPos.X-Xoffset,-endPos.Y+Yoffset);
+                mainScene.ConnectPoints(startPos.X, -startPos.Y, endPos.X,-endPos.Y);
             }
 
             UpdatePicBox();
@@ -226,7 +222,7 @@ namespace GraphicReactor
         private void UpdatePicBox(bool refresh = true)
         {
             main_graphics.Clear(Color.White);
-            mainScene.Draw(main_graphics,Xoffset,Yoffset);
+            mainScene.Draw(main_graphics);
             
             if (mainScene.points.Count > 0)
             {
@@ -239,7 +235,7 @@ namespace GraphicReactor
 
         private void aToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GR_Point p = new GR_Point(endPos.X - Xoffset, -endPos.Y + Yoffset, 0f,
+            GR_Point p = new GR_Point(endPos.X, -endPos.Y, 0f,
                 rnd.Next(8, 8), rnd.Next(2, 2),
                 rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255),
                 rnd.Next(0, 255), rnd.Next(0,255), rnd.Next(0,255));
@@ -252,18 +248,6 @@ namespace GraphicReactor
         {
             if (e.KeyCode == Keys.ShiftKey)  shiftButton = true;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
-          
-
-
-            if (tool == Tool.move)
-            {
-                if (e.KeyCode == Keys.Up) mainScene.MovePoints(0, -1, 0, true);
-                if (e.KeyCode == Keys.Down) mainScene.MovePoints(0, 1, 0, true);
-                if (e.KeyCode == Keys.Right) mainScene.MovePoints(1, 0, 0, true);
-                if (e.KeyCode == Keys.Left) mainScene.MovePoints(-1, 0, 0, true);
-                UpdatePicBox();
-            }
-
         }
 
         private void GR_KeyUp(object sender, KeyEventArgs e)
