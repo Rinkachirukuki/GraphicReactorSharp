@@ -141,14 +141,6 @@ namespace GraphicReactor
                 UpdatePicBox(true);
                 return;
             }
-            //if(tool == Tool.move && mouseLbutton && mainScene.SelectedPoints.Count > 0)
-            //{
-            //    mainScene.MovePoints(e.X - startPos.X, -e.Y + startPos.Y, 0, true);
-            //    startPos.X = e.X;
-            //    startPos.Y = e.Y;
-            //    UpdatePicBox(true);
-            //    return;
-            //}
             if (tool == Tool.select && mouseLbutton)
             {
                 UpdatePicBox(false);
@@ -248,6 +240,14 @@ namespace GraphicReactor
         {
             if (e.KeyCode == Keys.ShiftKey)  shiftButton = true;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
+            if (e.KeyCode == Keys.V)
+            {
+                UpdatePicBox(false);
+                CreateTree(5, new Pen(Color.Brown, 1), main_graphics, MainPicBox.Width / 2, MainPicBox.Height / 2, 0,20, 30,90);
+                MainPicBox.Refresh();
+            }
+                
+            
         }
 
         private void GR_KeyUp(object sender, KeyEventArgs e)
@@ -345,7 +345,31 @@ namespace GraphicReactor
             mainScene.ResetCamera();
             UpdatePicBox();
         }
+        public void CreateTree(int n, Pen pen, Graphics gr, float x, float y, double angle, double angle2, int length, int newLineChance)
+        {
+            if (n == 0) return;
+            gr.DrawLine(pen, x, y,
+                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
+                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y));
 
+
+            pen.Color = Color.FromArgb(255, (pen.Color.R * n) % 255, (pen.Color.G / n) % 255, (pen.Color.B * n) % 255);
+            if (rnd.Next(0,100) <= newLineChance)
+                CreateTree(n - 1, pen, gr,
+                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
+                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y),
+                angle + rnd.Next(-5, 5), angle2, length-2 - rnd.Next(0, 2), newLineChance - 10);
+            if (rnd.Next(0, 100) <= newLineChance)
+                CreateTree(n - 1, pen, gr,
+                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
+                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y),
+                angle - angle2 + rnd.Next(-5, 5), angle2, length - 2 - rnd.Next(0, 2), newLineChance - 10);
+            if (rnd.Next(0, 100) <= newLineChance)
+                CreateTree(n - 1, pen, gr,
+                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
+                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y),
+                angle + angle2 + rnd.Next(-5,5), angle2, length - 2 - rnd.Next(0, 2), newLineChance - 10);
+        }
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
     }
 }
