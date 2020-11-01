@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomForms\ToolCustomCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomForms\ToolCustomCheckBox.Designer.cs">
+      <DependentUpon>ToolCustomCheckBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomForms\ToolCustomButton.cs">
       <SubType>Component</SubType>
     </Compile>

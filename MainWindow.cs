@@ -27,18 +27,19 @@ namespace GraphicReactor
         bool shiftButton = false;
         bool ctrlButton = false;
 
+
         enum Tool
         {
-            view,
             move,
-            select
+            rotate,
+            resize
         }
         enum Action
         {
             noAction,
-            movingX,
-            movingY,
-            movingZ,
+            transformX,
+            transformY,
+            transformZ,
             selecting,
             connecting,
             viewchanging
@@ -75,24 +76,24 @@ namespace GraphicReactor
             
             if (mainScene.HitXarrow(startPos.X, startPos.Y))
             {
-                action = Action.movingX;
+                action = Action.transformX;
                 return;
             }
             if (mainScene.HitYarrow(startPos.X, startPos.Y))
             {
-                action = Action.movingY;
+                action = Action.transformY;
                 return;
             }
             if (mainScene.HitZarrow(startPos.X, startPos.Y))
             {
-                action = Action.movingZ;
+                action = Action.transformZ;
                 return;
             }
 
 
             if (shiftButton)
             {
-                tool = Tool.select;
+                action = Action.selecting;
                 return;
             }
             if (ctrlButton && mouseLbutton)
@@ -105,18 +106,43 @@ namespace GraphicReactor
         private void MainPicBox_MouseMove(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
-            if (action != Action.noAction)
+            if (mouseLbutton && action != Action.noAction)
             {
-                if (mouseLbutton && action == Action.connecting)
+                if (action == Action.connecting)
                 {
                     UpdatePicBox(false);
                     main_graphics.DrawLine(new Pen(Color.Black, 2.0F), startPos, endPos);
                     MainPicBox.Refresh();
                     return;
-                } 
-                else if (action == Action.movingX) mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
-                else if (action == Action.movingY) mainScene.MovePoints(0, e.X - startPos.X, 0, true);
-                else if (action == Action.movingZ) mainScene.MovePoints(0, 0, e.X - startPos.X, true);
+                }
+                else if (action == Action.selecting)
+                {
+                    UpdatePicBox(false);
+                    DrawSelectRect(Color.FromArgb(25, Color.Teal), Color.FromArgb(75, Color.Teal), startPos.X, startPos.Y, e.X, e.Y);
+                    MainPicBox.Refresh();
+                    return;
+                }
+                else if (action == Action.transformX)
+                {
+                    if (tool == Tool.move)
+                        mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
+                    else if (tool == Tool.rotate)
+                        mainScene.Temp_Xtransform += e.X - startPos.X;
+                }
+                else if (action == Action.transformY)
+                {
+                    if (tool == Tool.move)
+                        mainScene.MovePoints(0, e.X - startPos.X, 0, true);
+                    else if (tool == Tool.rotate)
+                        mainScene.Temp_Ytransform += e.X - startPos.X;
+                }
+                else if (action == Action.transformZ) 
+                {
+                    if (tool == Tool.move)
+                        mainScene.MovePoints(0, 0, e.X - startPos.X, true);
+                    else if (tool == Tool.rotate)
+                        mainScene.Temp_Ztransform += e.X - startPos.X;
+                }
                 UpdatePicBox(true);
                 startPos.X = e.X;
                 startPos.Y = e.Y; 
@@ -134,20 +160,14 @@ namespace GraphicReactor
             }
             if (mouseMidbutton)
             {
-                mainScene.Camera_HorizontalAngle += (e.X - startPos.X);
-                mainScene.Camera_VerticalAngle += (e.Y - startPos.Y);
+                mainScene.Camera_HorizontalAngle += e.X - startPos.X;
+                mainScene.Camera_VerticalAngle += e.Y - startPos.Y;
                 startPos.X = e.X;
                 startPos.Y = e.Y;
                 UpdatePicBox(true);
                 return;
             }
-            if (tool == Tool.select && mouseLbutton)
-            {
-                UpdatePicBox(false);
-                DrawSelectRect(Color.FromArgb(25, Color.Teal), Color.FromArgb(75, Color.Teal), startPos.X, startPos.Y, e.X, e.Y);
-                MainPicBox.Refresh();
-                return;
-            }
+            
             
         }
         private void DrawSelectRect(Color fillColor, Color outColor, int x1, int y1, int x2, int y2)
@@ -185,11 +205,17 @@ namespace GraphicReactor
         private void MainPicBox_MouseUp(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
-            
 
-            if (e.Button == MouseButtons.Middle) mouseMidbutton = false;
+            if (action == Action.transformX || action == Action.transformY || action == Action.transformZ)
+            {
+                mainScene.ApplyTransformation();
+                mainScene.ResetTemp();
+                action = Action.noAction;
+                return;
+            }
+            mainScene.ResetTemp();
 
-            if (tool == Tool.select && e.Button == MouseButtons.Left)
+            if (action == Action.selecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
                 mainScene.SelectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y);
@@ -206,15 +232,17 @@ namespace GraphicReactor
             }
 
             UpdatePicBox();
+
+            if (e.Button == MouseButtons.Middle) mouseMidbutton = false;
+
             if (e.Button == MouseButtons.Left) mouseLbutton = false;
-            tool = Tool.move;
             action = Action.noAction;
         }
 
         private void UpdatePicBox(bool refresh = true)
         {
             main_graphics.Clear(Color.White);
-            mainScene.Draw(main_graphics);
+            mainScene.Draw(main_graphics, compLinesCheckBox.Checked);
             
             if (mainScene.points.Count > 0)
             {
@@ -255,32 +283,12 @@ namespace GraphicReactor
             if (e.KeyCode == Keys.ShiftKey) shiftButton = false;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = false;
         }
-        private void setButtonsDefaultColors()
+        private void setToolPanelButtonsDefaultColors()
         {
-            foreach(Button b in panel1.Controls)
-            {
-                b.BackColor = Color.WhiteSmoke;
-            }
-        }
-        private void buttonToolView_Click(object sender, EventArgs e)
-        {
-            setButtonsDefaultColors();
-            buttonToolView.BackColor = Color.FromArgb(100, Color.Teal);
-            tool = Tool.view;
-        }
+            moveModeButton.BackColor = Color.WhiteSmoke;
+            rotationModeButton.BackColor = Color.WhiteSmoke;
+            resizeModeButton.BackColor = Color.WhiteSmoke;
 
-        private void buttonToolMove_Click(object sender, EventArgs e)
-        {
-            setButtonsDefaultColors();
-            buttonToolMove.BackColor = Color.FromArgb(100, Color.Teal);
-            tool = Tool.move;
-        }
-
-        private void buttonToolSelect_Click(object sender, EventArgs e)
-        {
-            setButtonsDefaultColors();
-            buttonToolStyle.BackColor = Color.FromArgb(100, Color.Teal);
-            tool = Tool.select;
         }
 
         private void aToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -370,6 +378,32 @@ namespace GraphicReactor
                 (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y),
                 angle + angle2 + rnd.Next(-5,5), angle2, length - 2 - rnd.Next(0, 2), newLineChance - 10);
         }
+
+        private void moveModeButton_Click(object sender, EventArgs e)
+        {
+            setToolPanelButtonsDefaultColors();
+            moveModeButton.BackColor = Color.FromArgb(100, Color.Teal);
+            tool = Tool.move;
+        }
+
+        private void rotationModeButton_Click(object sender, EventArgs e)
+        {
+            setToolPanelButtonsDefaultColors();
+            rotationModeButton.BackColor = Color.FromArgb(120, Color.Teal);
+            tool = Tool.rotate;
+        }
+        private void resizeModeButton_Click(object sender, EventArgs e)
+        {
+            setToolPanelButtonsDefaultColors();
+            resizeModeButton.BackColor = Color.FromArgb(100, Color.Teal);
+            tool = Tool.resize;
+        }
+
+        private void compLinesCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdatePicBox();
+        }
+
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
     }
 }

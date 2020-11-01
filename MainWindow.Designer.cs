@@ -43,16 +43,20 @@ namespace GraphicReactor
             this.zToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.resetButton = new GraphicReactor.CustomForms.ToolCustomButton();
-            this.buttonToolStyle = new GraphicReactor.CustomForms.ToolCustomButton();
-            this.buttonToolMove = new GraphicReactor.CustomForms.ToolCustomButton();
-            this.buttonToolView = new GraphicReactor.CustomForms.ToolCustomButton();
             this.MainPicBox = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.PropetiesPanel = new System.Windows.Forms.Panel();
+            this.CheckBoxRelCenter = new GraphicReactor.CustomForms.ToolCustomCheckBox();
+            this.resizeModeButton = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.rotationModeButton = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.moveModeButton = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.compLinesCheckBox = new GraphicReactor.CustomForms.ToolCustomCheckBox();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
+            this.PropetiesPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPicBox_ContextMenu
@@ -129,9 +133,6 @@ namespace GraphicReactor
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.Controls.Add(this.resetButton);
-            this.panel1.Controls.Add(this.buttonToolStyle);
-            this.panel1.Controls.Add(this.buttonToolMove);
-            this.panel1.Controls.Add(this.buttonToolView);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(55, 455);
@@ -140,6 +141,8 @@ namespace GraphicReactor
             // resetButton
             // 
             this.resetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Coral;
+            this.resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Coral;
             this.resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.resetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.resetButton.Location = new System.Drawing.Point(3, 429);
@@ -150,42 +153,6 @@ namespace GraphicReactor
             this.resetButton.UseVisualStyleBackColor = true;
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
-            // buttonToolStyle
-            // 
-            this.buttonToolStyle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonToolStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonToolStyle.Location = new System.Drawing.Point(4, 63);
-            this.buttonToolStyle.Name = "buttonToolStyle";
-            this.buttonToolStyle.Size = new System.Drawing.Size(49, 23);
-            this.buttonToolStyle.TabIndex = 8;
-            this.buttonToolStyle.Text = "Style";
-            this.buttonToolStyle.UseVisualStyleBackColor = true;
-            this.buttonToolStyle.Click += new System.EventHandler(this.buttonToolSelect_Click);
-            // 
-            // buttonToolMove
-            // 
-            this.buttonToolMove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonToolMove.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonToolMove.Location = new System.Drawing.Point(4, 33);
-            this.buttonToolMove.Name = "buttonToolMove";
-            this.buttonToolMove.Size = new System.Drawing.Size(49, 23);
-            this.buttonToolMove.TabIndex = 7;
-            this.buttonToolMove.Text = "Move";
-            this.buttonToolMove.UseVisualStyleBackColor = true;
-            this.buttonToolMove.Click += new System.EventHandler(this.buttonToolMove_Click);
-            // 
-            // buttonToolView
-            // 
-            this.buttonToolView.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonToolView.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonToolView.Location = new System.Drawing.Point(4, 3);
-            this.buttonToolView.Name = "buttonToolView";
-            this.buttonToolView.Size = new System.Drawing.Size(49, 23);
-            this.buttonToolView.TabIndex = 6;
-            this.buttonToolView.Text = "View";
-            this.buttonToolView.UseVisualStyleBackColor = true;
-            this.buttonToolView.Click += new System.EventHandler(this.buttonToolView_Click);
-            // 
             // MainPicBox
             // 
             this.MainPicBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -193,7 +160,7 @@ namespace GraphicReactor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MainPicBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.MainPicBox.Location = new System.Drawing.Point(59, 2);
+            this.MainPicBox.Location = new System.Drawing.Point(59, 1);
             this.MainPicBox.Name = "MainPicBox";
             this.MainPicBox.Size = new System.Drawing.Size(493, 454);
             this.MainPicBox.TabIndex = 1;
@@ -233,11 +200,100 @@ namespace GraphicReactor
             this.label3.TabIndex = 6;
             this.label3.Text = "label3";
             // 
+            // PropetiesPanel
+            // 
+            this.PropetiesPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropetiesPanel.Controls.Add(this.CheckBoxRelCenter);
+            this.PropetiesPanel.Location = new System.Drawing.Point(558, 102);
+            this.PropetiesPanel.Name = "PropetiesPanel";
+            this.PropetiesPanel.Size = new System.Drawing.Size(133, 135);
+            this.PropetiesPanel.TabIndex = 8;
+            // 
+            // CheckBoxRelCenter
+            // 
+            this.CheckBoxRelCenter.AutoSize = true;
+            this.CheckBoxRelCenter.Checked = true;
+            this.CheckBoxRelCenter.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CheckBoxRelCenter.Location = new System.Drawing.Point(3, 3);
+            this.CheckBoxRelCenter.Name = "CheckBoxRelCenter";
+            this.CheckBoxRelCenter.Size = new System.Drawing.Size(128, 17);
+            this.CheckBoxRelCenter.TabIndex = 7;
+            this.CheckBoxRelCenter.Text = "Relative to the center";
+            this.CheckBoxRelCenter.UseVisualStyleBackColor = true;
+            // 
+            // resizeModeButton
+            // 
+            this.resizeModeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.resizeModeButton.BackColor = System.Drawing.Color.Transparent;
+            this.resizeModeButton.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSeaGreen;
+            this.resizeModeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
+            this.resizeModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSeaGreen;
+            this.resizeModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.resizeModeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.resizeModeButton.Location = new System.Drawing.Point(502, 6);
+            this.resizeModeButton.Name = "resizeModeButton";
+            this.resizeModeButton.Size = new System.Drawing.Size(44, 23);
+            this.resizeModeButton.TabIndex = 11;
+            this.resizeModeButton.Text = "Resize";
+            this.resizeModeButton.UseVisualStyleBackColor = false;
+            this.resizeModeButton.Click += new System.EventHandler(this.resizeModeButton_Click);
+            // 
+            // rotationModeButton
+            // 
+            this.rotationModeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rotationModeButton.BackColor = System.Drawing.Color.Transparent;
+            this.rotationModeButton.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSeaGreen;
+            this.rotationModeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
+            this.rotationModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSeaGreen;
+            this.rotationModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rotationModeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rotationModeButton.Location = new System.Drawing.Point(455, 6);
+            this.rotationModeButton.Name = "rotationModeButton";
+            this.rotationModeButton.Size = new System.Drawing.Size(44, 23);
+            this.rotationModeButton.TabIndex = 9;
+            this.rotationModeButton.Text = "Rotate";
+            this.rotationModeButton.UseVisualStyleBackColor = false;
+            this.rotationModeButton.Click += new System.EventHandler(this.rotationModeButton_Click);
+            // 
+            // moveModeButton
+            // 
+            this.moveModeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveModeButton.BackColor = System.Drawing.SystemColors.Control;
+            this.moveModeButton.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSeaGreen;
+            this.moveModeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
+            this.moveModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSeaGreen;
+            this.moveModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.moveModeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.moveModeButton.Location = new System.Drawing.Point(408, 6);
+            this.moveModeButton.Name = "moveModeButton";
+            this.moveModeButton.Size = new System.Drawing.Size(44, 23);
+            this.moveModeButton.TabIndex = 10;
+            this.moveModeButton.Text = "Move";
+            this.moveModeButton.UseVisualStyleBackColor = false;
+            this.moveModeButton.Click += new System.EventHandler(this.moveModeButton_Click);
+            // 
+            // compLinesCheckBox
+            // 
+            this.compLinesCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.compLinesCheckBox.AutoSize = true;
+            this.compLinesCheckBox.Location = new System.Drawing.Point(561, 439);
+            this.compLinesCheckBox.Name = "compLinesCheckBox";
+            this.compLinesCheckBox.Size = new System.Drawing.Size(112, 17);
+            this.compLinesCheckBox.TabIndex = 8;
+            this.compLinesCheckBox.Text = "Complicated Lines";
+            this.compLinesCheckBox.UseVisualStyleBackColor = true;
+            this.compLinesCheckBox.CheckedChanged += new System.EventHandler(this.compLinesCheckBox_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(702, 458);
+            this.Controls.Add(this.compLinesCheckBox);
+            this.Controls.Add(this.resizeModeButton);
+            this.Controls.Add(this.rotationModeButton);
+            this.Controls.Add(this.moveModeButton);
+            this.Controls.Add(this.PropetiesPanel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
@@ -253,6 +309,8 @@ namespace GraphicReactor
             this.mainPicBox_ContextMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).EndInit();
+            this.PropetiesPanel.ResumeLayout(false);
+            this.PropetiesPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -264,9 +322,6 @@ namespace GraphicReactor
         private System.Windows.Forms.ToolStripMenuItem aToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem createGroupToolStripMenuItem;
         private System.Windows.Forms.Panel panel1;
-        private CustomForms.ToolCustomButton buttonToolView;
-        private CustomForms.ToolCustomButton buttonToolStyle;
-        private CustomForms.ToolCustomButton buttonToolMove;
         private System.Windows.Forms.PictureBox MainPicBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
@@ -277,6 +332,12 @@ namespace GraphicReactor
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private CustomForms.ToolCustomButton resetButton;
+        private CustomForms.ToolCustomCheckBox CheckBoxRelCenter;
+        private Panel PropetiesPanel;
+        private CustomForms.ToolCustomButton resizeModeButton;
+        private CustomForms.ToolCustomButton rotationModeButton;
+        private CustomForms.ToolCustomButton moveModeButton;
+        private CustomForms.ToolCustomCheckBox compLinesCheckBox;
     }
 }
 

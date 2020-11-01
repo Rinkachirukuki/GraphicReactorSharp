@@ -30,6 +30,10 @@ namespace GraphicReactor
         public float VerticalOffset { get; set; }
         public float HorizontalOffset { get; set; }
 
+        public float Temp_Xtransform { get; set; }
+        public float Temp_Ytransform { get; set; }
+        public float Temp_Ztransform { get; set; }
+
 
         public GR_Scene()
         {
@@ -51,27 +55,48 @@ namespace GraphicReactor
             Camera_VerticalAngle = 0;
             Camera_HorizontalOffset = 0;
             Camera_VerticalOffset = 0;
+
+            Temp_Xtransform = 0;
+            Temp_Ytransform = 0;
+            Temp_Ztransform = 0;
         }
 
-        public void Draw(Graphics gr)
+        public void Draw(Graphics gr, bool compLines = false)
         {
 
             Pen pen = new Pen(Color.Black);
 
             double[,] matrix = CalculateRotationMatrix();
+            double[,] temp_matrix = CalculateTempRotationMatrix();
 
             DrawXYZ(gr,matrix);
 
             UpdateTemp();
 
-            for(int i = 0; i < points.Count; i++)
+            foreach (GR_Point p in temp)
             {
-                temp[i].X = (float)(points[i].X * matrix[0, 0] + points[i].Y * matrix[1, 0] + points[i].Z * matrix[2, 0] + points[i].Ok * matrix[3, 0]);
-                temp[i].Y = (float)(points[i].X * matrix[0, 1] + points[i].Y * matrix[1, 1] + points[i].Z * matrix[2, 1] + points[i].Ok * matrix[3, 1]);
-                temp[i].Z = (float)(points[i].X * matrix[0, 2] + points[i].Y * matrix[1, 2] + points[i].Z * matrix[2, 2] + points[i].Ok * matrix[3, 2]);
-                temp[i].Ok = (float)(points[i].X * matrix[0, 3] + points[i].Y * matrix[1, 3] + points[i].Z * matrix[2, 3] + points[i].Ok * matrix[3, 3]);
+                if (p.Selected)
+                {
+                    GR_Point p1 = (GR_Point)p.Clone();
+                    p.X = (float)(p1.X * temp_matrix[0, 0] + p1.Y * temp_matrix[1, 0] + p1.Z * temp_matrix[2, 0] + p1.Ok * temp_matrix[3, 0]);
+                    p.Y = (float)(p1.X * temp_matrix[0, 1] + p1.Y * temp_matrix[1, 1] + p1.Z * temp_matrix[2, 1] + p1.Ok * temp_matrix[3, 1]);
+                    p.Z = (float)(p1.X * temp_matrix[0, 2] + p1.Y * temp_matrix[1, 2] + p1.Z * temp_matrix[2, 2] + p1.Ok * temp_matrix[3, 2]);
+                    p.Ok = (float)(p1.X * temp_matrix[0, 3] + p1.Y * temp_matrix[1, 3] + p1.Z * temp_matrix[2, 3] + p1.Ok * temp_matrix[3, 3]);
+                }
             }
-            if (true)
+            foreach (GR_Point p in temp)
+            {
+                GR_Point p1 = (GR_Point)p.Clone();
+                p.X = (float)(p1.X * matrix[0, 0] + p1.Y * matrix[1, 0] + p1.Z * matrix[2, 0] + p1.Ok * matrix[3, 0]);
+                p.Y = (float)(p1.X * matrix[0, 1] + p1.Y * matrix[1, 1] + p1.Z * matrix[2, 1] + p1.Ok * matrix[3, 1]);
+                p.Z = (float)(p1.X * matrix[0, 2] + p1.Y * matrix[1, 2] + p1.Z * matrix[2, 2] + p1.Ok * matrix[3, 2]);
+                p.Ok = (float)(p1.X * matrix[0, 3] + p1.Y * matrix[1, 3] + p1.Z * matrix[2, 3] + p1.Ok * matrix[3, 3]);
+
+            }
+
+           
+
+            if (compLines)
             {
                 foreach (GR_Line p in lines)
                 {
@@ -107,7 +132,7 @@ namespace GraphicReactor
             float adX = (p2.X - p1.X) / n;
             float adY = (p2.Y - p1.Y) / n;
             float adZ = (p2.Z - p1.Z) / n;
-            for (int i =0; i < n;i++)
+            for (int i = 0; i < n;i++)
             {
                 lst.Add(new GR_Point_Simple(p1.X + adX * i, p1.Y + adY * i, p1.Z + adZ * i, 1 ,line.width,line.color));
             }
@@ -141,7 +166,7 @@ namespace GraphicReactor
             return arw1;
             
         }
-        private void DrawXYZarrows(Graphics gr,float[,] arw)
+        public void DrawXYZarrows(Graphics gr,float[,] arw)
         {
             if (arw.GetLength(0) == 0) return;
             gr.DrawLine(new Pen(Color.Red, 3), arw[0, 0], arw[0, 1], arw[1, 0], arw[1, 1]);
@@ -225,34 +250,65 @@ namespace GraphicReactor
         }
         private double[,] CalculateRotationMatrix()
         {
-            double angleA = Camera_HorizontalAngle / 180 * Math.PI;
-            double angleB = Camera_VerticalAngle / 180 * Math.PI;
+            double B = Camera_HorizontalAngle / 180 * Math.PI;
+            double A = Camera_VerticalAngle / 180 * Math.PI;
+            double C = 0;
+
+            //return new double[,] {
+            //    {
+            //        Math.Cos(A),
+            //        -Math.Sin(A) * Math.Cos(B),
+            //        Math.Sin(A) * Math.Sin(B),
+            //        0
+            //    },
+
+            //    {
+            //        Math.Sin(A),
+            //        -Math.Cos(A)*Math.Cos(B),
+            //        -Math.Cos(A)*Math.Sin(B),
+            //        0
+            //    },
+
+            //    {
+            //        0,
+            //        -Math.Sin(B),
+            //        Math.Cos(B),
+            //        0
+            //    },
+
+            //    {
+            //        Camera_HorizontalOffset + HorizontalOffset,
+            //        Camera_VerticalOffset + VerticalOffset,
+            //        0,
+            //        1
+            //    }
+            //}; ;
             return new double[,] {
                 {
-                    Math.Cos(angleA),
+                    Math.Cos(B) * Math.Cos(C),
+                    Math.Cos(B) * Math.Sin(C),
+                    Math.Sin(B),
+                    0
+                },
+
+                {
+                    Math.Sin(A) * Math.Sin(B) * Math.Cos(C) + Math.Cos(A) * Math.Sin(C),
+                    Math.Sin(A) * Math.Sin(B) * Math.Sin(C) - Math.Cos(A) * Math.Cos(C),
+                    -Math.Sin(A)*Math.Cos(B),
+                    0
+                },
+
+                {
+                    -Math.Cos(A) * Math.Sin(B) * Math.Cos(C) + Math.Sin(A) * Math.Sin(C),
+                    -Math.Cos(A) * Math.Sin(B) * Math.Sin(C) - Math.Sin(A) * Math.Cos(C),
+                    Math.Cos(A)*Math.Cos(B),
+                    0
+                },
+
+                {
+                    Camera_HorizontalOffset + HorizontalOffset,
+                    Camera_VerticalOffset + VerticalOffset,
                     0,
-                    Math.Sin(angleA),
-                    0
-                },
-
-                {
-                    Math.Sin(angleB)*Math.Sin(angleA),
-                    -Math.Cos(angleB),
-                    -Math.Sin(angleB)*Math.Cos(angleA),
-                    0
-                },
-
-                {
-                    -Math.Cos(angleB)*Math.Sin(angleA),
-                    -Math.Sin(angleB),
-                    Math.Cos(angleA)*Math.Cos(angleB),
-                    0
-                },
-
-                {
-                    Math.Cos(angleA) -  Math.Sin(angleA)*Math.Sin(angleB) - Math.Cos(angleB) + Camera_HorizontalOffset + HorizontalOffset,
-                    - Math.Cos(angleB) +  Math.Sin(angleB) + Camera_VerticalOffset + VerticalOffset,
-                    Math.Sin(angleA) +  Math.Cos(angleA)*Math.Sin(angleB) - Math.Cos(angleB),
                     1
                 }
             }; ;
@@ -502,6 +558,70 @@ namespace GraphicReactor
                     p.Z += z;
                 }
             
+        }
+        public void PreviewSelectedPointsRotation(float angX, float angY, float angZ)
+        {
+
+            Temp_Xtransform += angX;
+            Temp_Ytransform += angY;
+            Temp_Ztransform += angZ;
+
+        }
+        private double[,] CalculateTempRotationMatrix()
+        {
+            double A = Temp_Xtransform / 180 * Math.PI;
+            double B = Temp_Ytransform / 180 * Math.PI;
+            double C = Temp_Ztransform / 180 * Math.PI;
+
+            GR_Point_Base P = GetPointsCenter(true);
+
+            return new double[,] {
+                {
+                    Math.Cos(B) * Math.Cos(C),
+                    -Math.Cos(B) * Math.Sin(C),
+                    Math.Sin(B),
+                    0
+                },
+
+                {
+                    Math.Sin(A) * Math.Sin(B) * Math.Cos(C) + Math.Cos(A) * Math.Sin(C),
+                    -Math.Sin(A) * Math.Sin(B) * Math.Sin(C) + Math.Cos(A) * Math.Cos(C),
+                    -Math.Sin(A)*Math.Cos(B),
+                    0
+                },
+
+                {
+                    -Math.Cos(A) * Math.Sin(B) * Math.Cos(C) + Math.Sin(A) * Math.Sin(C),
+                    Math.Cos(A) * Math.Sin(B) * Math.Sin(C) + Math.Sin(A) * Math.Cos(C),
+                    Math.Cos(A)*Math.Cos(B),
+                    0
+                },
+
+                {
+                    (-P.X*Math.Cos(B)+P.Y*Math.Sin(A)*Math.Sin(B) - P.Z*Math.Sin(B))*Math.Cos(C) - (P.Y*Math.Cos(A) + P.Z*Math.Sin(A))*Math.Sin(C) + P.X,
+                    (P.X*Math.Cos(B)-P.Y*Math.Sin(A)*Math.Sin(B)+P.Z*Math.Cos(A))*Math.Sin(C) - (P.Y*Math.Cos(A)+P.Z*Math.Sin(A))*Math.Cos(C) + P.Y,
+                    -P.X*Math.Sin(B)+P.Y*Math.Sin(A)*Math.Cos(B)-P.Z*Math.Cos(A) + P.Z,
+                    1
+                }
+            }; ;
+        }
+        public void ApplyTransformation()
+        {
+            double[,] temp_matrix = CalculateTempRotationMatrix();
+            foreach (GR_Point p in SelectedPoints)
+            {
+                GR_Point p1 = (GR_Point)p.Clone();
+                p.X = (float)(p1.X * temp_matrix[0, 0] + p1.Y * temp_matrix[1, 0] + p1.Z * temp_matrix[2, 0] + p1.Ok * temp_matrix[3, 0]);
+                p.Y = (float)(p1.X * temp_matrix[0, 1] + p1.Y * temp_matrix[1, 1] + p1.Z * temp_matrix[2, 1] + p1.Ok * temp_matrix[3, 1]);
+                p.Z = (float)(p1.X * temp_matrix[0, 2] + p1.Y * temp_matrix[1, 2] + p1.Z * temp_matrix[2, 2] + p1.Ok * temp_matrix[3, 2]);
+                p.Ok = (float)(p1.X * temp_matrix[0, 3] + p1.Y * temp_matrix[1, 3] + p1.Z * temp_matrix[2, 3] + p1.Ok * temp_matrix[3, 3]);
+            }
+        }
+        public void ResetTemp()
+        {
+            Temp_Xtransform = 0;
+            Temp_Ytransform = 0;
+            Temp_Ztransform = 0;
         }
     }
 }
