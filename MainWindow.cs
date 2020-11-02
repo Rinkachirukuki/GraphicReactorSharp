@@ -61,6 +61,8 @@ namespace GraphicReactor
 
         private void UpdatePicBoxParams()
         {
+            mainScene.Camera_VerticalAngle = 45;
+            mainScene.Camera_HorizontalAngle = 120;
             Xoffset = MainPicBox.Width / 2;
             Yoffset = MainPicBox.Height / 2;
             MainPicBox.Image = new Bitmap(MainPicBox.Width > 0 ? MainPicBox.Width : 1, MainPicBox.Height > 0 ? MainPicBox.Height : 1);
@@ -117,10 +119,10 @@ namespace GraphicReactor
                     main_graphics.DrawLine(new Pen(Color.Black, 2.0F), startPos, endPos);
                     MainPicBox.Refresh();
                     return;
-                } 
-                else if (action == Action.movingX) mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
-                else if (action == Action.movingY) mainScene.MovePoints(0, e.X - startPos.X, 0, true);
-                else if (action == Action.movingZ) mainScene.MovePoints(0, 0, e.X - startPos.X, true);
+                }
+                else if (action == Action.movingX) mainScene.MovePoints(true, false, false,e.X,startPos.X,e.Y,startPos.Y, true);
+                else if (action == Action.movingY) mainScene.MovePoints(false, true, false, e.X, startPos.X, e.Y, startPos.Y, true);
+                else if (action == Action.movingZ) mainScene.MovePoints(false, false, true, e.X, startPos.X, e.Y, startPos.Y, true);
                 UpdatePicBox(true);
                 startPos.X = e.X;
                 startPos.Y = e.Y; 
@@ -252,15 +254,17 @@ namespace GraphicReactor
         {
             if (e.KeyCode == Keys.ShiftKey)  shiftButton = true;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
-          
+            if (e.KeyCode == Keys.D1) mainScene.SetFigure1();
+            if (e.KeyCode == Keys.D2) mainScene.SetFigure2();
+            if (e.KeyCode == Keys.D3) mainScene.SetFigure3();
 
 
             if (tool == Tool.move)
             {
-                if (e.KeyCode == Keys.Up) mainScene.MovePoints(0, -1, 0, true);
-                if (e.KeyCode == Keys.Down) mainScene.MovePoints(0, 1, 0, true);
-                if (e.KeyCode == Keys.Right) mainScene.MovePoints(1, 0, 0, true);
-                if (e.KeyCode == Keys.Left) mainScene.MovePoints(-1, 0, 0, true);
+               // if (e.KeyCode == Keys.Up) mainScene.MovePoints(0, -1, 0, true);
+              //  if (e.KeyCode == Keys.Down) mainScene.MovePoints(0, 1, 0, true);
+              //  if (e.KeyCode == Keys.Right) mainScene.MovePoints(1, 0, 0, true);
+              //  if (e.KeyCode == Keys.Left) mainScene.MovePoints(-1, 0, 0, true);
                 UpdatePicBox();
             }
 

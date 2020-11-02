@@ -17,9 +17,12 @@ namespace GraphicReactor
         private uint point_identificator;
 
         public List<GR_Point> points;
+        public List<GR_Point> figure1 = new List<GR_Point>();
+        public List<GR_Point> figure2 = new List<GR_Point>();
+        public List<GR_Point> figure3 = new List<GR_Point>();
         private List<GR_Line> lines;
         private List<GR_Point> temp;
-
+        public float[,] globalArw;
         public Pen selectPen { get; set; }
 
         public float Camera_VerticalAngle { get; set; }
@@ -27,6 +30,18 @@ namespace GraphicReactor
         public float Camera_VerticalOffset { get; set; }
         public float Camera_HorizontalOffset { get; set; }
 
+        public void SetFigure1()
+        {
+            figure1 = SelectedPoints;
+        }
+        public void SetFigure2()
+        {
+            figure2 = SelectedPoints;
+        }
+        public void SetFigure3()
+        {
+            figure3 = SelectedPoints;
+        }
 
         public GR_Scene()
         {
@@ -50,10 +65,23 @@ namespace GraphicReactor
             double[,] matrix = CalculateRotationMatrix();
 
             DrawXYZ(gr,matrix,Xoffset,Yoffset);
+            
 
             UpdateTemp();
 
-            for(int i = 0; i < points.Count; i++)
+            if (figure1.Count > 0 && figure2.Count > 0 && figure3.Count > 0 && figure1.Count == figure3.Count)
+            {
+                for (int i = 0; i < figure1.Count; i++)
+                {
+                    GR_Point newpoint = new GR_Point();
+                    newpoint.X = figure1[i].X * 1 / 6 + figure2[i].X * 2 / 6 + figure3[i].X * 3 / 6;
+                    newpoint.Y = figure1[i].Y * 1 / 6 + figure2[i].Y * 2 / 6 + figure3[i].Y * 3 / 6;
+                    temp.Add(newpoint);
+                }
+
+            }
+
+            for (int i = 0; i < points.Count; i++)
             {
                 temp[i].X = (float)(points[i].X * matrix[0, 0] + points[i].Y * matrix[1, 0] + points[i].Z * matrix[2, 0] + points[i].Ok * matrix[3, 0]);
                 temp[i].Y = (float)(points[i].X * matrix[0, 1] + points[i].Y * matrix[1, 1] + points[i].Z * matrix[2, 1] + points[i].Ok * matrix[3, 1]);
@@ -123,6 +151,7 @@ namespace GraphicReactor
         private void DrawXYZarrows(Graphics gr,float[,] arw)
         {
             if (arw.GetLength(0) == 0) return;
+            globalArw = arw;
             gr.DrawLine(new Pen(Color.Red, 3), arw[0, 0], arw[0, 1], arw[1, 0], arw[1, 1]);
             gr.DrawLine(new Pen(Color.Green, 3), arw[0, 0], arw[0, 1], arw[2, 0], arw[2, 1]);
             gr.DrawLine(new Pen(Color.Blue, 3), arw[0, 0], arw[0, 1], arw[3, 0], arw[3, 1]);
@@ -459,21 +488,104 @@ namespace GraphicReactor
             Camera_VerticalOffset = 0;
             Camera_HorizontalOffset = 0;
         }
-        public void MovePoints(int x, int y, int z, bool selectedOnly = false)
+        public void MovePoints(bool x, bool y, bool z, int eX, int StartX, int eY, int StartY, bool selectedOnly = false)
         {
-            if(selectedOnly)
+            //ax x  x1 arw[0, 0], y1  arw[0, 1], x2 arw[1, 0], y2 arw[1, 1];
+            // ax y x1 arw[0, 0], y1 arw[0, 1], x2 arw[2, 0], y2 arw[2, 1];
+            //ax z x1 arw[0, 0], y1 arw[0, 1], x2 arw[3, 0],y2 arw[3, 1]);
+            float Vlengthdif = Math.Abs((float)Math.Sqrt(Math.Pow(StartX, 2) + Math.Pow(StartY, 2)) -(float)Math.Sqrt(Math.Pow(eX, 2) + Math.Pow(eY, 2)));
+            
+            if (selectedOnly)
+            {
                 foreach (GR_Point p in SelectedPoints)
                 {
-                    p.X += x;
-                    p.Y += y;
-                    p.Z += z;
+                    float speed = 50f;
+                    if (x)
+                    {
+                        
+                        float vecX = globalArw[1, 0] - globalArw[0, 0];
+                        float vecY = globalArw[1, 1] - globalArw[0, 1];
+
+                        float vecStartEx = eX - StartX;
+                        float vecStartEy = eY - StartY;
+                        float cosA = 0;
+                        float normalizeRate = 1;
+                        if((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) !=0) //normalize vecX
+                        {
+                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
+                        }
+                        vecX*= normalizeRate * 100;
+                        vecY *= normalizeRate * 100;
+                        if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
+                        else
+                        {
+                            cosA = (vecStartEx * vecX + vecStartEy * vecY) / ((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
+                        }
+                        
+                        p.X += Vlengthdif*cosA* normalizeRate * speed;
+                    }
+                    if (y)
+                    {
+                        float vecX = globalArw[2, 0] - globalArw[0, 0];
+                        float vecY = globalArw[2, 1] - globalArw[0, 1];
+                        float vecStartEx = eX - StartX;
+                        float vecStartEy = eY - StartY;
+                        float cosA = 0;
+                        float normalizeRate = 1;
+                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
+                        {
+                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
+                        }
+                        vecX *= normalizeRate * 100;
+                        vecY *= normalizeRate * 100;
+
+                        if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
+                        else
+                        {
+                            cosA = (vecStartEx * vecX + vecStartEy * vecY) / ((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
+                        }
+
+                        p.Y += Vlengthdif * cosA * normalizeRate * speed;
+                    }
+                    if (z)
+                    {
+                        float vecX = globalArw[3, 0] - globalArw[0, 0];
+                        float vecY = globalArw[3, 1] - globalArw[0, 1];
+                        
+                        float vecStartEx = eX - StartX;
+                        float vecStartEy = eY - StartY;
+                        float cosA = 0;
+                        float normalizeRate = 1;
+                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
+                        {
+                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
+                        }
+
+                        vecX *= normalizeRate *100;
+                        vecY *= normalizeRate *100;
+
+                        if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
+                        else
+                        {
+                            cosA = (vecStartEx * vecX + vecStartEy * vecY) / ((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
+                        }
+
+                        p.Z += Vlengthdif * cosA *  normalizeRate * speed;
+                    }  
                 }
+            }
             else
                 foreach (GR_Point p in points)
                 {
-                    p.X += x;
-                    p.Y += y;
-                    p.Z += z;
+                   // p.X += x;
+                   // p.Y += y;
+                   // p.Z += z;
                 }
             
         }
