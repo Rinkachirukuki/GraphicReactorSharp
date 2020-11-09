@@ -54,6 +54,8 @@ namespace GraphicReactor
 
             UpdatePicBoxParams();
 
+            Zc_label.Text = mainScene.Zc.ToString();
+
         }
 
         private void UpdatePicBoxParams()
@@ -125,21 +127,21 @@ namespace GraphicReactor
                 else if (action == Action.transformX)
                 {
                     if (tool == Tool.move)
-                        mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
+                        /*mainScene.MovePoints(true, false, false, e.X, startPos.X, e.Y, startPos.Y, true);*/ mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Xtransform += e.X - startPos.X;
                 }
                 else if (action == Action.transformY)
                 {
                     if (tool == Tool.move)
-                        mainScene.MovePoints(0, e.X - startPos.X, 0, true);
+                        mainScene.MovePoints(false, true, false, e.X, startPos.X, e.Y, startPos.Y, true); //mainScene.MovePoints(0, e.X - startPos.X, 0, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Ytransform += e.X - startPos.X;
                 }
                 else if (action == Action.transformZ) 
                 {
                     if (tool == Tool.move)
-                        mainScene.MovePoints(0, 0, e.X - startPos.X, true);
+                        mainScene.MovePoints(false, false, true, e.X, startPos.X, e.Y, startPos.Y, true);//mainScene.MovePoints(0, 0, e.X - startPos.X, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Ztransform += e.X - startPos.X;
                 }
@@ -160,8 +162,8 @@ namespace GraphicReactor
             }
             if (mouseMidbutton)
             {
-                mainScene.Camera_HorizontalAngle += e.X - startPos.X;
-                mainScene.Camera_VerticalAngle += e.Y - startPos.Y;
+                mainScene.Camera_HorizontalAngle += (float)(e.X - startPos.X)/4;
+                mainScene.Camera_VerticalAngle += (float)(e.Y - startPos.Y)/4;
                 startPos.X = e.X;
                 startPos.Y = e.Y;
                 UpdatePicBox(true);
@@ -243,13 +245,14 @@ namespace GraphicReactor
         {
             main_graphics.Clear(Color.White);
             mainScene.Draw(main_graphics, compLinesCheckBox.Checked);
-            
-            if (mainScene.points.Count > 0)
-            {
-                label2.Text = mainScene.points[0].X.ToString();
-                label3.Text = mainScene.points[0].Y.ToString();
-            }
-            
+
+            GR_Point p = mainScene.GetPointsCenter(true);
+
+            label2.Text = p.X.ToString();
+            label3.Text = p.Y.ToString();
+            label4.Text = p.Z.ToString();
+
+
             if (refresh) MainPicBox.Refresh();
         }
 
@@ -268,12 +271,6 @@ namespace GraphicReactor
         {
             if (e.KeyCode == Keys.ShiftKey)  shiftButton = true;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
-            if (e.KeyCode == Keys.V)
-            {
-                UpdatePicBox(false);
-                CreateTree(5, new Pen(Color.Brown, 1), main_graphics, MainPicBox.Width / 2, MainPicBox.Height / 2, 0,20, 30,90);
-                MainPicBox.Refresh();
-            }
                 
             
         }
@@ -353,32 +350,6 @@ namespace GraphicReactor
             mainScene.ResetCamera();
             UpdatePicBox();
         }
-        public void CreateTree(int n, Pen pen, Graphics gr, float x, float y, double angle, double angle2, int length, int newLineChance)
-        {
-            if (n == 0) return;
-            gr.DrawLine(pen, x, y,
-                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
-                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y));
-
-
-            pen.Color = Color.FromArgb(255, (pen.Color.R * n) % 255, (pen.Color.G / n) % 255, (pen.Color.B * n) % 255);
-            if (rnd.Next(0,100) <= newLineChance)
-                CreateTree(n - 1, pen, gr,
-                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
-                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y),
-                angle + rnd.Next(-5, 5), angle2, length-2 - rnd.Next(0, 2), newLineChance - 10);
-            if (rnd.Next(0, 100) <= newLineChance)
-                CreateTree(n - 1, pen, gr,
-                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
-                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y),
-                angle - angle2 + rnd.Next(-5, 5), angle2, length - 2 - rnd.Next(0, 2), newLineChance - 10);
-            if (rnd.Next(0, 100) <= newLineChance)
-                CreateTree(n - 1, pen, gr,
-                (float)((x) * Math.Cos(angle / 180 * Math.PI) - (y - length) * Math.Sin(angle / 180 * Math.PI) - x * Math.Cos(angle / 180 * Math.PI) + y * Math.Sin(angle / 180 * Math.PI) + x),
-                (float)((x) * Math.Sin(angle / 180 * Math.PI) + (y - length) * Math.Cos(angle / 180 * Math.PI) - x * Math.Sin(angle / 180 * Math.PI) - y * Math.Cos(angle / 180 * Math.PI) + y),
-                angle + angle2 + rnd.Next(-5,5), angle2, length - 2 - rnd.Next(0, 2), newLineChance - 10);
-        }
-
         private void moveModeButton_Click(object sender, EventArgs e)
         {
             setToolPanelButtonsDefaultColors();
@@ -402,6 +373,22 @@ namespace GraphicReactor
         private void compLinesCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             UpdatePicBox();
+        }
+
+
+
+        private void Zc_DecreaseButton_Click(object sender, EventArgs e)
+        {
+            mainScene.Zc -= 100;
+            UpdatePicBox();
+            Zc_label.Text = mainScene.Zc.ToString();
+        }
+
+        private void Zc_IncreaseButton_Click(object sender, EventArgs e)
+        {
+            mainScene.Zc += 100;
+            UpdatePicBox();
+            Zc_label.Text = mainScene.Zc.ToString();
         }
 
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);

@@ -34,8 +34,10 @@ namespace GraphicReactor
         public float Temp_Ytransform { get; set; }
         public float Temp_Ztransform { get; set; }
 
+        public double Zc { get; set; }
 
-        public GR_Scene()
+
+    public GR_Scene()
         {
             points = new List<GR_Point_Base>();
             lines = new List<GR_Line>();
@@ -59,6 +61,8 @@ namespace GraphicReactor
             Temp_Xtransform = 0;
             Temp_Ytransform = 0;
             Temp_Ztransform = 0;
+
+            Zc = 800;
         }
 
         public void Draw(Graphics gr, bool compLines = false)
@@ -92,6 +96,13 @@ namespace GraphicReactor
                 p.Z = (float)(p1.X * matrix[0, 2] + p1.Y * matrix[1, 2] + p1.Z * matrix[2, 2] + p1.Ok * matrix[3, 2]);
                 p.Ok = (float)(p1.X * matrix[0, 3] + p1.Y * matrix[1, 3] + p1.Z * matrix[2, 3] + p1.Ok * matrix[3, 3]);
 
+                p.X /= p.Ok;
+                p.Y /= p.Ok;
+                p.Z /= p.Ok;
+                p.Ok = 1;
+
+                p.X += Camera_HorizontalOffset + HorizontalOffset;
+                p.Y += Camera_VerticalOffset + VerticalOffset;
             }
 
            
@@ -107,7 +118,15 @@ namespace GraphicReactor
             {
                 foreach (GR_Line line in lines)
                 {
-                    gr.DrawLine(new Pen(line.color,line.width), GetPointByUid(line.point1).ToPoint(), GetPointByUid(line.point2).ToPoint());
+                    try
+                    {
+                        gr.DrawLine(new Pen(line.color, line.width), GetPointByUid(line.point1).ToPoint(), GetPointByUid(line.point2).ToPoint());
+                    }
+                    catch
+                    {
+
+                    }
+                    
                 }
             }
             
@@ -162,6 +181,14 @@ namespace GraphicReactor
                 arw1[i, 1] = (float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
                 arw1[i, 2] = (float)(arw[i, 0] * matrix[0, 2] + arw[i, 1] * matrix[1, 2] + arw[i, 2] * matrix[2, 2] + arw[i, 3] * matrix[3, 2]);
                 arw1[i, 3] = (float)(arw[i, 0] * matrix[0, 3] + arw[i, 1] * matrix[1, 3] + arw[i, 2] * matrix[2, 3] + arw[i, 3] * matrix[3, 3]);
+
+                arw1[i, 0] /= arw1[i, 3];
+                arw1[i, 1] /= arw1[i, 3];
+                arw1[i, 2] /= arw1[i, 3];
+                arw1[i, 3] = 1;
+
+                arw1[i, 0] += Camera_HorizontalOffset + HorizontalOffset;
+                arw1[i, 1] += Camera_VerticalOffset + VerticalOffset;
             }
             return arw1;
             
@@ -221,19 +248,30 @@ namespace GraphicReactor
         private void DrawXYZ(Graphics gr, double[,] matrix)
         {
 
+            //float[,] arw = new float[,] {
+            //{HorizontalOffset*2, 0, 0, 1},
+            //{-HorizontalOffset*2, 0, 0, 1},
+
+            //{0, VerticalOffset*2, 0, 1},
+            //{0, -VerticalOffset*2, 0, 1},
+
+            //{0, 0,  VerticalOffset*2, 1},
+            //{0, 0, - VerticalOffset*2, 1}
+            //};
+
             float[,] arw = new float[,] {
-            {HorizontalOffset*2, 0, 0, 1},
-            {-HorizontalOffset*2, 0, 0, 1},
+            {200, 0, 0, 1},
+            {-200, 0, 0, 1},
 
-            {0, VerticalOffset*2, 0, 1},
-            {0, -VerticalOffset*2, 0, 1},
+            {0, 200, 0, 1},
+            {0, -200, 0, 1},
 
-            {0, 0,  VerticalOffset*2, 1},
-            {0, 0, - VerticalOffset*2, 1}
+            {0, 0,  200, 1},
+            {0, 0,  -200, 1}
             };
 
 
-            
+
             float[,] arw1 = new float[6, 4];
 
 
@@ -243,6 +281,15 @@ namespace GraphicReactor
                 arw1[i, 1] = (float)(arw[i, 0] * matrix[0, 1] + arw[i, 1] * matrix[1, 1] + arw[i, 2] * matrix[2, 1] + arw[i, 3] * matrix[3, 1]);
                 arw1[i, 2] = (float)(arw[i, 0] * matrix[0, 2] + arw[i, 1] * matrix[1, 2] + arw[i, 2] * matrix[2, 2] + arw[i, 3] * matrix[3, 2]);
                 arw1[i, 3] = (float)(arw[i, 0] * matrix[0, 3] + arw[i, 1] * matrix[1, 3] + arw[i, 2] * matrix[2, 3] + arw[i, 3] * matrix[3, 3]);
+
+                arw1[i, 0] /= arw1[i, 3];
+                arw1[i, 1] /= arw1[i, 3];
+                arw1[i, 2] /= arw1[i, 3];
+                arw1[i, 3] = 1;
+
+                arw1[i, 0] += Camera_HorizontalOffset + HorizontalOffset;
+                arw1[i, 1] += Camera_VerticalOffset + VerticalOffset;
+
             }
             gr.DrawLine(new Pen(Color.FromArgb(50,Color.Red), 2), arw1[0, 0], arw1[0, 1], arw1[1, 0], arw1[1, 1]);
             gr.DrawLine(new Pen(Color.FromArgb(50, Color.Green), 2), arw1[2, 0], arw1[2, 1], arw1[3, 0], arw1[3, 1]);
@@ -250,68 +297,39 @@ namespace GraphicReactor
         }
         private double[,] CalculateRotationMatrix()
         {
-            double B = Camera_HorizontalAngle / 180 * Math.PI;
-            double A = Camera_VerticalAngle / 180 * Math.PI;
-            double C = 0;
+            double A = Camera_HorizontalAngle / 180 * Math.PI;
+            double B = Camera_VerticalAngle / 180 * Math.PI;
 
-            //return new double[,] {
-            //    {
-            //        Math.Cos(A),
-            //        -Math.Sin(A) * Math.Cos(B),
-            //        Math.Sin(A) * Math.Sin(B),
-            //        0
-            //    },
-
-            //    {
-            //        Math.Sin(A),
-            //        -Math.Cos(A)*Math.Cos(B),
-            //        -Math.Cos(A)*Math.Sin(B),
-            //        0
-            //    },
-
-            //    {
-            //        0,
-            //        -Math.Sin(B),
-            //        Math.Cos(B),
-            //        0
-            //    },
-
-            //    {
-            //        Camera_HorizontalOffset + HorizontalOffset,
-            //        Camera_VerticalOffset + VerticalOffset,
-            //        0,
-            //        1
-            //    }
-            //}; ;
             return new double[,] {
                 {
-                    Math.Cos(B) * Math.Cos(C),
-                    Math.Cos(B) * Math.Sin(C),
-                    Math.Sin(B),
-                    0
+                    Math.Cos(A),
+                    -Math.Sin(A) * Math.Sin(B),
+                    0,
+                    Math.Sin(A) * Math.Cos(B)/Zc
                 },
 
                 {
-                    Math.Sin(A) * Math.Sin(B) * Math.Cos(C) + Math.Cos(A) * Math.Sin(C),
-                    Math.Sin(A) * Math.Sin(B) * Math.Sin(C) - Math.Cos(A) * Math.Cos(C),
-                    -Math.Sin(A)*Math.Cos(B),
-                    0
+                   0,
+                   -Math.Cos(B),
+                   0,
+                   -Math.Sin(B)/Zc
                 },
 
                 {
-                    -Math.Cos(A) * Math.Sin(B) * Math.Cos(C) + Math.Sin(A) * Math.Sin(C),
-                    -Math.Cos(A) * Math.Sin(B) * Math.Sin(C) - Math.Sin(A) * Math.Cos(C),
-                    Math.Cos(A)*Math.Cos(B),
-                    0
+                    Math.Sin(A),
+                    Math.Cos(A)*Math.Sin(B),
+                    0,
+                    Math.Cos(A)*Math.Cos(B)/Zc
                 },
 
                 {
-                    Camera_HorizontalOffset + HorizontalOffset,
-                    Camera_VerticalOffset + VerticalOffset,
+                    0, //Camera_HorizontalOffset + HorizontalOffset
+                    0, //Camera_VerticalOffset + VerticalOffset
                     0,
                     1
                 }
             }; ;
+
         }
         private void UpdateTemp(bool selectedOnly = false)
         {
@@ -574,7 +592,7 @@ namespace GraphicReactor
             double C = Temp_Ztransform / 180 * Math.PI;
 
             GR_Point_Base P = GetPointsCenter(true);
-
+           
             return new double[,] {
                 {
                     Math.Cos(B) * Math.Cos(C),
@@ -586,21 +604,21 @@ namespace GraphicReactor
                 {
                     Math.Sin(A) * Math.Sin(B) * Math.Cos(C) + Math.Cos(A) * Math.Sin(C),
                     -Math.Sin(A) * Math.Sin(B) * Math.Sin(C) + Math.Cos(A) * Math.Cos(C),
-                    -Math.Sin(A)*Math.Cos(B),
+                    -Math.Sin(A) * Math.Cos(B),
                     0
                 },
 
                 {
                     -Math.Cos(A) * Math.Sin(B) * Math.Cos(C) + Math.Sin(A) * Math.Sin(C),
                     Math.Cos(A) * Math.Sin(B) * Math.Sin(C) + Math.Sin(A) * Math.Cos(C),
-                    Math.Cos(A)*Math.Cos(B),
+                    Math.Cos(A) * Math.Cos(B),
                     0
                 },
 
                 {
-                    (-P.X*Math.Cos(B)+P.Y*Math.Sin(A)*Math.Sin(B) - P.Z*Math.Sin(B))*Math.Cos(C) - (P.Y*Math.Cos(A) + P.Z*Math.Sin(A))*Math.Sin(C) + P.X,
-                    (P.X*Math.Cos(B)-P.Y*Math.Sin(A)*Math.Sin(B)+P.Z*Math.Cos(A))*Math.Sin(C) - (P.Y*Math.Cos(A)+P.Z*Math.Sin(A))*Math.Cos(C) + P.Y,
-                    -P.X*Math.Sin(B)+P.Y*Math.Sin(A)*Math.Cos(B)-P.Z*Math.Cos(A) + P.Z,
+                    (-P.X * Math.Cos(B) + P.Y * Math.Sin(A) * Math.Sin(B) - P.Z * Math.Sin(B)) * Math.Cos(C) - (P.Y * Math.Cos(A) + P.Z * Math.Sin(A)) * Math.Sin(C) + P.X,
+                    (P.X * Math.Cos(B) - P.Y * Math.Sin(A) * Math.Sin(B) + P.Z * Math.Cos(A)) * Math.Sin(C) - (P.Y * Math.Cos(A) + P.Z * Math.Sin(A)) * Math.Cos(C) + P.Y,
+                    -P.X * Math.Sin(B) + P.Y * Math.Sin(A) * Math.Cos(B) - P.Z * Math.Cos(A) + P.Z,
                     1
                 }
             }; ;
@@ -622,6 +640,106 @@ namespace GraphicReactor
             Temp_Xtransform = 0;
             Temp_Ytransform = 0;
             Temp_Ztransform = 0;
+        }
+        public void MovePoints(bool x, bool y, bool z, int eX, int StartX, int eY, int StartY, bool selectedOnly = false)
+        {
+            //ax x  x1 arw[0, 0], y1  arw[0, 1], x2 arw[1, 0], y2 arw[1, 1];
+            // ax y x1 arw[0, 0], y1 arw[0, 1], x2 arw[2, 0], y2 arw[2, 1];
+            //ax z x1 arw[0, 0], y1 arw[0, 1], x2 arw[3, 0],y2 arw[3, 1]);
+            float Vlengthdif = Math.Abs((float)Math.Sqrt(Math.Pow(StartX, 2) + Math.Pow(StartY, 2)) - (float)Math.Sqrt(Math.Pow(eX, 2) + Math.Pow(eY, 2)));
+            float[,] arw = CalculateXYZarrows(CalculateRotationMatrix());
+            if (selectedOnly)
+            {
+                foreach (GR_Point p in SelectedPoints)
+                {
+                    float speed = 10f;
+                    if (x)
+                    {
+                        float vecX = arw[1, 0] - arw[0, 0];
+                        float vecY = arw[1, 1] - arw[0, 1];
+
+                        float vecStartEx = eX - StartX;
+                        float vecStartEy = eY - StartY;
+                        float cosA = 0;
+                        float normalizeRate = 1;
+                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
+                        {
+                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
+                        }
+                        vecX *= normalizeRate * 100;
+                        vecY *= normalizeRate * 100;
+                        if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
+                        else
+                        {
+                            cosA = (vecStartEx * vecX + vecStartEy * vecY) / ((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
+                        }
+
+                        p.X += Vlengthdif * cosA * normalizeRate * speed;
+                    }
+                    if (y)
+                    {
+                        float vecX = arw[2, 0] - arw[0, 0];
+                        float vecY = arw[2, 1] - arw[0, 1];
+                        float vecStartEx = eX - StartX;
+                        float vecStartEy = eY - StartY;
+                        float cosA = 0;
+                        float normalizeRate = 1;
+                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
+                        {
+                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
+                        }
+                        vecX *= normalizeRate * 100;
+                        vecY *= normalizeRate * 100;
+
+                        if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
+                        else
+                        {
+                            cosA = (vecStartEx * vecX + vecStartEy * vecY) / ((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
+                        }
+
+                        p.Y += Vlengthdif * cosA * normalizeRate * speed;
+                    }
+                    if (z)
+                    {
+                        float vecX = arw[3, 0] - arw[0, 0];
+                        float vecY = arw[3, 1] - arw[0, 1];
+
+                        float vecStartEx = eX - StartX;
+                        float vecStartEy = eY - StartY;
+                        float cosA = 0;
+                        float normalizeRate = 1;
+                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
+                        {
+                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
+                        }
+
+                        vecX *= normalizeRate * 100;
+                        vecY *= normalizeRate * 100;
+
+                        if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                           (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
+                        else
+                        {
+                            cosA = (vecStartEx * vecX + vecStartEy * vecY) / ((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
+                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
+                        }
+
+                        p.Z += Vlengthdif * cosA * normalizeRate * speed;
+                    }
+                }
+            }
+            else
+                foreach (GR_Point p in points)
+                {
+                    // p.X += x;
+                    // p.Y += y;
+                    // p.Z += z;
+                }
+
         }
     }
 }
