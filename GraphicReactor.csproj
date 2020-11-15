@@ -46,6 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GR_Object.cs" />
+    <Compile Include="CustomForms\ToolCustomTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomForms\ToolCustomTabControl.Designer.cs">
+      <DependentUpon>ToolCustomTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomForms\ToolCustomTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomForms\ToolCustomTreeView.Designer.cs">
+      <DependentUpon>ToolCustomTreeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomForms\ToolCustomTextBox.cs">
       <SubType>Component</SubType>
     </Compile>

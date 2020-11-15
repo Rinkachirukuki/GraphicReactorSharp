@@ -30,9 +30,13 @@ namespace GraphicReactor
         public float VerticalOffset { get; set; }
         public float HorizontalOffset { get; set; }
 
-        public float Temp_Xtransform { get; set; }
-        public float Temp_Ytransform { get; set; }
-        public float Temp_Ztransform { get; set; }
+        public float Temp_Xrotate { get; set; }
+        public float Temp_Yrotate { get; set; }
+        public float Temp_Zrotate { get; set; }
+
+        public float Temp_Xresize { get; set; }
+        public float Temp_Yresize { get; set; }
+        public float Temp_Zresize { get; set; }
 
         public double Zc { get; set; }
 
@@ -58,11 +62,15 @@ namespace GraphicReactor
             Camera_HorizontalOffset = 0;
             Camera_VerticalOffset = 0;
 
-            Temp_Xtransform = 0;
-            Temp_Ytransform = 0;
-            Temp_Ztransform = 0;
+            Temp_Xrotate = 0;
+            Temp_Yrotate = 0;
+            Temp_Zrotate = 0;
 
-            Zc = 800;
+            Temp_Xresize = 1;
+            Temp_Yresize = 1;
+            Temp_Zresize = 1;
+
+            Zc = 1000;
         }
 
         public void Draw(Graphics gr, bool compLines = false)
@@ -73,6 +81,7 @@ namespace GraphicReactor
             double[,] matrix = CalculateRotationMatrix();
             double[,] temp_matrix = CalculateTempRotationMatrix();
 
+            
             DrawXYZ(gr,matrix);
 
             UpdateTemp();
@@ -318,7 +327,7 @@ namespace GraphicReactor
                 {
                     Math.Sin(A),
                     Math.Cos(A)*Math.Sin(B),
-                    0,
+                    0, //////////////////////////////////////////////////////////////// 1
                     Math.Cos(A)*Math.Cos(B)/Zc
                 },
 
@@ -580,48 +589,52 @@ namespace GraphicReactor
         public void PreviewSelectedPointsRotation(float angX, float angY, float angZ)
         {
 
-            Temp_Xtransform += angX;
-            Temp_Ytransform += angY;
-            Temp_Ztransform += angZ;
+            Temp_Xrotate += angX;
+            Temp_Yrotate += angY;
+            Temp_Zrotate += angZ;
 
         }
         private double[,] CalculateTempRotationMatrix()
         {
-            double A = Temp_Xtransform / 180 * Math.PI;
-            double B = Temp_Ytransform / 180 * Math.PI;
-            double C = Temp_Ztransform / 180 * Math.PI;
+            double A = Temp_Xrotate / 180 * Math.PI;
+            double B = Temp_Yrotate / 180 * Math.PI;
+            double C = Temp_Zrotate / 180 * Math.PI;
 
             GR_Point_Base P = GetPointsCenter(true);
            
             return new double[,] {
                 {
-                    Math.Cos(B) * Math.Cos(C),
-                    -Math.Cos(B) * Math.Sin(C),
-                    Math.Sin(B),
+                    (Math.Cos(B) * Math.Cos(C)) * Temp_Xresize,
+                    -Math.Cos(B) * Math.Sin(C) * Temp_Yresize,
+                    Math.Sin(B) * Temp_Zresize,
                     0
                 },
 
                 {
-                    Math.Sin(A) * Math.Sin(B) * Math.Cos(C) + Math.Cos(A) * Math.Sin(C),
-                    -Math.Sin(A) * Math.Sin(B) * Math.Sin(C) + Math.Cos(A) * Math.Cos(C),
-                    -Math.Sin(A) * Math.Cos(B),
+                    (Math.Sin(A) * Math.Sin(B) * Math.Cos(C) + Math.Cos(A) * Math.Sin(C)) * Temp_Xresize,
+                    (-Math.Sin(A) * Math.Sin(B) * Math.Sin(C) + Math.Cos(A) * Math.Cos(C)) * Temp_Yresize,
+                    -Math.Sin(A) * Math.Cos(B) * Temp_Zresize,
                     0
                 },
 
                 {
-                    -Math.Cos(A) * Math.Sin(B) * Math.Cos(C) + Math.Sin(A) * Math.Sin(C),
-                    Math.Cos(A) * Math.Sin(B) * Math.Sin(C) + Math.Sin(A) * Math.Cos(C),
-                    Math.Cos(A) * Math.Cos(B),
+                    (-Math.Cos(A) * Math.Sin(B) * Math.Cos(C) + Math.Sin(A) * Math.Sin(C)) * Temp_Xresize,
+                    (Math.Cos(A) * Math.Sin(B) * Math.Sin(C) + Math.Sin(A) * Math.Cos(C)) * Temp_Yresize,
+                    Math.Cos(A) * Math.Cos(B) * Temp_Zresize,
                     0
                 },
 
                 {
-                    (-P.X * Math.Cos(B) + P.Y * Math.Sin(A) * Math.Sin(B) - P.Z * Math.Sin(B)) * Math.Cos(C) - (P.Y * Math.Cos(A) + P.Z * Math.Sin(A)) * Math.Sin(C) + P.X,
-                    (P.X * Math.Cos(B) - P.Y * Math.Sin(A) * Math.Sin(B) + P.Z * Math.Cos(A)) * Math.Sin(C) - (P.Y * Math.Cos(A) + P.Z * Math.Sin(A)) * Math.Cos(C) + P.Y,
-                    -P.X * Math.Sin(B) + P.Y * Math.Sin(A) * Math.Cos(B) - P.Z * Math.Cos(A) + P.Z,
+                    (Math.Cos(C)*(-P.X*Math.Cos(B)-Math.Sin(B)*(-P.Z*Math.Cos(A)+P.Y*Math.Sin(A))) + Math.Sin(C)*(-P.Y*Math.Cos(A)-P.Z*Math.Sin(A))) * Temp_Xresize + P.X,
+                    (Math.Cos(C)*(-P.Y*Math.Cos(A)-P.Z*Math.Sin(A)) - Math.Sin(C)*(-P.X*Math.Cos(B)- Math.Sin(B)*(-P.Z*Math.Cos(A) + P.Y*Math.Sin(A)))) * Temp_Yresize + P.Y,
+                    (-P.X*Math.Sin(B) + Math.Cos(B)*(-P.Z*Math.Cos(A) + P.Y*Math.Sin(A))) * Temp_Zresize + P.Z,
                     1
                 }
             }; ;
+            //(-P.X * Math.Cos(B) + P.Y * Math.Sin(A) * Math.Sin(B) - P.Z * Math.Sin(B)) * Math.Cos(C) - (P.Y * Math.Cos(A) + P.Z * Math.Sin(A)) * Math.Sin(C) + P.X,
+            //        (P.X * Math.Cos(B) - P.Y * Math.Sin(A) * Math.Sin(B) + P.Z * Math.Cos(A)) * Math.Sin(C) - (P.Y * Math.Cos(A) + P.Z * Math.Sin(A)) * Math.Cos(C) + P.Y,
+            //        -P.X * Math.Sin(B) + P.Y * Math.Sin(A) * Math.Cos(B) - P.Z * Math.Cos(A) + P.Z,
+            //        1
         }
         public void ApplyTransformation()
         {
@@ -637,9 +650,13 @@ namespace GraphicReactor
         }
         public void ResetTemp()
         {
-            Temp_Xtransform = 0;
-            Temp_Ytransform = 0;
-            Temp_Ztransform = 0;
+            Temp_Xrotate = 0;
+            Temp_Yrotate = 0;
+            Temp_Zrotate = 0;
+
+            Temp_Xresize = 1;
+            Temp_Yresize = 1;
+            Temp_Zresize = 1;
         }
         public void MovePoints(bool x, bool y, bool z, int eX, int StartX, int eY, int StartY, bool selectedOnly = false)
         {
@@ -740,6 +757,18 @@ namespace GraphicReactor
                     // p.Z += z;
                 }
 
+        } /////////////////////////////////////////////////////
+
+        public void SelectPoint(uint id)
+        {
+            foreach(GR_Point_Base p in points)
+            {
+                if(p is GR_Point && p.Id == id)
+                {
+                    ((GR_Point)p).Select();
+                    return;
+                }
+            }
         }
     }
 }
