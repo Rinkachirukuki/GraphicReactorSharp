@@ -31,8 +31,7 @@ namespace GraphicReactor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Points");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Groups");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Root");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.mainPicBox_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +63,13 @@ namespace GraphicReactor
             this.propetiesTabControl = new GraphicReactor.CustomForms.ToolCustomTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.toolCustomButton2 = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.toolCustomButton1 = new GraphicReactor.CustomForms.ToolCustomButton();
             this.groupsTreeView = new GraphicReactor.CustomForms.ToolCustomTreeView();
+            this.morfingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.select1FigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.select2FigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createNewFigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
@@ -81,28 +86,29 @@ namespace GraphicReactor
             this.aToolStripMenuItem,
             this.aToolStripMenuItem1,
             this.createGroupToolStripMenuItem,
-            this.toolStripMenuItem2});
+            this.toolStripMenuItem2,
+            this.morfingToolStripMenuItem});
             this.mainPicBox_ContextMenu.Name = "contextMenuStrip1";
-            this.mainPicBox_ContextMenu.Size = new System.Drawing.Size(175, 92);
+            this.mainPicBox_ContextMenu.Size = new System.Drawing.Size(181, 136);
             // 
             // aToolStripMenuItem
             // 
             this.aToolStripMenuItem.Name = "aToolStripMenuItem";
-            this.aToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.aToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aToolStripMenuItem.Text = "Add";
             this.aToolStripMenuItem.Click += new System.EventHandler(this.aToolStripMenuItem_Click);
             // 
             // aToolStripMenuItem1
             // 
             this.aToolStripMenuItem1.Name = "aToolStripMenuItem1";
-            this.aToolStripMenuItem1.Size = new System.Drawing.Size(174, 22);
+            this.aToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.aToolStripMenuItem1.Text = "Delete";
             this.aToolStripMenuItem1.Click += new System.EventHandler(this.aToolStripMenuItem1_Click);
             // 
             // createGroupToolStripMenuItem
             // 
             this.createGroupToolStripMenuItem.Name = "createGroupToolStripMenuItem";
-            this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createGroupToolStripMenuItem.Text = "Create Group";
             this.createGroupToolStripMenuItem.Click += new System.EventHandler(this.createGroupToolStripMenuItem_Click);
             // 
@@ -111,7 +117,7 @@ namespace GraphicReactor
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.xToolStripMenuItem});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(174, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem2.Text = "Transform selected";
             // 
             // xToolStripMenuItem
@@ -152,7 +158,7 @@ namespace GraphicReactor
             this.panel1.Controls.Add(this.resetButton);
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(55, 455);
+            this.panel1.Size = new System.Drawing.Size(55, 451);
             this.panel1.TabIndex = 4;
             // 
             // resetButton
@@ -162,7 +168,7 @@ namespace GraphicReactor
             this.resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Coral;
             this.resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.resetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.resetButton.Location = new System.Drawing.Point(3, 429);
+            this.resetButton.Location = new System.Drawing.Point(3, 425);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(49, 23);
             this.resetButton.TabIndex = 9;
@@ -179,7 +185,7 @@ namespace GraphicReactor
             this.MainPicBox.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.MainPicBox.Location = new System.Drawing.Point(59, 1);
             this.MainPicBox.Name = "MainPicBox";
-            this.MainPicBox.Size = new System.Drawing.Size(474, 454);
+            this.MainPicBox.Size = new System.Drawing.Size(450, 451);
             this.MainPicBox.TabIndex = 1;
             this.MainPicBox.TabStop = false;
             this.MainPicBox.SizeChanged += new System.EventHandler(this.MainPicBox_SizeChanged);
@@ -191,10 +197,11 @@ namespace GraphicReactor
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(7, 36);
+            this.label2.Location = new System.Drawing.Point(11, 29);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(45, 16);
             this.label2.TabIndex = 5;
             this.label2.Text = "label2";
             // 
@@ -202,10 +209,11 @@ namespace GraphicReactor
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.ForeColor = System.Drawing.Color.Green;
-            this.label3.Location = new System.Drawing.Point(60, 36);
+            this.label3.Location = new System.Drawing.Point(72, 29);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.Size = new System.Drawing.Size(45, 16);
             this.label3.TabIndex = 6;
             this.label3.Text = "label3";
             // 
@@ -213,9 +221,9 @@ namespace GraphicReactor
             // 
             this.PropetiesPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.PropetiesPanel.Controls.Add(this.CheckBoxRelCenter);
-            this.PropetiesPanel.Location = new System.Drawing.Point(3, 61);
+            this.PropetiesPanel.Location = new System.Drawing.Point(0, 61);
             this.PropetiesPanel.Name = "PropetiesPanel";
-            this.PropetiesPanel.Size = new System.Drawing.Size(166, 128);
+            this.PropetiesPanel.Size = new System.Drawing.Size(196, 128);
             this.PropetiesPanel.TabIndex = 8;
             // 
             // CheckBoxRelCenter
@@ -245,10 +253,11 @@ namespace GraphicReactor
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label4.ForeColor = System.Drawing.Color.Blue;
-            this.label4.Location = new System.Drawing.Point(112, 36);
+            this.label4.Location = new System.Drawing.Point(132, 29);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.Size = new System.Drawing.Size(45, 16);
             this.label4.TabIndex = 12;
             this.label4.Text = "label4";
             // 
@@ -268,9 +277,9 @@ namespace GraphicReactor
             this.panel2.Controls.Add(this.Zc_label);
             this.panel2.Controls.Add(this.Zc_DecreaseButton);
             this.panel2.Controls.Add(this.Zc_IncreaseButton);
-            this.panel2.Location = new System.Drawing.Point(3, 325);
+            this.panel2.Location = new System.Drawing.Point(0, 321);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(166, 77);
+            this.panel2.Size = new System.Drawing.Size(196, 77);
             this.panel2.TabIndex = 17;
             // 
             // Zc_DecreaseButton
@@ -297,7 +306,7 @@ namespace GraphicReactor
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 6);
+            this.label6.Location = new System.Drawing.Point(6, 3);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(81, 13);
             this.label6.TabIndex = 18;
@@ -307,7 +316,7 @@ namespace GraphicReactor
             // 
             this.compLinesCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.compLinesCheckBox.AutoSize = true;
-            this.compLinesCheckBox.Location = new System.Drawing.Point(5, 408);
+            this.compLinesCheckBox.Location = new System.Drawing.Point(4, 403);
             this.compLinesCheckBox.Name = "compLinesCheckBox";
             this.compLinesCheckBox.Size = new System.Drawing.Size(112, 17);
             this.compLinesCheckBox.TabIndex = 8;
@@ -324,7 +333,7 @@ namespace GraphicReactor
             this.resizeModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSeaGreen;
             this.resizeModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.resizeModeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.resizeModeButton.Location = new System.Drawing.Point(482, 6);
+            this.resizeModeButton.Location = new System.Drawing.Point(458, 6);
             this.resizeModeButton.Name = "resizeModeButton";
             this.resizeModeButton.Size = new System.Drawing.Size(44, 23);
             this.resizeModeButton.TabIndex = 11;
@@ -341,7 +350,7 @@ namespace GraphicReactor
             this.rotationModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSeaGreen;
             this.rotationModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rotationModeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.rotationModeButton.Location = new System.Drawing.Point(435, 6);
+            this.rotationModeButton.Location = new System.Drawing.Point(411, 6);
             this.rotationModeButton.Name = "rotationModeButton";
             this.rotationModeButton.Size = new System.Drawing.Size(44, 23);
             this.rotationModeButton.TabIndex = 9;
@@ -358,7 +367,7 @@ namespace GraphicReactor
             this.moveModeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSeaGreen;
             this.moveModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.moveModeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.moveModeButton.Location = new System.Drawing.Point(388, 6);
+            this.moveModeButton.Location = new System.Drawing.Point(364, 6);
             this.moveModeButton.Name = "moveModeButton";
             this.moveModeButton.Size = new System.Drawing.Size(44, 23);
             this.moveModeButton.TabIndex = 10;
@@ -372,10 +381,10 @@ namespace GraphicReactor
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propetiesTabControl.Controls.Add(this.tabPage1);
             this.propetiesTabControl.Controls.Add(this.tabPage2);
-            this.propetiesTabControl.Location = new System.Drawing.Point(535, 1);
+            this.propetiesTabControl.Location = new System.Drawing.Point(511, 1);
             this.propetiesTabControl.Name = "propetiesTabControl";
             this.propetiesTabControl.SelectedIndex = 0;
-            this.propetiesTabControl.Size = new System.Drawing.Size(180, 455);
+            this.propetiesTabControl.Size = new System.Drawing.Size(204, 451);
             this.propetiesTabControl.TabIndex = 19;
             this.propetiesTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
             this.propetiesTabControl.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
@@ -392,49 +401,108 @@ namespace GraphicReactor
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(172, 429);
+            this.tabPage1.Size = new System.Drawing.Size(196, 425);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Info";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.toolCustomButton2);
+            this.tabPage2.Controls.Add(this.toolCustomButton1);
             this.tabPage2.Controls.Add(this.groupsTreeView);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(172, 429);
+            this.tabPage2.Size = new System.Drawing.Size(196, 425);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "ObjList";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // toolCustomButton2
+            // 
+            this.toolCustomButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.toolCustomButton2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Coral;
+            this.toolCustomButton2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Coral;
+            this.toolCustomButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolCustomButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolCustomButton2.Location = new System.Drawing.Point(6, 379);
+            this.toolCustomButton2.Name = "toolCustomButton2";
+            this.toolCustomButton2.Size = new System.Drawing.Size(95, 23);
+            this.toolCustomButton2.TabIndex = 11;
+            this.toolCustomButton2.Text = "Delete selected";
+            this.toolCustomButton2.UseVisualStyleBackColor = true;
+            // 
+            // toolCustomButton1
+            // 
+            this.toolCustomButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.toolCustomButton1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Coral;
+            this.toolCustomButton1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Coral;
+            this.toolCustomButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolCustomButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolCustomButton1.Location = new System.Drawing.Point(6, 350);
+            this.toolCustomButton1.Name = "toolCustomButton1";
+            this.toolCustomButton1.Size = new System.Drawing.Size(95, 23);
+            this.toolCustomButton1.TabIndex = 10;
+            this.toolCustomButton1.Text = "Delete selected";
+            this.toolCustomButton1.UseVisualStyleBackColor = true;
             // 
             // groupsTreeView
             // 
+            this.groupsTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupsTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.groupsTreeView.CheckBoxes = true;
             this.groupsTreeView.Location = new System.Drawing.Point(0, 0);
             this.groupsTreeView.Name = "groupsTreeView";
-            treeNode1.BackColor = System.Drawing.Color.Transparent;
-            treeNode1.ForeColor = System.Drawing.Color.DarkSlateGray;
-            treeNode1.Name = "Points";
-            treeNode1.Text = "Points";
-            treeNode2.Name = "Groups";
-            treeNode2.Text = "Groups";
+            treeNode3.Name = "Objects";
+            treeNode3.Text = "Root";
             this.groupsTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            this.groupsTreeView.Size = new System.Drawing.Size(172, 297);
+            treeNode3});
+            this.groupsTreeView.Size = new System.Drawing.Size(196, 344);
             this.groupsTreeView.TabIndex = 1;
             this.groupsTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterCheck);
             this.groupsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterSelect);
             this.groupsTreeView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
             this.groupsTreeView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
             // 
+            // morfingToolStripMenuItem
+            // 
+            this.morfingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.select1FigureToolStripMenuItem,
+            this.select2FigureToolStripMenuItem,
+            this.createNewFigureToolStripMenuItem});
+            this.morfingToolStripMenuItem.Name = "morfingToolStripMenuItem";
+            this.morfingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.morfingToolStripMenuItem.Text = "Morfing";
+            // 
+            // select1FigureToolStripMenuItem
+            // 
+            this.select1FigureToolStripMenuItem.Name = "select1FigureToolStripMenuItem";
+            this.select1FigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.select1FigureToolStripMenuItem.Text = "Select 1 figure";
+            this.select1FigureToolStripMenuItem.Click += new System.EventHandler(this.select1FigureToolStripMenuItem_Click);
+            // 
+            // select2FigureToolStripMenuItem
+            // 
+            this.select2FigureToolStripMenuItem.Name = "select2FigureToolStripMenuItem";
+            this.select2FigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.select2FigureToolStripMenuItem.Text = "Select 2 figure";
+            this.select2FigureToolStripMenuItem.Click += new System.EventHandler(this.select2FigureToolStripMenuItem_Click);
+            // 
+            // createNewFigureToolStripMenuItem
+            // 
+            this.createNewFigureToolStripMenuItem.Name = "createNewFigureToolStripMenuItem";
+            this.createNewFigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createNewFigureToolStripMenuItem.Text = "Create new figure";
+            this.createNewFigureToolStripMenuItem.Click += new System.EventHandler(this.createNewFigureToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(716, 458);
+            this.ClientSize = new System.Drawing.Size(716, 459);
             this.Controls.Add(this.propetiesTabControl);
             this.Controls.Add(this.resizeModeButton);
             this.Controls.Add(this.rotationModeButton);
@@ -495,6 +563,12 @@ namespace GraphicReactor
         private TabPage tabPage1;
         private TabPage tabPage2;
         private CustomForms.ToolCustomTreeView groupsTreeView;
+        private CustomForms.ToolCustomButton toolCustomButton1;
+        private CustomForms.ToolCustomButton toolCustomButton2;
+        private ToolStripMenuItem morfingToolStripMenuItem;
+        private ToolStripMenuItem select1FigureToolStripMenuItem;
+        private ToolStripMenuItem select2FigureToolStripMenuItem;
+        private ToolStripMenuItem createNewFigureToolStripMenuItem;
     }
 }
 

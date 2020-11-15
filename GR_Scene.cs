@@ -15,6 +15,10 @@ namespace GraphicReactor
     class GR_Scene
     {
         private uint point_identificator;
+        private uint object_identificator;
+
+
+        public GR_Object root_object;
 
         public List<GR_Point_Base> points;
         private List<GR_Line> lines;
@@ -47,12 +51,13 @@ namespace GraphicReactor
             lines = new List<GR_Line>();
             temp = new List<GR_Point_Base>();
 
-            
+            root_object = new GR_Object(0);
 
             selectPen = new Pen(Color.Red, 1.5f);
             selectPen.DashStyle = DashStyle.Dot;
 
             point_identificator = 1;
+            object_identificator = 1;
 
             HorizontalOffset = 0;
             VerticalOffset = 0;
@@ -71,6 +76,12 @@ namespace GraphicReactor
             Temp_Zresize = 1;
 
             Zc = 1000;
+        }
+
+        private void UpdateListOfPoints()
+        {
+            points.Clear();
+            points.AddRange(root_object.Points);
         }
 
         public void Draw(Graphics gr, bool compLines = false)
@@ -371,13 +382,28 @@ namespace GraphicReactor
             }
             return null;
         }
-        public void AddPoint(GR_Point point)
+        public void AddPoint(GR_Point point, uint insert_objID)
         {
+            GR_Object parent_obj = root_object.GetObjectById(insert_objID);
+
             point.Id = point_identificator;
             point.X -= HorizontalOffset + Camera_HorizontalOffset;
             point.Y += VerticalOffset + Camera_VerticalOffset;
             point_identificator++;
-            points.Add(point);
+
+            parent_obj.gr_points.Add(point);
+
+            UpdateListOfPoints();
+        }
+        public void AddObject(uint insert_objID)
+        {
+            GR_Object parent_obj = root_object.GetObjectById(insert_objID);
+
+            parent_obj.gr_objects.Add(new GR_Object(object_identificator));
+
+            object_identificator++;
+
+            UpdateListOfPoints();
         }
         public void SelectPoints(int x1, int y1, int x2, int y2, bool reselect = true)
         {
@@ -468,16 +494,15 @@ namespace GraphicReactor
         public void DeletePoints (bool selectedOnly = false)
         {
             if (selectedOnly)
-                foreach (GR_Point l in SelectedPoints)
-                {
-                    DeleteLineByPoint(l.Id);
-                    points.Remove(l);
-                }
+            {
+                root_object.RemoveSelectedPoints();
+            }
             else
             {
                 points.Clear();
                 lines.Clear();
             }
+            UpdateListOfPoints();
         }
         public GR_Point GetPointsCenter(bool selectedOnly = false)
         {

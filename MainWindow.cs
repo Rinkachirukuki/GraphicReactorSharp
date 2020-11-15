@@ -22,6 +22,8 @@ namespace GraphicReactor
         private Tool tool;
         private Action action;
 
+        private uint selectedObject = 0;
+
         bool mouseMidbutton = false;
         bool mouseLbutton = false;
         bool shiftButton = false;
@@ -42,7 +44,7 @@ namespace GraphicReactor
             transformZ,
             selecting,
             connecting,
-            viewchanging
+            morfing
         }
 
         public MainWindow()
@@ -64,7 +66,7 @@ namespace GraphicReactor
             mainScene.HorizontalOffset = MainPicBox.Width / 2;
             mainScene.VerticalOffset = MainPicBox.Height / 2;
             MainPicBox.Image = new Bitmap(MainPicBox.Width > 0 ? MainPicBox.Width : 1, MainPicBox.Height > 0 ? MainPicBox.Height : 1);
-            main_graphics = Graphics.FromImage(MainPicBox.Image); 
+            main_graphics = Graphics.FromImage(MainPicBox.Image);
             main_graphics.SmoothingMode = SmoothingMode.AntiAlias;
             UpdatePicBox();
         }
@@ -76,7 +78,7 @@ namespace GraphicReactor
             if (e.Button == MouseButtons.Left) mouseLbutton = true;
             if (e.Button == MouseButtons.Middle) mouseMidbutton = true;
 
-            
+
             if (mainScene.HitXarrow(startPos.X, startPos.Y))
             {
                 action = Action.transformX;
@@ -104,7 +106,7 @@ namespace GraphicReactor
                 action = Action.connecting;
                 return;
             }
-                
+
         }
         private void MainPicBox_MouseMove(object sender, MouseEventArgs e)
         {
@@ -131,7 +133,7 @@ namespace GraphicReactor
                         mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Xrotate += e.X - startPos.X;
-                    else if(tool == Tool.resize)
+                    else if (tool == Tool.resize)
                         mainScene.Temp_Xresize += (float)(e.X - startPos.X) / 16;
                 }
                 else if (action == Action.transformY)
@@ -143,7 +145,7 @@ namespace GraphicReactor
                     else if (tool == Tool.resize)
                         mainScene.Temp_Yresize += (float)(e.X - startPos.X) / 16;
                 }
-                else if (action == Action.transformZ) 
+                else if (action == Action.transformZ)
                 {
                     if (tool == Tool.move)
                         mainScene.MovePoints(0, 0, e.X - startPos.X, true);
@@ -154,7 +156,7 @@ namespace GraphicReactor
                 }
                 UpdatePicBox(true);
                 startPos.X = e.X;
-                startPos.Y = e.Y; 
+                startPos.Y = e.Y;
                 return;
             }
 
@@ -169,15 +171,15 @@ namespace GraphicReactor
             }
             if (mouseMidbutton)
             {
-                mainScene.Camera_HorizontalAngle += (float)(e.X - startPos.X)/4;
-                mainScene.Camera_VerticalAngle += (float)(e.Y - startPos.Y)/4;
+                mainScene.Camera_HorizontalAngle += (float)(e.X - startPos.X) / 4;
+                mainScene.Camera_VerticalAngle += (float)(e.Y - startPos.Y) / 4;
                 startPos.X = e.X;
                 startPos.Y = e.Y;
                 UpdatePicBox(true);
                 return;
             }
-            
-            
+
+
         }
         private void DrawSelectRect(Color fillColor, Color outColor, int x1, int y1, int x2, int y2)
         {
@@ -209,7 +211,7 @@ namespace GraphicReactor
             select_brush.Dispose();
             select_pen.Dispose();
         }
-        
+
 
         private void MainPicBox_MouseUp(object sender, MouseEventArgs e)
         {
@@ -228,7 +230,7 @@ namespace GraphicReactor
             {
                 mouseLbutton = false;
                 mainScene.SelectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y);
-                treeSelected_CheckedUpdate();
+                UpdateTreeView();
 
             }
             if (e.Button == MouseButtons.Right)
@@ -238,7 +240,7 @@ namespace GraphicReactor
             if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.ConnectPoints(startPos.X, startPos.Y, endPos.X,endPos.Y, 4, Color.FromArgb(255,rnd.Next(0,255), rnd.Next(0, 255), rnd.Next(0, 255)));
+                mainScene.ConnectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y, 4, Color.FromArgb(255, rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255)));
             }
 
             UpdatePicBox();
@@ -269,8 +271,8 @@ namespace GraphicReactor
             GR_Point p = new GR_Point(endPos.X, -endPos.Y, 0f,
                 rnd.Next(8, 8), rnd.Next(2, 2),
                 rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255),
-                rnd.Next(0, 255), rnd.Next(0,255), rnd.Next(0,255));
-            mainScene.AddPoint(p);
+                rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
+            mainScene.AddPoint(p,selectedObject);
 
             UpdatePicBox();
             UpdateTreeView();
@@ -278,10 +280,10 @@ namespace GraphicReactor
 
         private void GR_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ShiftKey)  shiftButton = true;
+            if (e.KeyCode == Keys.ShiftKey) shiftButton = true;
             if (e.KeyCode == Keys.ControlKey) ctrlButton = true;
-                
-            
+
+
         }
 
         private void GR_KeyUp(object sender, KeyEventArgs e)
@@ -318,7 +320,7 @@ namespace GraphicReactor
                                 {0,1,0,0},
                                 {0,0,1,0},
                                 {0,0,0,1}
-                             }, 
+                             },
                                 true
                              );
             UpdatePicBox();
@@ -404,46 +406,66 @@ namespace GraphicReactor
         private void UpdateTreeView()
         {
             groupsTreeView.Nodes[0].Nodes.Clear();
-            foreach (GR_Point p in mainScene.points)
+            UpdateTreeView(mainScene.root_object, groupsTreeView.Nodes[0]);
+            groupsTreeView.ExpandAll();
+        }
+
+        private void UpdateTreeView(GR_Object obj, TreeNode node)
+        {
+            if (obj == null) return;
+
+            TreeNode temp_node = new TreeNode();
+            temp_node.Text = "Object " + obj.Id.ToString();
+            temp_node.Name = obj.Id.ToString();
+            temp_node.BackColor = Color.MediumTurquoise;
+
+            node.Nodes.Add(temp_node);
+
+            if (selectedObject == obj.Id) groupsTreeView.SelectedNode = temp_node;
+
+
+
+            foreach (GR_Point p in obj.gr_points)
             {
-                TreeNode node = new TreeNode();
-                node.Text = "Point " + p.Id.ToString();
-                node.Name = p.Id.ToString();
-                node.Checked = p.Selected;
-                groupsTreeView.Nodes[0].Nodes.Add(node);
+                TreeNode temp_point_node = new TreeNode();
+
+                temp_point_node.Text = "Point " + p.Id.ToString();
+                temp_point_node.Name = p.Id.ToString();
+                temp_point_node.Checked = p.Selected;
+                temp_point_node.ForeColor = Color.FromArgb(100, Color.Teal);
+                temp_node.Nodes.Add(temp_point_node);
+            }
+            foreach (GR_Object ob in obj.gr_objects)
+            {
+                UpdateTreeView(ob, temp_node);
             }
         }
 
         private void createGroupToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mainScene.AddObject(selectedObject);
             UpdateTreeView();
         }
 
 
         private void groupsTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            //mainScene.UnselectPoints();
-            //mainScene.SelectPoint(Convert.ToUInt32(e.Node.Name));
-            //UpdatePicBox();
+            uint temp = 0;
+            if (UInt32.TryParse(e.Node.Name, out temp))
+            {
+                selectedObject = temp;
+            }
+           
         }
 
         private void groupsTreeView_AfterCheck(object sender, TreeViewEventArgs e)
         {
-            if (action == Action.selecting) return;
-            if (e.Node == groupsTreeView.Nodes[0])
+            if (e.Node.Text.Contains("Object"))
             {
-               foreach(TreeNode node in e.Node.Nodes)
-                {
-                    node.Checked = e.Node.Checked;
-                }
+                GR_Object obj = mainScene.root_object.GetObjectById(Convert.ToUInt32(e.Node.Name));
+                obj.SelectedForAllPoints(e.Node.Checked);
             }
-            else
-            {
-                pointsSelected_CheckedUpdate();
-                UpdatePicBox();
-            }
-            
-            
+            UpdatePicBox();
         }
         private void treeSelected_CheckedUpdate()
         {
@@ -470,6 +492,22 @@ namespace GraphicReactor
             }
             return true;
         }
+
+        private void select1FigureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void select2FigureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void createNewFigureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
     }
