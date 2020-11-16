@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
-    class GR_Point_Base :  ICloneable, IComparable<GR_Point_Base>
+     class GR_Point_Base :  ICloneable, IComparable<GR_Point_Base>
     {
         virtual public uint Id { get; set; }
         virtual public float X { get; set; }

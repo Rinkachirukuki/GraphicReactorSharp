@@ -24,6 +24,10 @@ namespace GraphicReactor
         private List<GR_Line> lines;
         private List<GR_Point_Base> temp;
 
+        public List<GR_Point_Base> morphingFigure1;
+        public List<GR_Point_Base> morphingFigure2;
+        public List<GR_Point_Base> morphingFigureResult;
+
         public Pen selectPen { get; set; }
 
         public float Camera_VerticalAngle { get; set; }
@@ -45,8 +49,11 @@ namespace GraphicReactor
         public double Zc { get; set; }
 
 
-    public GR_Scene()
+        public GR_Scene()
         {
+            morphingFigure1 = new List<GR_Point_Base>();
+            morphingFigure2 = new List<GR_Point_Base>();
+            morphingFigureResult = new List<GR_Point_Base>();
             points = new List<GR_Point_Base>();
             lines = new List<GR_Line>();
             temp = new List<GR_Point_Base>();
@@ -77,13 +84,53 @@ namespace GraphicReactor
 
             Zc = 1000;
         }
+        public bool MorphingStart()
+        {
+            if (morphingFigure1.Count != morphingFigure2.Count && morphingFigure1.Count > 0) return false;
+
+            morphingFigureResult.Clear();
+            for (int i = 0; i < morphingFigure1.Count; i++)
+            {
+                morphingFigureResult.Add(new GR_Point());
+            }
+
+            points.AddRange(morphingFigureResult);
+
+            return true;
+        }
+        public void MorphingLoop(int morphParamUnnormalized)
+        {
+            if (morphParamUnnormalized > 200) morphParamUnnormalized = 200;
+            if (morphParamUnnormalized < -200) morphParamUnnormalized = -200;
+
+            float morphParam = (morphParamUnnormalized + 200f) / 400f;
+
+            for (int i =0; i < morphingFigure2.Count; i++)
+            {
+                morphingFigureResult[i].X = morphingFigure1[i].X * morphParam + morphingFigure2[i].X * (1 - morphParam);
+                morphingFigureResult[i].Y = morphingFigure1[i].Y * morphParam + morphingFigure2[i].Y * (1 - morphParam);
+                morphingFigureResult[i].Z = morphingFigure1[i].Z * morphParam + morphingFigure2[i].Z * (1 - morphParam);
+            }           
+        }
+        public void ApplyMorphing(uint objId)
+        {
+            foreach(GR_Point p in morphingFigureResult)
+            {
+                p.X += Camera_HorizontalOffset + HorizontalOffset;
+                p.Y -= Camera_VerticalOffset + VerticalOffset;
+
+                AddPoint(p, objId);
+            }
+            morphingFigureResult.Clear();
+            morphingFigure1.Clear();
+            morphingFigure2.Clear();
+        }
 
         private void UpdateListOfPoints()
         {
             points.Clear();
             points.AddRange(root_object.Points);
         }
-
         public void Draw(Graphics gr, bool compLines = false)
         {
 
@@ -94,6 +141,7 @@ namespace GraphicReactor
 
             
             DrawXYZ(gr,matrix);
+
 
             UpdateTemp();
 

@@ -31,7 +31,7 @@ namespace GraphicReactor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Root");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Root");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.mainPicBox_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,6 +42,10 @@ namespace GraphicReactor
             this.xToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.yToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.morfingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.select1FigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.select2FigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createNewFigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.resetButton = new GraphicReactor.CustomForms.ToolCustomButton();
             this.MainPicBox = new System.Windows.Forms.PictureBox();
@@ -66,10 +70,6 @@ namespace GraphicReactor
             this.toolCustomButton2 = new GraphicReactor.CustomForms.ToolCustomButton();
             this.toolCustomButton1 = new GraphicReactor.CustomForms.ToolCustomButton();
             this.groupsTreeView = new GraphicReactor.CustomForms.ToolCustomTreeView();
-            this.morfingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.select1FigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.select2FigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createNewFigureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
@@ -109,7 +109,7 @@ namespace GraphicReactor
             // 
             this.createGroupToolStripMenuItem.Name = "createGroupToolStripMenuItem";
             this.createGroupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createGroupToolStripMenuItem.Text = "Create Group";
+            this.createGroupToolStripMenuItem.Text = "Create object";
             this.createGroupToolStripMenuItem.Click += new System.EventHandler(this.createGroupToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
@@ -127,7 +127,7 @@ namespace GraphicReactor
             this.yToolStripMenuItem,
             this.zToolStripMenuItem});
             this.xToolStripMenuItem.Name = "xToolStripMenuItem";
-            this.xToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.xToolStripMenuItem.Text = "Reflect";
             // 
             // xToolStripMenuItem1
@@ -150,6 +150,37 @@ namespace GraphicReactor
             this.zToolStripMenuItem.Size = new System.Drawing.Size(81, 22);
             this.zToolStripMenuItem.Text = "Z";
             this.zToolStripMenuItem.Click += new System.EventHandler(this.zToolStripMenuItem_Click);
+            // 
+            // morfingToolStripMenuItem
+            // 
+            this.morfingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.select1FigureToolStripMenuItem,
+            this.select2FigureToolStripMenuItem,
+            this.createNewFigureToolStripMenuItem});
+            this.morfingToolStripMenuItem.Name = "morfingToolStripMenuItem";
+            this.morfingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.morfingToolStripMenuItem.Text = "Morfing";
+            // 
+            // select1FigureToolStripMenuItem
+            // 
+            this.select1FigureToolStripMenuItem.Name = "select1FigureToolStripMenuItem";
+            this.select1FigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.select1FigureToolStripMenuItem.Text = "Select 1 figure";
+            this.select1FigureToolStripMenuItem.Click += new System.EventHandler(this.select1FigureToolStripMenuItem_Click);
+            // 
+            // select2FigureToolStripMenuItem
+            // 
+            this.select2FigureToolStripMenuItem.Name = "select2FigureToolStripMenuItem";
+            this.select2FigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.select2FigureToolStripMenuItem.Text = "Select 2 figure";
+            this.select2FigureToolStripMenuItem.Click += new System.EventHandler(this.select2FigureToolStripMenuItem_Click);
+            // 
+            // createNewFigureToolStripMenuItem
+            // 
+            this.createNewFigureToolStripMenuItem.Name = "createNewFigureToolStripMenuItem";
+            this.createNewFigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createNewFigureToolStripMenuItem.Text = "Create new figure";
+            this.createNewFigureToolStripMenuItem.Click += new System.EventHandler(this.createNewFigureToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -456,47 +487,16 @@ namespace GraphicReactor
             this.groupsTreeView.CheckBoxes = true;
             this.groupsTreeView.Location = new System.Drawing.Point(0, 0);
             this.groupsTreeView.Name = "groupsTreeView";
-            treeNode3.Name = "Objects";
-            treeNode3.Text = "Root";
+            treeNode1.Name = "Objects";
+            treeNode1.Text = "Root";
             this.groupsTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3});
+            treeNode1});
             this.groupsTreeView.Size = new System.Drawing.Size(196, 344);
             this.groupsTreeView.TabIndex = 1;
             this.groupsTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterCheck);
             this.groupsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterSelect);
             this.groupsTreeView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
             this.groupsTreeView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
-            // 
-            // morfingToolStripMenuItem
-            // 
-            this.morfingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.select1FigureToolStripMenuItem,
-            this.select2FigureToolStripMenuItem,
-            this.createNewFigureToolStripMenuItem});
-            this.morfingToolStripMenuItem.Name = "morfingToolStripMenuItem";
-            this.morfingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.morfingToolStripMenuItem.Text = "Morfing";
-            // 
-            // select1FigureToolStripMenuItem
-            // 
-            this.select1FigureToolStripMenuItem.Name = "select1FigureToolStripMenuItem";
-            this.select1FigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.select1FigureToolStripMenuItem.Text = "Select 1 figure";
-            this.select1FigureToolStripMenuItem.Click += new System.EventHandler(this.select1FigureToolStripMenuItem_Click);
-            // 
-            // select2FigureToolStripMenuItem
-            // 
-            this.select2FigureToolStripMenuItem.Name = "select2FigureToolStripMenuItem";
-            this.select2FigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.select2FigureToolStripMenuItem.Text = "Select 2 figure";
-            this.select2FigureToolStripMenuItem.Click += new System.EventHandler(this.select2FigureToolStripMenuItem_Click);
-            // 
-            // createNewFigureToolStripMenuItem
-            // 
-            this.createNewFigureToolStripMenuItem.Name = "createNewFigureToolStripMenuItem";
-            this.createNewFigureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createNewFigureToolStripMenuItem.Text = "Create new figure";
-            this.createNewFigureToolStripMenuItem.Click += new System.EventHandler(this.createNewFigureToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

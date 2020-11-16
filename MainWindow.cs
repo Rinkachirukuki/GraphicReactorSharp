@@ -111,8 +111,40 @@ namespace GraphicReactor
         private void MainPicBox_MouseMove(object sender, MouseEventArgs e)
         {
             endPos = e.Location;
+
+            if (mouseMidbutton && shiftButton)
+            {
+                mainScene.Camera_HorizontalOffset += (e.X - startPos.X);
+                mainScene.Camera_VerticalOffset += (e.Y - startPos.Y);
+                startPos.X = e.X;
+                startPos.Y = e.Y;
+                UpdatePicBox(true);
+                return;
+            }
+
+            if (mouseMidbutton)
+            {
+                mainScene.Camera_HorizontalAngle += (float)(e.X - startPos.X) / 4;
+                mainScene.Camera_VerticalAngle += (float)(e.Y - startPos.Y) / 4;
+                startPos.X = e.X;
+                startPos.Y = e.Y;
+                UpdatePicBox(true);
+                return;
+            }
+
+
+            if (action == Action.morfing)
+            {
+
+                mainScene.MorphingLoop(e.X - startPos.X);
+                UpdatePicBox();
+
+                return;
+            }
+
             if (mouseLbutton && action != Action.noAction)
             {
+                
                 if (action == Action.connecting)
                 {
                     UpdatePicBox(false);
@@ -160,24 +192,7 @@ namespace GraphicReactor
                 return;
             }
 
-            if (mouseMidbutton && shiftButton)
-            {
-                mainScene.Camera_HorizontalOffset += (e.X - startPos.X);
-                mainScene.Camera_VerticalOffset += (e.Y - startPos.Y);
-                startPos.X = e.X;
-                startPos.Y = e.Y;
-                UpdatePicBox(true);
-                return;
-            }
-            if (mouseMidbutton)
-            {
-                mainScene.Camera_HorizontalAngle += (float)(e.X - startPos.X) / 4;
-                mainScene.Camera_VerticalAngle += (float)(e.Y - startPos.Y) / 4;
-                startPos.X = e.X;
-                startPos.Y = e.Y;
-                UpdatePicBox(true);
-                return;
-            }
+            
 
 
         }
@@ -217,38 +232,57 @@ namespace GraphicReactor
         {
             endPos = e.Location;
 
+            if (e.Button == MouseButtons.Middle) mouseMidbutton = false;
+            if (e.Button == MouseButtons.Left) mouseLbutton = false;
+
+            if (action == Action.morfing && e.Button == MouseButtons.Left)
+            {
+                mainScene.ApplyMorphing(selectedObject);
+                UpdateTreeView();
+                action = Action.noAction;
+                UpdatePicBox();
+                select1FigureToolStripMenuItem.Text= "Select 1 figure";
+                select2FigureToolStripMenuItem.Text = "Select 2 figure";
+                return;
+            }
+
             if (action == Action.transformX || action == Action.transformY || action == Action.transformZ)
             {
                 mainScene.ApplyTransformation();
                 mainScene.ResetTemp();
                 action = Action.noAction;
+                mainScene.ResetTemp();
+                UpdatePicBox();
                 return;
             }
-            mainScene.ResetTemp();
+            
 
             if (action == Action.selecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
                 mainScene.SelectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y);
                 UpdateTreeView();
-
+                action = Action.noAction;
+                UpdatePicBox();
+                return;
             }
+
             if (e.Button == MouseButtons.Right)
             {
                 mainPicBox_ContextMenu.Show(Cursor.Position.X, Cursor.Position.Y);
+                return;
             }
+
             if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
                 mainScene.ConnectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y, 4, Color.FromArgb(255, rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255)));
+                UpdatePicBox();
+                return;
             }
 
-            UpdatePicBox();
+            
 
-            if (e.Button == MouseButtons.Middle) mouseMidbutton = false;
-
-            if (e.Button == MouseButtons.Left) mouseLbutton = false;
-            action = Action.noAction;
         }
 
         private void UpdatePicBox(bool refresh = true)
@@ -495,17 +529,27 @@ namespace GraphicReactor
 
         private void select1FigureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (mainScene.SelectedPoints.Count > 0)
+            {
+                mainScene.morphingFigure1.Clear();
+                mainScene.morphingFigure1.AddRange(mainScene.SelectedPoints);
+                select1FigureToolStripMenuItem.Text = "Selected 1 figure (" + mainScene.SelectedPoints.Count.ToString() + " points)";
+            }
         }
 
         private void select2FigureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (mainScene.SelectedPoints.Count > 0)
+            {
+                mainScene.morphingFigure2.Clear();
+                mainScene.morphingFigure2.AddRange(mainScene.SelectedPoints);
+                select2FigureToolStripMenuItem.Text = "Selected 2 figure (" + mainScene.SelectedPoints.Count.ToString() + " points)";
+            }
         }
 
         private void createNewFigureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (mainScene.MorphingStart()) action = Action.morfing;
         }
 
 
