@@ -128,7 +128,7 @@ namespace GraphicReactor
                 else if (action == Action.transformX)
                 {
                     if (tool == Tool.move)
-                        mainScene.MovePoints(e.X - startPos.X, 0, 0, true);
+                        mainScene.MovePoints( true, false, false, e.X, startPos.X, e.Y, startPos.Y, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Xrotate += e.X - startPos.X;
                     else if(tool == Tool.resize)
@@ -137,7 +137,7 @@ namespace GraphicReactor
                 else if (action == Action.transformY)
                 {
                     if (tool == Tool.move)
-                        mainScene.MovePoints(0, e.X - startPos.X, 0, true);
+                        mainScene.MovePoints(false, true, false, e.X, startPos.X, e.Y, startPos.Y, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Yrotate += e.X - startPos.X;
                     else if (tool == Tool.resize)
@@ -146,7 +146,7 @@ namespace GraphicReactor
                 else if (action == Action.transformZ) 
                 {
                     if (tool == Tool.move)
-                        mainScene.MovePoints(0, 0, e.X - startPos.X, true);
+                        mainScene.MovePoints(false, false, true, e.X, startPos.X, e.Y, startPos.Y, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Zrotate += e.X - startPos.X;
                     else if (tool == Tool.resize)

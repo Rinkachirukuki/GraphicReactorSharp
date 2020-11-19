@@ -663,13 +663,13 @@ namespace GraphicReactor
             //ax x  x1 arw[0, 0], y1  arw[0, 1], x2 arw[1, 0], y2 arw[1, 1];
             // ax y x1 arw[0, 0], y1 arw[0, 1], x2 arw[2, 0], y2 arw[2, 1];
             //ax z x1 arw[0, 0], y1 arw[0, 1], x2 arw[3, 0],y2 arw[3, 1]);
-            float Vlengthdif = Math.Abs((float)Math.Sqrt(Math.Pow(StartX, 2) + Math.Pow(StartY, 2)) - (float)Math.Sqrt(Math.Pow(eX, 2) + Math.Pow(eY, 2)));
+            float Vlengthdif = (float)Math.Sqrt(Math.Pow(eX - StartX, 2)   + Math.Pow( eY- StartY, 2));
             float[,] arw = CalculateXYZarrows(CalculateRotationMatrix());
+            
             if (selectedOnly)
             {
                 foreach (GR_Point p in SelectedPoints)
                 {
-                    float speed = 10f;
                     if (x)
                     {
                         float vecX = arw[1, 0] - arw[0, 0];
@@ -678,13 +678,8 @@ namespace GraphicReactor
                         float vecStartEx = eX - StartX;
                         float vecStartEy = eY - StartY;
                         float cosA = 0;
-                        float normalizeRate = 1;
-                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
-                        {
-                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
-                        }
-                        vecX *= normalizeRate * 100;
-                        vecY *= normalizeRate * 100;
+                       
+                        
                         if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
                         else
@@ -693,7 +688,7 @@ namespace GraphicReactor
                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
                         }
 
-                        p.X += Vlengthdif * cosA * normalizeRate * speed;
+                        p.X += (Vlengthdif*cosA);
                     }
                     if (y)
                     {
@@ -702,14 +697,7 @@ namespace GraphicReactor
                         float vecStartEx = eX - StartX;
                         float vecStartEy = eY - StartY;
                         float cosA = 0;
-                        float normalizeRate = 1;
-                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
-                        {
-                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
-                        }
-                        vecX *= normalizeRate * 100;
-                        vecY *= normalizeRate * 100;
-
+                       
                         if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
                         else
@@ -718,7 +706,7 @@ namespace GraphicReactor
                             (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
                         }
 
-                        p.Y += Vlengthdif * cosA * normalizeRate * speed;
+                        p.Y += Vlengthdif * cosA ;
                     }
                     if (z)
                     {
@@ -728,15 +716,7 @@ namespace GraphicReactor
                         float vecStartEx = eX - StartX;
                         float vecStartEy = eY - StartY;
                         float cosA = 0;
-                        float normalizeRate = 1;
-                        if ((float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)) != 0) //normalize vecX
-                        {
-                            normalizeRate = 1.0f / (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2));
-                        }
-
-                        vecX *= normalizeRate * 100;
-                        vecY *= normalizeRate * 100;
-
+           
                         if (((float)Math.Sqrt(Math.Pow(vecStartEx, 2) + Math.Pow(vecStartEy, 2)) *
                            (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2))) == 0) cosA = 1;
                         else
@@ -745,7 +725,7 @@ namespace GraphicReactor
                             (float)Math.Sqrt(Math.Pow(vecX, 2) + Math.Pow(vecY, 2)));
                         }
 
-                        p.Z += Vlengthdif * cosA * normalizeRate * speed;
+                        p.Z += Vlengthdif * cosA;
                     }
                 }
             }
