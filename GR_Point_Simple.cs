@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
+    [Serializable]
     class GR_Point_Simple : GR_Point_Base
     {
         private float radius;
