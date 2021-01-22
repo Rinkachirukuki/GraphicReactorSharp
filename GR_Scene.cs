@@ -65,7 +65,7 @@ namespace GraphicReactor
             Temp_Yresize = 1;
             Temp_Zresize = 1;
 
-            Zc = 50000;
+            Zc = 1000;
         }
 
         public void Draw(Graphics gr, bool compLines = false)
@@ -138,14 +138,14 @@ namespace GraphicReactor
             temp.Sort();
 
             Pen selectPen = new Pen(Color.Red, 1.5f);
-            selectPen.DashStyle = DashStyle.Solid;
+            selectPen.DashStyle = DashStyle.Dot;
 
             foreach (GR_Point_Base p in temp)
             {
                 p.Draw(gr,selectPen);
             }
 
-            //DrawXYZarrows(gr, CalculateXYZarrows(matrix));
+            DrawXYZarrows(gr, CalculateXYZarrows(matrix));
            
             pen.Dispose();
 
@@ -298,9 +298,9 @@ namespace GraphicReactor
                 arw1[i, 1] += Camera_VerticalOffset + VerticalOffset;
 
             }
-            gr.DrawLine(new Pen(Color.FromArgb(50,Color.Black), 2), arw1[0, 0], arw1[0, 1], arw1[1, 0], arw1[1, 1]);
-            gr.DrawLine(new Pen(Color.FromArgb(50, Color.Black), 2), arw1[2, 0], arw1[2, 1], arw1[3, 0], arw1[3, 1]);
-            gr.DrawLine(new Pen(Color.FromArgb(50, Color.Black), 2), arw1[4, 0], arw1[4, 1], arw1[5, 0], arw1[5, 1]);
+            gr.DrawLine(new Pen(Color.FromArgb(50,Color.Red), 2), arw1[0, 0], arw1[0, 1], arw1[1, 0], arw1[1, 1]);
+            gr.DrawLine(new Pen(Color.FromArgb(50, Color.Green), 2), arw1[2, 0], arw1[2, 1], arw1[3, 0], arw1[3, 1]);
+            gr.DrawLine(new Pen(Color.FromArgb(50, Color.Blue), 2), arw1[4, 0], arw1[4, 1], arw1[5, 0], arw1[5, 1]);
         }
         private double[,] CalculateRotationMatrix()
         {
