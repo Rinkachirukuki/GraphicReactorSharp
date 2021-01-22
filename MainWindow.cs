@@ -56,10 +56,9 @@ namespace GraphicReactor
 
             UpdatePicBoxParams();
 
-            Zc_label.Text = mainScene.Zc.ToString();
-            moveModeButton.BackColor = Color.FromArgb(100, Color.Teal);
+            moveModeButton.BackColor = Color.Aquamarine;
+            label5.Text = grid_value.ToString();
 
-            label7.Text = spline_step.ToString();
 
         }
 
@@ -118,21 +117,21 @@ namespace GraphicReactor
                 if (action == Action.connecting)
                 {
                     UpdatePicBox(false);
-                    main_graphics.DrawLine(new Pen(Color.Black, 2.0F), startPos, endPos);
+                    main_graphics.DrawLine(new Pen(Color.Red, 1.5F), startPos, endPos);
                     MainPicBox.Refresh();
                     return;
                 }
                 else if (action == Action.selecting)
                 {
                     UpdatePicBox(false);
-                    DrawSelectRect(Color.FromArgb(25, Color.Teal), Color.FromArgb(75, Color.Teal), startPos.X, startPos.Y, e.X, e.Y);
+                    DrawSelectRect( Color.FromArgb(255, Color.Black), startPos.X, startPos.Y, e.X, e.Y);
                     MainPicBox.Refresh();
                     return;
                 }
                 else if (action == Action.transformX)
                 {
                     if (tool == Tool.move)
-                        mainScene.MovePoints( true, false, false, e.X, startPos.X, e.Y, startPos.Y, true);
+                        mainScene.MovePoints(true, false, false, e.X, startPos.X, e.Y, startPos.Y, true);
                     else if (tool == Tool.rotate)
                         mainScene.Temp_Xrotate += e.X - startPos.X;
                     else if(tool == Tool.resize)
@@ -183,15 +182,10 @@ namespace GraphicReactor
             
             
         }
-        private void DrawSelectRect(Color fillColor, Color outColor, int x1, int y1, int x2, int y2)
+        private void DrawSelectRect(Color outColor, int x1, int y1, int x2, int y2)
         {
-            Brush select_brush;
+            //Brush select_brush;
             Pen select_pen = new Pen(outColor, 2.0F);
-
-            if (x1 == x2 || y1 == y2)
-                select_brush = new LinearGradientBrush(new Point(x1, y1), new Point(x2 + 1, y2 + 1), outColor, fillColor);
-            else
-                select_brush = new LinearGradientBrush(new Point(x1, y1), new Point(x2, y2), outColor, fillColor);
 
             x2 -= x1; // width and heigt
             y2 -= y1;
@@ -206,11 +200,8 @@ namespace GraphicReactor
                 y2 = -y2;
                 y1 -= y2;
             }
-
-            main_graphics.FillRectangle(select_brush, x1, y1, x2, y2);
             main_graphics.DrawRectangle(select_pen, x1, y1, x2, y2);
 
-            select_brush.Dispose();
             select_pen.Dispose();
         }
         
@@ -232,7 +223,6 @@ namespace GraphicReactor
             {
                 mouseLbutton = false;
                 mainScene.SelectPoints(startPos.X, startPos.Y, endPos.X, endPos.Y);
-                treeSelected_CheckedUpdate();
 
             }
             if (e.Button == MouseButtons.Right)
@@ -242,7 +232,7 @@ namespace GraphicReactor
             if (action == Action.connecting && e.Button == MouseButtons.Left)
             {
                 mouseLbutton = false;
-                mainScene.ConnectPoints(startPos.X, startPos.Y, endPos.X,endPos.Y, 4, Color.FromArgb(255,rnd.Next(0,255), rnd.Next(0, 255), rnd.Next(0, 255)));
+                mainScene.ConnectPoints(startPos.X, startPos.Y, endPos.X,endPos.Y, 4, Color.Black);
             }
 
             UpdatePicBox();
@@ -256,7 +246,7 @@ namespace GraphicReactor
         private void UpdatePicBox(bool refresh = true)
         {
             main_graphics.Clear(Color.White);
-            mainScene.Draw(main_graphics, compLinesCheckBox.Checked);
+            mainScene.Draw(main_graphics, false);
 
             GR_Point p = mainScene.GetPointsCenter(true);
 
@@ -270,14 +260,11 @@ namespace GraphicReactor
 
         private void aToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GR_Point p = new GR_Point(endPos.X, -endPos.Y, 0f,
-                rnd.Next(8, 8), rnd.Next(2, 2),
-                rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255),
-                rnd.Next(0, 255), rnd.Next(0,255), rnd.Next(0,255));
+            GR_Point p = new GR_Point(endPos.X, -endPos.Y, 0f,4,0,0,0,0,0,0,0);
             mainScene.AddPoint(p);
 
             UpdatePicBox();
-            UpdateTreeView();
+            
         }
 
         private void GR_KeyDown(object sender, KeyEventArgs e)
@@ -305,7 +292,7 @@ namespace GraphicReactor
         {
             mainScene.DeletePoints(true);
             UpdatePicBox();
-            UpdateTreeView();
+            
         }
 
         private void MainPicBox_SizeChanged(object sender, EventArgs e)
@@ -362,25 +349,28 @@ namespace GraphicReactor
         private void resetButton_Click(object sender, EventArgs e)
         {
             mainScene.ResetCamera();
+            trackBar1.Value = 0;
+            trackBar2.Value = 0;
+
             UpdatePicBox();
         }
         private void moveModeButton_Click(object sender, EventArgs e)
         {
             setToolPanelButtonsDefaultColors();
-            moveModeButton.BackColor = Color.FromArgb(100, Color.Teal);
+            moveModeButton.BackColor = Color.Aquamarine;
             tool = Tool.move;
         }
 
         private void rotationModeButton_Click(object sender, EventArgs e)
         {
             setToolPanelButtonsDefaultColors();
-            rotationModeButton.BackColor = Color.FromArgb(120, Color.Teal);
+            rotationModeButton.BackColor = Color.Aquamarine;
             tool = Tool.rotate;
         }
         private void resizeModeButton_Click(object sender, EventArgs e)
         {
             setToolPanelButtonsDefaultColors();
-            resizeModeButton.BackColor = Color.FromArgb(100, Color.Teal);
+            resizeModeButton.BackColor = Color.Aquamarine;
             tool = Tool.resize;
         }
 
@@ -391,89 +381,6 @@ namespace GraphicReactor
 
 
 
-        private void Zc_DecreaseButton_Click(object sender, EventArgs e)
-        {
-            mainScene.Zc -= 100;
-            UpdatePicBox();
-            Zc_label.Text = mainScene.Zc.ToString();
-        }
-
-        private void Zc_IncreaseButton_Click(object sender, EventArgs e)
-        {
-            mainScene.Zc += 100;
-            UpdatePicBox();
-            Zc_label.Text = mainScene.Zc.ToString();
-        }
-
-        private void UpdateTreeView()
-        {
-            groupsTreeView.Nodes[0].Nodes.Clear();
-            foreach (GR_Point p in mainScene.points)
-            {
-                TreeNode node = new TreeNode();
-                node.Text = "Point " + p.Id.ToString();
-                node.Name = p.Id.ToString();
-                node.Checked = p.Selected;
-                groupsTreeView.Nodes[0].Nodes.Add(node);
-            }
-        }
-
-        private void createGroupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateTreeView();
-        }
-
-
-        private void groupsTreeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            //mainScene.UnselectPoints();
-            //mainScene.SelectPoint(Convert.ToUInt32(e.Node.Name));
-            //UpdatePicBox();
-        }
-
-        private void groupsTreeView_AfterCheck(object sender, TreeViewEventArgs e)
-        {
-            if (action == Action.selecting) return;
-            if (e.Node == groupsTreeView.Nodes[0])
-            {
-               foreach(TreeNode node in e.Node.Nodes)
-                {
-                    node.Checked = e.Node.Checked;
-                }
-            }
-            else
-            {
-                pointsSelected_CheckedUpdate();
-                UpdatePicBox();
-            }
-            
-            
-        }
-        private void treeSelected_CheckedUpdate()
-        {
-            foreach (GR_Point p in mainScene.points)
-                foreach (TreeNode node in groupsTreeView.Nodes[0].Nodes)
-                    if (node.Name == p.Id.ToString())
-                        node.Checked = p.Selected;
-        }
-        private void pointsSelected_CheckedUpdate()
-        {
-            foreach (GR_Point p in mainScene.points)
-                foreach (TreeNode node in groupsTreeView.Nodes[0].Nodes)
-                    if (node.Name == p.Id.ToString())
-                        p.Selected = node.Checked;
-        }
-        private bool AllChildsChecked()
-        {
-            foreach (TreeNode node in groupsTreeView.Nodes[0].Nodes)
-            {
-                if (!node.Checked)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
 
         //Пример быдлокодинга представлен ниже
 
@@ -548,9 +455,7 @@ namespace GraphicReactor
                         ((a3_x*t+a2_x)*t + a1_x)*t + a0_x,
                         ((a3_y * t + a2_y) * t + a1_y) * t + a0_y,
                         ((a3_z * t + a2_z)*t + a1_z)*t + a0_z,
-                        2,
-                        Color.Black
-                        );
+                        4, 0, 0, 0, 0, 0, 0, 0);
                     mainScene.AddPoint_with_relative_coords(p);
                 }
 
@@ -565,7 +470,7 @@ namespace GraphicReactor
 
             spline_step -= 0.05f;
 
-            label7.Text = spline_step.ToString();
+            label77.Text = spline_step.ToString();
 
         }
 
@@ -575,7 +480,7 @@ namespace GraphicReactor
 
             spline_step += 0.05f;
 
-            label7.Text = spline_step.ToString();
+            label77.Text = spline_step.ToString();
         }
 
         private void toolCustomButton3_Click(object sender, EventArgs e)
@@ -612,6 +517,247 @@ namespace GraphicReactor
             }
         }
 
-        //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);
+
+        public int grid_value = 1;
+
+        private void toolCustomButton2_Click_1(object sender, EventArgs e)
+        {
+            switch (tool)
+            {
+                case Tool.move:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            p.X += grid_value;
+                        }
+                        break;
+                    }
+                case Tool.rotate:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Xrotate += grid_value;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Xrotate = 0;
+                        break;
+                    }
+                case Tool.resize:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Xresize += (float)(grid_value) / 16;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Xresize = 0;
+                        break;
+                    }
+            }
+            UpdatePicBox();
+        }
+
+        private void toolCustomButton1_Click_1(object sender, EventArgs e)
+        {
+            switch (tool)
+            {
+                case Tool.move:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            p.X -= grid_value;
+                        }
+                        break;
+                    }
+                case Tool.rotate:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Xrotate -= grid_value;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Xrotate = 0;
+                        break;
+                    }
+                case Tool.resize:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Xresize -= (float)(grid_value) / 16;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Xresize = 0;
+                        break;
+                    }
+            }
+            UpdatePicBox();
+        }
+
+        private void toolCustomButton6_Click(object sender, EventArgs e)
+        {
+            switch (tool)
+            {
+                case Tool.move:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            p.Y -= grid_value;
+                        }
+                        break;
+                    }
+                case Tool.rotate:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Yrotate -= grid_value;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Yrotate = 0;
+                        break;
+                    }
+                case Tool.resize:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Yresize -= (float)(grid_value) / 16;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Yresize = 0;
+                        break;
+                    }
+            }
+            UpdatePicBox();
+        }
+
+        private void toolCustomButton5_Click(object sender, EventArgs e)
+        {
+            switch (tool)
+            {
+                case Tool.move:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            p.Y += grid_value;
+                        }
+                        break;
+                    }
+                case Tool.rotate:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Yrotate += grid_value;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Yrotate = 0;
+                        break;
+                    }
+                case Tool.resize:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Yresize += (float)(grid_value) / 16;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Yresize = 0;
+                        break;
+                    }
+            }
+            UpdatePicBox();
+        }
+
+        private void toolCustomButton8_Click(object sender, EventArgs e)
+        {
+            switch (tool)
+            {
+                case Tool.move:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            p.Z += grid_value;
+                        }
+                        break;
+                    }
+                case Tool.rotate:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Zrotate += grid_value;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Yrotate = 0;
+                        break;
+                    }
+                case Tool.resize:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Zresize += (float)(grid_value) / 16;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Zresize = 0;
+                        break;
+                    }
+            }
+            UpdatePicBox();
+        }
+
+        private void toolCustomButton7_Click(object sender, EventArgs e)
+        {
+            switch (tool)
+            {
+                case Tool.move:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            p.Z -= grid_value;
+                        }
+                        break;
+                    }
+                case Tool.rotate:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Zrotate -= grid_value;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Yrotate = 0;
+                        break;
+                    }
+                case Tool.resize:
+                    {
+                        foreach (GR_Point p in mainScene.SelectedPoints)
+                        {
+                            mainScene.Temp_Zresize -= (float)(grid_value) / 16;
+                        }
+                        mainScene.ApplyTransformation();
+                        mainScene.Temp_Zresize = 0;
+                        break;
+                    }
+            }
+            UpdatePicBox();
+        }
+
+        private void toolCustomButton10_Click(object sender, EventArgs e)
+        {
+            grid_value++;
+            label5.Text = grid_value.ToString();
+        }
+
+        private void toolCustomButton9_Click(object sender, EventArgs e)
+        {
+            grid_value--;
+            label5.Text = grid_value.ToString();
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            mainScene.Camera_HorizontalAngle = trackBar2.Value;
+            UpdatePicBox();
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            mainScene.Camera_VerticalAngle = trackBar1.Value;
+            UpdatePicBox();
+        }
     }
 }
