@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GR_Object.cs" />
     <Compile Include="CustomForms\ToolCustomTabControl.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -4,9 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -58,8 +56,6 @@ namespace GraphicReactor
 
             Zc_label.Text = mainScene.Zc.ToString();
             moveModeButton.BackColor = Color.FromArgb(100, Color.Teal);
-
-            label7.Text = spline_step.ToString();
 
         }
 
@@ -473,143 +469,6 @@ namespace GraphicReactor
                 }
             }
             return true;
-        }
-
-        //Пример быдлокодинга представлен ниже
-
-        private List<GR_Point_Base> Spline_points = new List<GR_Point_Base>();
-        private float spline_step = 0.05f;
-
-        private void selectPointsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Spline_points = mainScene.SelectedPoints;
-        }
-
-        private void createSplineToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Spline_points.Count < 4) return;
-
-            for (int i = 0; i < Spline_points.Count; i++)
-            {
-                float a0_x =
-                     (Spline_points[i % Spline_points.Count].X
-                     + 4 * Spline_points[(i + 1) % Spline_points.Count].X
-                     + Spline_points[(i + 2) % Spline_points.Count].X) / 6;
-                float a1_x =
-                     (-Spline_points[i % Spline_points.Count].X 
-                     + Spline_points[(i + 2) % Spline_points.Count].X) / 2;
-                float a2_x =
-                     (Spline_points[i % Spline_points.Count].X 
-                     - 2 * Spline_points[(i + 1) % Spline_points.Count].X 
-                     + Spline_points[(i + 2) % Spline_points.Count].X) / 2;
-                float a3_x =
-                     (-Spline_points[i % Spline_points.Count].X
-                     + 3 * Spline_points[(i + 1) % Spline_points.Count].X
-                     - 3 * Spline_points[(i + 2) % Spline_points.Count].X
-                     + Spline_points[(i + 3) % Spline_points.Count].X) / 6;
-
-                float a0_y =
-                     (Spline_points[i % Spline_points.Count].Y
-                     + 4 * Spline_points[(i + 1) % Spline_points.Count].Y
-                     + Spline_points[(i + 2) % Spline_points.Count].Y) / 6;
-                float a1_y =
-                     (-Spline_points[i % Spline_points.Count].Y
-                     + Spline_points[(i + 2) % Spline_points.Count].Y) / 2;
-                float a2_y =
-                     (Spline_points[i % Spline_points.Count].Y
-                     - 2 * Spline_points[(i + 1) % Spline_points.Count].Y
-                     + Spline_points[(i + 2) % Spline_points.Count].Y) / 2;
-                float a3_y =
-                     (-Spline_points[i % Spline_points.Count].Y
-                     + 3 * Spline_points[(i + 1) % Spline_points.Count].Y
-                     - 3 * Spline_points[(i + 2) % Spline_points.Count].Y
-                     + Spline_points[(i + 3) % Spline_points.Count].Y) / 6;
-
-                float a0_z =
-                     (Spline_points[i % Spline_points.Count].Z
-                     + 4 * Spline_points[(i + 1) % Spline_points.Count].Z
-                     + Spline_points[(i + 2) % Spline_points.Count].Z) / 6;
-                float a1_z =
-                     (-Spline_points[i % Spline_points.Count].Z
-                     + Spline_points[(i + 2) % Spline_points.Count].Z) / 2;
-                float a2_z =
-                     (Spline_points[i % Spline_points.Count].Z
-                     - 2 * Spline_points[(i + 1) % Spline_points.Count].Z
-                     + Spline_points[(i + 2) % Spline_points.Count].Z) / 2;
-                float a3_z =
-                     (-Spline_points[i % Spline_points.Count].Z
-                     + 3 * Spline_points[(i + 1) % Spline_points.Count].Z
-                     - 3 * Spline_points[(i + 2) % Spline_points.Count].Z
-                     + Spline_points[(i + 3) % Spline_points.Count].Z) / 6;
-
-                for (float t = 0; t < 1; t += spline_step)
-                {
-                    GR_Point p = new GR_Point(
-                        ((a3_x*t+a2_x)*t + a1_x)*t + a0_x,
-                        ((a3_y * t + a2_y) * t + a1_y) * t + a0_y,
-                        ((a3_z * t + a2_z)*t + a1_z)*t + a0_z,
-                        2,
-                        Color.Black
-                        );
-                    mainScene.AddPoint_with_relative_coords(p);
-                }
-
-            }
-
-
-        }
-
-        private void toolCustomButton1_Click(object sender, EventArgs e)
-        {
-            if (spline_step <= 0.06) return;
-
-            spline_step -= 0.05f;
-
-            label7.Text = spline_step.ToString();
-
-        }
-
-        private void toolCustomButton2_Click(object sender, EventArgs e)
-        {
-            if (spline_step >= 0.49) return;
-
-            spline_step += 0.05f;
-
-            label7.Text = spline_step.ToString();
-        }
-
-        private void toolCustomButton3_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                Stream s = File.Open(saveFileDialog.FileName, FileMode.Create);
-
-                BinaryFormatter bf = new BinaryFormatter();
-
-                bf.Serialize(s, mainScene);
-
-                s.Close();
-            }
-        }
-
-        private void toolCustomButton4_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                Stream s = File.Open(openFileDialog.FileName, FileMode.Open);
-
-                BinaryFormatter bf = new BinaryFormatter();
-
-                mainScene = (GR_Scene)bf.Deserialize(s);
-
-                s.Close();
-
-                UpdatePicBoxParams();
-
-
-            }
         }
 
         //MatrixOperation(new float[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, -1, 0, 1 } }, true);

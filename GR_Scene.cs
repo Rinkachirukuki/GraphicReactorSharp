@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
-    [Serializable]
     class GR_Scene
     {
         private uint point_identificator;
@@ -21,6 +20,7 @@ namespace GraphicReactor
         private List<GR_Line> lines;
         private List<GR_Point_Base> temp;
 
+        public Pen selectPen { get; set; }
 
         public float Camera_VerticalAngle { get; set; }
         public float Camera_HorizontalAngle { get; set; }
@@ -46,6 +46,11 @@ namespace GraphicReactor
             points = new List<GR_Point_Base>();
             lines = new List<GR_Line>();
             temp = new List<GR_Point_Base>();
+
+            
+
+            selectPen = new Pen(Color.Red, 1.5f);
+            selectPen.DashStyle = DashStyle.Dot;
 
             point_identificator = 1;
 
@@ -136,9 +141,6 @@ namespace GraphicReactor
             
 
             temp.Sort();
-
-            Pen selectPen = new Pen(Color.Red, 1.5f);
-            selectPen.DashStyle = DashStyle.Dot;
 
             foreach (GR_Point_Base p in temp)
             {
@@ -374,12 +376,6 @@ namespace GraphicReactor
             point.Id = point_identificator;
             point.X -= HorizontalOffset + Camera_HorizontalOffset;
             point.Y += VerticalOffset + Camera_VerticalOffset;
-            point_identificator++;
-            points.Add(point);
-        }
-        public void AddPoint_with_relative_coords(GR_Point point)
-        {
-            point.Id = point_identificator;
             point_identificator++;
             points.Add(point);
         }

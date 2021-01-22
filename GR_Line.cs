@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
-    [Serializable]
     class GR_Line
     {
         public uint point1 { get; set; }
