@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphicReactor
 {
+    [Serializable]
     class GR_Point : GR_Point_Base
     {
 

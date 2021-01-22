@@ -43,35 +43,43 @@ namespace GraphicReactor
             this.xToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.yToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createSplineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.resetButton = new GraphicReactor.CustomForms.ToolCustomButton();
             this.MainPicBox = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.PropetiesPanel = new System.Windows.Forms.Panel();
-            this.CheckBoxRelCenter = new GraphicReactor.CustomForms.ToolCustomCheckBox();
-            this.Zc_label = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.propetiesTabControl = new GraphicReactor.CustomForms.ToolCustomTabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.Zc_label = new System.Windows.Forms.Label();
             this.Zc_DecreaseButton = new GraphicReactor.CustomForms.ToolCustomButton();
             this.Zc_IncreaseButton = new GraphicReactor.CustomForms.ToolCustomButton();
-            this.label6 = new System.Windows.Forms.Label();
             this.compLinesCheckBox = new GraphicReactor.CustomForms.ToolCustomCheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.PropetiesPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.toolCustomButton1 = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.toolCustomButton2 = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupsTreeView = new GraphicReactor.CustomForms.ToolCustomTreeView();
             this.resizeModeButton = new GraphicReactor.CustomForms.ToolCustomButton();
             this.rotationModeButton = new GraphicReactor.CustomForms.ToolCustomButton();
             this.moveModeButton = new GraphicReactor.CustomForms.ToolCustomButton();
-            this.propetiesTabControl = new GraphicReactor.CustomForms.ToolCustomTabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupsTreeView = new GraphicReactor.CustomForms.ToolCustomTreeView();
+            this.toolCustomButton3 = new GraphicReactor.CustomForms.ToolCustomButton();
+            this.toolCustomButton4 = new GraphicReactor.CustomForms.ToolCustomButton();
             this.mainPicBox_ContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).BeginInit();
-            this.PropetiesPanel.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.propetiesTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.PropetiesPanel.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,9 +89,10 @@ namespace GraphicReactor
             this.aToolStripMenuItem,
             this.aToolStripMenuItem1,
             this.createGroupToolStripMenuItem,
-            this.toolStripMenuItem2});
+            this.toolStripMenuItem2,
+            this.splineToolStripMenuItem});
             this.mainPicBox_ContextMenu.Name = "contextMenuStrip1";
-            this.mainPicBox_ContextMenu.Size = new System.Drawing.Size(175, 92);
+            this.mainPicBox_ContextMenu.Size = new System.Drawing.Size(175, 114);
             // 
             // aToolStripMenuItem
             // 
@@ -145,6 +154,29 @@ namespace GraphicReactor
             this.zToolStripMenuItem.Text = "Z";
             this.zToolStripMenuItem.Click += new System.EventHandler(this.zToolStripMenuItem_Click);
             // 
+            // splineToolStripMenuItem
+            // 
+            this.splineToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectPointsToolStripMenuItem,
+            this.createSplineToolStripMenuItem});
+            this.splineToolStripMenuItem.Name = "splineToolStripMenuItem";
+            this.splineToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.splineToolStripMenuItem.Text = "Spline";
+            // 
+            // selectPointsToolStripMenuItem
+            // 
+            this.selectPointsToolStripMenuItem.Name = "selectPointsToolStripMenuItem";
+            this.selectPointsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.selectPointsToolStripMenuItem.Text = "Select points";
+            this.selectPointsToolStripMenuItem.Click += new System.EventHandler(this.selectPointsToolStripMenuItem_Click);
+            // 
+            // createSplineToolStripMenuItem
+            // 
+            this.createSplineToolStripMenuItem.Name = "createSplineToolStripMenuItem";
+            this.createSplineToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.createSplineToolStripMenuItem.Text = "Create spline";
+            this.createSplineToolStripMenuItem.Click += new System.EventHandler(this.createSplineToolStripMenuItem_Click);
+            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -187,6 +219,174 @@ namespace GraphicReactor
             this.MainPicBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseMove);
             this.MainPicBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainPicBox_MouseUp);
             // 
+            // propetiesTabControl
+            // 
+            this.propetiesTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.propetiesTabControl.Controls.Add(this.tabPage1);
+            this.propetiesTabControl.Controls.Add(this.tabPage2);
+            this.propetiesTabControl.Location = new System.Drawing.Point(535, 1);
+            this.propetiesTabControl.Name = "propetiesTabControl";
+            this.propetiesTabControl.SelectedIndex = 0;
+            this.propetiesTabControl.Size = new System.Drawing.Size(180, 455);
+            this.propetiesTabControl.TabIndex = 19;
+            this.propetiesTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
+            this.propetiesTabControl.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.panel2);
+            this.tabPage1.Controls.Add(this.compLinesCheckBox);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.PropetiesPanel);
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(172, 429);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.Zc_label);
+            this.panel2.Controls.Add(this.Zc_DecreaseButton);
+            this.panel2.Controls.Add(this.Zc_IncreaseButton);
+            this.panel2.Location = new System.Drawing.Point(2, 275);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(166, 77);
+            this.panel2.TabIndex = 17;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(4, 4);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(79, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Vanishing point";
+            // 
+            // Zc_label
+            // 
+            this.Zc_label.AutoSize = true;
+            this.Zc_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Zc_label.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.Zc_label.Location = new System.Drawing.Point(5, 24);
+            this.Zc_label.Name = "Zc_label";
+            this.Zc_label.Size = new System.Drawing.Size(51, 20);
+            this.Zc_label.TabIndex = 15;
+            this.Zc_label.Text = "label4";
+            // 
+            // Zc_DecreaseButton
+            // 
+            this.Zc_DecreaseButton.Location = new System.Drawing.Point(4, 51);
+            this.Zc_DecreaseButton.Name = "Zc_DecreaseButton";
+            this.Zc_DecreaseButton.Size = new System.Drawing.Size(78, 23);
+            this.Zc_DecreaseButton.TabIndex = 14;
+            this.Zc_DecreaseButton.Text = "-100";
+            this.Zc_DecreaseButton.UseVisualStyleBackColor = true;
+            this.Zc_DecreaseButton.Click += new System.EventHandler(this.Zc_DecreaseButton_Click);
+            // 
+            // Zc_IncreaseButton
+            // 
+            this.Zc_IncreaseButton.Location = new System.Drawing.Point(84, 51);
+            this.Zc_IncreaseButton.Name = "Zc_IncreaseButton";
+            this.Zc_IncreaseButton.Size = new System.Drawing.Size(78, 23);
+            this.Zc_IncreaseButton.TabIndex = 13;
+            this.Zc_IncreaseButton.Text = "+100";
+            this.Zc_IncreaseButton.UseVisualStyleBackColor = true;
+            this.Zc_IncreaseButton.Click += new System.EventHandler(this.Zc_IncreaseButton_Click);
+            // 
+            // compLinesCheckBox
+            // 
+            this.compLinesCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.compLinesCheckBox.AutoSize = true;
+            this.compLinesCheckBox.Location = new System.Drawing.Point(3, 358);
+            this.compLinesCheckBox.Name = "compLinesCheckBox";
+            this.compLinesCheckBox.Size = new System.Drawing.Size(112, 17);
+            this.compLinesCheckBox.TabIndex = 8;
+            this.compLinesCheckBox.Text = "Complicated Lines";
+            this.compLinesCheckBox.UseVisualStyleBackColor = true;
+            this.compLinesCheckBox.CheckedChanged += new System.EventHandler(this.compLinesCheckBox_CheckedChanged);
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 6);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(81, 13);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "Selected Points";
+            // 
+            // PropetiesPanel
+            // 
+            this.PropetiesPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropetiesPanel.Controls.Add(this.label7);
+            this.PropetiesPanel.Controls.Add(this.toolCustomButton1);
+            this.PropetiesPanel.Controls.Add(this.toolCustomButton2);
+            this.PropetiesPanel.Controls.Add(this.label1);
+            this.PropetiesPanel.Location = new System.Drawing.Point(3, 61);
+            this.PropetiesPanel.Name = "PropetiesPanel";
+            this.PropetiesPanel.Size = new System.Drawing.Size(166, 128);
+            this.PropetiesPanel.TabIndex = 8;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.ForeColor = System.Drawing.Color.DarkSlateGray;
+            this.label7.Location = new System.Drawing.Point(5, 56);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(51, 20);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "label4";
+            // 
+            // toolCustomButton1
+            // 
+            this.toolCustomButton1.Location = new System.Drawing.Point(4, 82);
+            this.toolCustomButton1.Name = "toolCustomButton1";
+            this.toolCustomButton1.Size = new System.Drawing.Size(78, 23);
+            this.toolCustomButton1.TabIndex = 18;
+            this.toolCustomButton1.Text = "-0.05";
+            this.toolCustomButton1.UseVisualStyleBackColor = true;
+            this.toolCustomButton1.Click += new System.EventHandler(this.toolCustomButton1_Click);
+            // 
+            // toolCustomButton2
+            // 
+            this.toolCustomButton2.Location = new System.Drawing.Point(84, 82);
+            this.toolCustomButton2.Name = "toolCustomButton2";
+            this.toolCustomButton2.Size = new System.Drawing.Size(78, 23);
+            this.toolCustomButton2.TabIndex = 17;
+            this.toolCustomButton2.Text = "+0.05";
+            this.toolCustomButton2.UseVisualStyleBackColor = true;
+            this.toolCustomButton2.Click += new System.EventHandler(this.toolCustomButton2_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(4, 37);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Spline step";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.Blue;
+            this.label4.Location = new System.Drawing.Point(112, 36);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "label4";
+            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -209,111 +409,40 @@ namespace GraphicReactor
             this.label3.TabIndex = 6;
             this.label3.Text = "label3";
             // 
-            // PropetiesPanel
+            // tabPage2
             // 
-            this.PropetiesPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PropetiesPanel.Controls.Add(this.CheckBoxRelCenter);
-            this.PropetiesPanel.Location = new System.Drawing.Point(3, 61);
-            this.PropetiesPanel.Name = "PropetiesPanel";
-            this.PropetiesPanel.Size = new System.Drawing.Size(166, 128);
-            this.PropetiesPanel.TabIndex = 8;
+            this.tabPage2.Controls.Add(this.toolCustomButton3);
+            this.tabPage2.Controls.Add(this.toolCustomButton4);
+            this.tabPage2.Controls.Add(this.groupsTreeView);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(172, 429);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // CheckBoxRelCenter
+            // groupsTreeView
             // 
-            this.CheckBoxRelCenter.AutoSize = true;
-            this.CheckBoxRelCenter.Checked = true;
-            this.CheckBoxRelCenter.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxRelCenter.Location = new System.Drawing.Point(3, 3);
-            this.CheckBoxRelCenter.Name = "CheckBoxRelCenter";
-            this.CheckBoxRelCenter.Size = new System.Drawing.Size(128, 17);
-            this.CheckBoxRelCenter.TabIndex = 7;
-            this.CheckBoxRelCenter.Text = "Relative to the center";
-            this.CheckBoxRelCenter.UseVisualStyleBackColor = true;
-            // 
-            // Zc_label
-            // 
-            this.Zc_label.AutoSize = true;
-            this.Zc_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Zc_label.ForeColor = System.Drawing.Color.DarkSlateGray;
-            this.Zc_label.Location = new System.Drawing.Point(5, 24);
-            this.Zc_label.Name = "Zc_label";
-            this.Zc_label.Size = new System.Drawing.Size(51, 20);
-            this.Zc_label.TabIndex = 15;
-            this.Zc_label.Text = "label4";
-            // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.Color.Blue;
-            this.label4.Location = new System.Drawing.Point(112, 36);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "label4";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(4, 4);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 13);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Vanishing point";
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.label5);
-            this.panel2.Controls.Add(this.Zc_label);
-            this.panel2.Controls.Add(this.Zc_DecreaseButton);
-            this.panel2.Controls.Add(this.Zc_IncreaseButton);
-            this.panel2.Location = new System.Drawing.Point(3, 325);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(166, 77);
-            this.panel2.TabIndex = 17;
-            // 
-            // Zc_DecreaseButton
-            // 
-            this.Zc_DecreaseButton.Location = new System.Drawing.Point(4, 51);
-            this.Zc_DecreaseButton.Name = "Zc_DecreaseButton";
-            this.Zc_DecreaseButton.Size = new System.Drawing.Size(78, 23);
-            this.Zc_DecreaseButton.TabIndex = 14;
-            this.Zc_DecreaseButton.Text = "-100";
-            this.Zc_DecreaseButton.UseVisualStyleBackColor = true;
-            this.Zc_DecreaseButton.Click += new System.EventHandler(this.Zc_DecreaseButton_Click);
-            // 
-            // Zc_IncreaseButton
-            // 
-            this.Zc_IncreaseButton.Location = new System.Drawing.Point(84, 51);
-            this.Zc_IncreaseButton.Name = "Zc_IncreaseButton";
-            this.Zc_IncreaseButton.Size = new System.Drawing.Size(78, 23);
-            this.Zc_IncreaseButton.TabIndex = 13;
-            this.Zc_IncreaseButton.Text = "+100";
-            this.Zc_IncreaseButton.UseVisualStyleBackColor = true;
-            this.Zc_IncreaseButton.Click += new System.EventHandler(this.Zc_IncreaseButton_Click);
-            // 
-            // label6
-            // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 6);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(81, 13);
-            this.label6.TabIndex = 18;
-            this.label6.Text = "Selected Points";
-            // 
-            // compLinesCheckBox
-            // 
-            this.compLinesCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.compLinesCheckBox.AutoSize = true;
-            this.compLinesCheckBox.Location = new System.Drawing.Point(5, 408);
-            this.compLinesCheckBox.Name = "compLinesCheckBox";
-            this.compLinesCheckBox.Size = new System.Drawing.Size(112, 17);
-            this.compLinesCheckBox.TabIndex = 8;
-            this.compLinesCheckBox.Text = "Complicated Lines";
-            this.compLinesCheckBox.UseVisualStyleBackColor = true;
-            this.compLinesCheckBox.CheckedChanged += new System.EventHandler(this.compLinesCheckBox_CheckedChanged);
+            this.groupsTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.groupsTreeView.CheckBoxes = true;
+            this.groupsTreeView.Location = new System.Drawing.Point(0, 0);
+            this.groupsTreeView.Name = "groupsTreeView";
+            treeNode1.BackColor = System.Drawing.Color.Transparent;
+            treeNode1.ForeColor = System.Drawing.Color.DarkSlateGray;
+            treeNode1.Name = "Points";
+            treeNode1.Text = "Points";
+            treeNode2.Name = "Groups";
+            treeNode2.Text = "Groups";
+            this.groupsTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2});
+            this.groupsTreeView.Size = new System.Drawing.Size(172, 394);
+            this.groupsTreeView.TabIndex = 1;
+            this.groupsTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterCheck);
+            this.groupsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterSelect);
+            this.groupsTreeView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
+            this.groupsTreeView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
             // 
             // resizeModeButton
             // 
@@ -366,69 +495,27 @@ namespace GraphicReactor
             this.moveModeButton.UseVisualStyleBackColor = false;
             this.moveModeButton.Click += new System.EventHandler(this.moveModeButton_Click);
             // 
-            // propetiesTabControl
+            // toolCustomButton3
             // 
-            this.propetiesTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.propetiesTabControl.Controls.Add(this.tabPage1);
-            this.propetiesTabControl.Controls.Add(this.tabPage2);
-            this.propetiesTabControl.Location = new System.Drawing.Point(535, 1);
-            this.propetiesTabControl.Name = "propetiesTabControl";
-            this.propetiesTabControl.SelectedIndex = 0;
-            this.propetiesTabControl.Size = new System.Drawing.Size(180, 455);
-            this.propetiesTabControl.TabIndex = 19;
-            this.propetiesTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
-            this.propetiesTabControl.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
+            this.toolCustomButton3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolCustomButton3.Location = new System.Drawing.Point(6, 400);
+            this.toolCustomButton3.Name = "toolCustomButton3";
+            this.toolCustomButton3.Size = new System.Drawing.Size(78, 23);
+            this.toolCustomButton3.TabIndex = 22;
+            this.toolCustomButton3.Text = "Save";
+            this.toolCustomButton3.UseVisualStyleBackColor = true;
+            this.toolCustomButton3.Click += new System.EventHandler(this.toolCustomButton3_Click);
             // 
-            // tabPage1
+            // toolCustomButton4
             // 
-            this.tabPage1.Controls.Add(this.panel2);
-            this.tabPage1.Controls.Add(this.compLinesCheckBox);
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.PropetiesPanel);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(172, 429);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.groupsTreeView);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(172, 429);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // groupsTreeView
-            // 
-            this.groupsTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.groupsTreeView.CheckBoxes = true;
-            this.groupsTreeView.Location = new System.Drawing.Point(0, 0);
-            this.groupsTreeView.Name = "groupsTreeView";
-            treeNode1.BackColor = System.Drawing.Color.Transparent;
-            treeNode1.ForeColor = System.Drawing.Color.DarkSlateGray;
-            treeNode1.Name = "Points";
-            treeNode1.Text = "Points";
-            treeNode2.Name = "Groups";
-            treeNode2.Text = "Groups";
-            this.groupsTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            this.groupsTreeView.Size = new System.Drawing.Size(172, 297);
-            this.groupsTreeView.TabIndex = 1;
-            this.groupsTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterCheck);
-            this.groupsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.groupsTreeView_AfterSelect);
-            this.groupsTreeView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GR_KeyDown);
-            this.groupsTreeView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GR_KeyUp);
+            this.toolCustomButton4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolCustomButton4.Location = new System.Drawing.Point(86, 400);
+            this.toolCustomButton4.Name = "toolCustomButton4";
+            this.toolCustomButton4.Size = new System.Drawing.Size(78, 23);
+            this.toolCustomButton4.TabIndex = 21;
+            this.toolCustomButton4.Text = "Load";
+            this.toolCustomButton4.UseVisualStyleBackColor = true;
+            this.toolCustomButton4.Click += new System.EventHandler(this.toolCustomButton4_Click);
             // 
             // MainWindow
             // 
@@ -451,13 +538,13 @@ namespace GraphicReactor
             this.mainPicBox_ContextMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MainPicBox)).EndInit();
-            this.PropetiesPanel.ResumeLayout(false);
-            this.PropetiesPanel.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.propetiesTabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.PropetiesPanel.ResumeLayout(false);
+            this.PropetiesPanel.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -478,7 +565,6 @@ namespace GraphicReactor
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private CustomForms.ToolCustomButton resetButton;
-        private CustomForms.ToolCustomCheckBox CheckBoxRelCenter;
         private Panel PropetiesPanel;
         private CustomForms.ToolCustomButton resizeModeButton;
         private CustomForms.ToolCustomButton rotationModeButton;
@@ -495,6 +581,15 @@ namespace GraphicReactor
         private TabPage tabPage1;
         private TabPage tabPage2;
         private CustomForms.ToolCustomTreeView groupsTreeView;
+        private ToolStripMenuItem splineToolStripMenuItem;
+        private ToolStripMenuItem selectPointsToolStripMenuItem;
+        private ToolStripMenuItem createSplineToolStripMenuItem;
+        private Label label1;
+        private Label label7;
+        private CustomForms.ToolCustomButton toolCustomButton1;
+        private CustomForms.ToolCustomButton toolCustomButton2;
+        private CustomForms.ToolCustomButton toolCustomButton3;
+        private CustomForms.ToolCustomButton toolCustomButton4;
     }
 }
 
